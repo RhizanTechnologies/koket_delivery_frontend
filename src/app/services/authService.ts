@@ -3,6 +3,7 @@
  * Handles login, registration, and auth-related API calls
  */
 import { apiClient } from "./api";
+import { logger } from "@/app/utils/logger";
 
 // Types
 export interface LoginPayload {
@@ -41,7 +42,7 @@ export const loginUser = async (data: LoginPayload): Promise<AuthResponse> => {
     const response = await apiClient.post<AuthResponse>("/auth/login", data);
     return response.data;
   } catch (error: any) {
-    console.error("Login failed:", error.response?.data || error.message);
+    logger.error("Login failed:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -56,7 +57,7 @@ export const registerUser = async (
     const response = await apiClient.post<AuthResponse>("/auth/register", data);
     return response.data;
   } catch (error: any) {
-    console.error(
+    logger.error(
       "Registration failed:",
       error.response?.data || error.message
     );
@@ -74,7 +75,7 @@ export const refreshToken = async (
     const response = await apiClient.post("/auth/refresh", { refreshToken });
     return response.data;
   } catch (error: any) {
-    console.error(
+    logger.error(
       "Token refresh failed:",
       error.response?.data || error.message
     );

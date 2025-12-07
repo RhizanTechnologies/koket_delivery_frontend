@@ -1,4 +1,5 @@
 import { apiClient } from "./api";
+import { logger } from "@/app/utils/logger";
 
 export interface UserRating {
   product: {
@@ -54,7 +55,7 @@ export const registerUser = async (userData: {
     const response = await apiClient.post("/users/register", userData);
     return response.data;
   } catch (error: any) {
-    console.error("Failed to register user:", error);
+    logger.error("Failed to register user:", error);
     throw new Error(error.response?.data?.message || "Failed to register user");
   }
 };
@@ -81,7 +82,7 @@ export const getAllCustomers = async (): Promise<CustomerWithStats[]> => {
       totalSpent: user.totalSpent || user.total_spent || 0,
     }));
   } catch (error: any) {
-    console.error("Failed to fetch customers:", error);
+    logger.error("Failed to fetch customers:", error);
     throw new Error(
       error.response?.data?.message || "Failed to fetch customers"
     );
@@ -98,7 +99,7 @@ export const getUserById = async (id: string): Promise<User> => {
     // Backend responds with { message: string, user: User }
     return response.data.user || response.data;
   } catch (error: any) {
-    console.error("Failed to fetch user:", error);
+    logger.error("Failed to fetch user:", error);
     throw new Error(error.response?.data?.message || "Failed to fetch user");
   }
 };
@@ -110,7 +111,7 @@ export const deleteUser = async (id: string): Promise<void> => {
   try {
     await apiClient.delete(`/users/${id}`);
   } catch (error: any) {
-    console.error("Failed to delete user:", error);
+    logger.error("Failed to delete user:", error);
     throw new Error(error.response?.data?.message || "Failed to delete user");
   }
 };
@@ -124,7 +125,7 @@ export const getProfile = async (): Promise<User> => {
     const response = await apiClient.get("/users/profile");
     return response.data.user || response.data;
   } catch (error: any) {
-    console.error("Failed to fetch profile:", error);
+    logger.error("Failed to fetch profile:", error);
     throw new Error(error.response?.data?.message || "Failed to fetch profile");
   }
 };
@@ -145,7 +146,7 @@ export const updateProfileImage = async (imageFile: File): Promise<User> => {
     });
     return response.data.user || response.data;
   } catch (error: any) {
-    console.error("Failed to update profile image:", error);
+    logger.error("Failed to update profile image:", error);
     throw new Error(
       error.response?.data?.message || "Failed to update profile image"
     );

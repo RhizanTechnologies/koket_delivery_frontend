@@ -6,12 +6,10 @@ import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ReviewFormProps {
-  onSubmit: (payload: {
-    rating: number;
-    comment: string;
-  }) => void;
+  onSubmit: (payload: { rating: number; comment: string }) => void;
   defaultRating?: number;
   isSubmitting?: boolean;
 }
@@ -43,11 +41,13 @@ export function ReviewForm({
           <label className="mb-2 block text-sm font-medium">Rating</label>
           <div className="flex gap-2">
             {[1, 2, 3, 4, 5].map((star) => (
-              <button
+              <Button
                 key={star}
                 type="button"
+                variant="ghost"
+                size="icon"
                 onClick={() => setRating(star)}
-                className="transition-colors"
+                className="transition-colors p-0 h-auto w-auto"
                 disabled={isSubmitting}
               >
                 <Star
@@ -57,19 +57,18 @@ export function ReviewForm({
                       : "text-muted-foreground"
                   }`}
                 />
-              </button>
+              </Button>
             ))}
           </div>
         </div>
 
         <div>
           <label className="mb-2 block text-sm font-medium">Review</label>
-          <textarea
+          <Textarea
             value={comment}
             onChange={(event) => setComment(event.target.value)}
             placeholder="Tell us about the cake, taste, delivery, design..."
             rows={4}
-            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             required
             disabled={isSubmitting}
           />

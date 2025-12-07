@@ -11,6 +11,7 @@ import { useCart } from "@/app/context/CartContext";
 import LoadingState from "@/components/LoadingState";
 import { createOrder, type OrderItem } from "@/app/services/orderService";
 import { toast } from "react-toastify";
+import { getErrorMessage, getSuccessMessage } from "@/app/utils/errorHandler";
 
 interface CheckoutItem {
   id: string;
@@ -177,20 +178,17 @@ export default function CheckoutPage() {
 
       // Clear selected items from localStorage
       localStorage.removeItem("selectedCartItems");
-
       // Refresh cart context to get updated cart (without ordered items)
       await refreshCart();
 
-      toast.success("Order placed successfully!");
+      toast.success(getSuccessMessage("submit", "Order"));
 
       // Redirect to orders page
       router.push("/orders");
     } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Failed to place order";
-      toast.error(message);
+      toast.error(
+        getErrorMessage(error, "Failed to place order. Please try again.")
+      );
     } finally {
       setIsSubmitting(false);
     }

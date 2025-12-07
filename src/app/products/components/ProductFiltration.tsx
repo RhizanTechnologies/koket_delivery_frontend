@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { getCategories } from "@/app/services/categoryService";
 import LoadingState from "@/components/LoadingState";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 // ✅ Define flexible Category type from backend
 export type Category = {
@@ -121,9 +123,12 @@ export default function ProductFiltration({
             </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-1 border-b-2 border-primary bg-primary/20 text-primary rounded-t-md py-1 px-3 text-sm font-medium">
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-1 border-b-2 border-primary bg-primary/20 text-primary rounded-t-md py-1 px-3 text-sm font-medium"
+                >
                   <FaBars />
-                </button>
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {categories
@@ -150,8 +155,9 @@ export default function ProductFiltration({
         {/* Desktop */}
         <div className="hidden 2xl:flex gap-4 overflow-x-auto no-scrollbar mb-6 py-2">
           {categories.map((cat) => (
-            <button
+            <Button
               key={cat._id}
+              variant={category === cat.name ? "default" : "secondary"}
               onClick={() =>
                 setFilters((prev) => ({
                   ...prev,
@@ -166,7 +172,7 @@ export default function ProductFiltration({
               }`}
             >
               {cat.name}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -174,31 +180,33 @@ export default function ProductFiltration({
         <div className="grid grid-cols-2 2xl:grid-cols-5 gap-3 items-center">
           {/* Search */}
           <div className="col-span-2 2xl:col-span-3">
-            <div className="flex items-center bg-white rounded-lg border px-6 py-3">
-              <FaSearch className="text-gray-400 mr-2" />
-              <input
+            <div className="relative flex items-center">
+              <FaSearch className="absolute left-6 text-gray-400 pointer-events-none" />
+              <Input
                 type="text"
                 placeholder={`Search ${category.toLowerCase()}...`}
                 value={search}
                 onChange={(e) =>
                   setFilters((prev) => ({ ...prev, search: e.target.value }))
                 }
-                className="w-full bg-transparent outline-none text-lg"
+                className="w-full pl-14 pr-6 py-6 text-lg bg-white border rounded-lg"
               />
             </div>
           </div>
-
           {/* Sort */}
           <div className="col-span-1">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="w-full bg-white border rounded-lg px-2 md:px-4 py-3 flex items-center justify-between">
+                <Button
+                  variant="outline"
+                  className="w-full bg-white border rounded-lg px-2 md:px-4 py-3 flex items-center justify-between"
+                >
                   <span className="line-clamp-1">
                     {sortOptions.find((s) => s.value === sort)?.label ||
                       "Sort by"}
                   </span>
                   <span className="ml-2 text-foreground">&#9662;</span>
-                </button>
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 {sortOptions.map((opt) => (
@@ -222,12 +230,15 @@ export default function ProductFiltration({
           <div className="col-span-1">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="w-full bg-white border rounded-lg px-2 md:px-4 py-3 flex items-center justify-between">
+                <Button
+                  variant="outline"
+                  className="w-full bg-white border rounded-lg px-2 md:px-4 py-3 flex items-center justify-between"
+                >
                   <span className="line-clamp-1">
                     {subcategory || "All Products"}
                   </span>
                   <span className="ml-2 text-gray-600">&#9662;</span>
-                </button>
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 {currentSubcategories.length > 0 ? (

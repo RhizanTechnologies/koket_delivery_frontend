@@ -3,6 +3,7 @@
  * Handles all analytics-related API calls for admin dashboard
  */
 import { apiClient } from "../api";
+import { logger } from "@/app/utils/logger";
 
 export interface AnalyticsResponse {
   total_orders: number;
@@ -100,7 +101,7 @@ export const getDashboardOverview = async (): Promise<DashboardOverview> => {
     const response = await apiClient.get("/analytics/dashboard");
     return response.data;
   } catch (error: any) {
-    console.error("Failed to fetch dashboard overview:", error);
+    logger.error("Failed to fetch dashboard overview:", error);
     throw new Error(
       error.response?.data?.message || "Failed to fetch dashboard"
     );
@@ -119,7 +120,7 @@ export const getAnalyticsData = async (params?: {
     const response = await apiClient.get("/analytics/data", { params });
     return response.data;
   } catch (error: any) {
-    console.error("Failed to fetch analytics data:", error);
+    logger.error("Failed to fetch analytics data:", error);
     throw new Error(
       error.response?.data?.message || "Failed to fetch analytics"
     );
@@ -139,7 +140,7 @@ export const getProductPerformance = async (
     });
     return response.data;
   } catch (error: any) {
-    console.error("Failed to fetch product performance:", error);
+    logger.error("Failed to fetch product performance:", error);
     throw new Error(
       error.response?.data?.message || "Failed to fetch product performance"
     );
@@ -156,7 +157,7 @@ export const getCategoryPerformance = async (): Promise<
     const response = await apiClient.get("/analytics/categories/performance");
     return response.data;
   } catch (error: any) {
-    console.error("Failed to fetch category performance:", error);
+    logger.error("Failed to fetch category performance:", error);
     throw new Error(
       error.response?.data?.message || "Failed to fetch category performance"
     );
@@ -176,7 +177,7 @@ export const getRevenueTrend = async (params?: {
     });
     return response.data;
   } catch (error: any) {
-    console.error("Failed to fetch revenue trend:", error);
+    logger.error("Failed to fetch revenue trend:", error);
     throw new Error(
       error.response?.data?.message || "Failed to fetch revenue trend"
     );
@@ -191,7 +192,7 @@ export const getCustomerAnalytics = async (): Promise<CustomerAnalytics> => {
     const response = await apiClient.get("/analytics/customers");
     return response.data;
   } catch (error: any) {
-    console.error("Failed to fetch customer analytics:", error);
+    logger.error("Failed to fetch customer analytics:", error);
     throw new Error(
       error.response?.data?.message || "Failed to fetch customer analytics"
     );

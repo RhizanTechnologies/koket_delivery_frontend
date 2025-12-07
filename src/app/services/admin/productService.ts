@@ -3,6 +3,7 @@
  * Handles admin product operations
  */
 import { apiClient } from "../api";
+import { logger } from "@/app/utils/logger";
 
 export interface ProductFilters {
   categoryId?: string;
@@ -53,7 +54,7 @@ export async function getAdminProducts(
     }
     return data.products || data.data || [];
   } catch (error: any) {
-    console.error(
+    logger.error(
       "Failed to fetch admin products",
       error?.response?.data ?? error
     );
@@ -68,7 +69,7 @@ export async function deleteAdminProduct(productId: string): Promise<void> {
   try {
     await apiClient.delete(`/products/${productId}`);
   } catch (error: any) {
-    console.error("Failed to delete product", error?.response?.data ?? error);
+    logger.error("Failed to delete product", error?.response?.data ?? error);
     throw error;
   }
 }

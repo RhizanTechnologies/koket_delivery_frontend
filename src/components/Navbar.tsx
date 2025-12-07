@@ -274,8 +274,9 @@ function Navbar() {
               <Link
                 href="/cart"
                 className="relative text-primary text-xl 2xl:text-2xl transition-transform duration-200 hover:text-primary-hover hover:scale-110 cursor-pointer"
+                aria-label={`Shopping cart ${cartCount > 0 ? `with ${cartCount} items` : '(empty)'}`}
               >
-                <FaShoppingCart size={27} />
+                <FaShoppingCart size={27} aria-hidden="true" />
                 {cartCount > 0 && (
                   <Badge className="absolute -top-2 -right-3 text-[10px] lg:text-[13px] font-semibold bg-secondary text-secondary-foreground rounded-full px-1.5 py-0.5 animate-bounce">
                     {cartCount}
@@ -300,8 +301,9 @@ function Navbar() {
                   <Link
                     href="/cart"
                     className="relative text-primary text-xl transition-colors duration-200 hover:text-primary-hover cursor-pointer"
+                    aria-label={`Shopping cart ${cartCount > 0 ? `with ${cartCount} items` : '(empty)'}`}
                   >
-                    <FaShoppingCart size={30} />
+                    <FaShoppingCart size={30} aria-hidden="true" />
                     {cartCount > 0 && (
                       <Badge className="absolute -top-2 -right-3 text-[13px] font-semibold bg-secondary text-secondary-foreground rounded-full px-1.5 py-0.5 animate-bounce">
                         {cartCount}
@@ -311,8 +313,11 @@ function Navbar() {
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button className="flex items-center justify-center w-9 h-9 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover transition-colors cursor-pointer">
-                        <User size={18} />
+                      <Button 
+                        className="flex items-center justify-center w-9 h-9 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover transition-colors cursor-pointer"
+                        aria-label="User menu"
+                      >
+                        <User size={18} aria-hidden="true" />
                       </Button>
                     </DropdownMenuTrigger>
 
@@ -429,8 +434,9 @@ function Navbar() {
                 variant="outline"
                 size="icon"
                 className="border-border text-primary hover:bg-secondary transition-colors cursor-pointer"
+                aria-label="Open mobile menu"
               >
-                <svg width="24" height="24" fill="currentColor">
+                <svg width="24" height="24" fill="currentColor" aria-hidden="true">
                   <rect x="4" y="7" width="16" height="2" rx="1" />
                   <rect x="4" y="15" width="16" height="2" rx="1" />
                 </svg>

@@ -258,7 +258,7 @@ export function ContactPaymentForm({
         </div>
         {/* Delivery Date */}
         <div>
-          <label className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+          <label className="flex text-sm font-semibold text-foreground mb-2 items-center gap-2">
             <svg
               className="w-4 h-4 text-primary"
               fill="none"
@@ -302,7 +302,7 @@ export function ContactPaymentForm({
 
         {/* Recipient Phone */}
         <div>
-          <label className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+          <label className="flex text-sm font-semibold text-foreground mb-2 items-center gap-2">
             <svg
               className="w-4 h-4 text-primary"
               fill="none"
@@ -334,7 +334,7 @@ export function ContactPaymentForm({
 
         {/* Payment Proof Upload */}
         <div>
-          <label className="block text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+          <label className="flex text-sm font-semibold text-foreground mb-2 items-center gap-2">
             <svg
               className="w-4 h-4 text-primary"
               fill="none"
@@ -401,16 +401,17 @@ export function ContactPaymentForm({
                       {formData.paymentProof.name}
                     </p>
                   </div>
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
                     onClick={(e) => {
                       e.preventDefault();
                       setFormData((prev) => ({ ...prev, paymentProof: null }));
                     }}
-                    className="text-xs text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium"
+                    className="text-xs text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium h-auto p-0"
                   >
                     Remove & Upload Different File
-                  </button>
+                  </Button>
                 </div>
               ) : (
                 <>
@@ -430,10 +431,10 @@ export function ContactPaymentForm({
         </div>
 
         {/* Submit Button */}
-        <button
+        <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base"
+          className="w-full mt-6 font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-base"
         >
           {isSubmitting ? (
             <>
@@ -477,7 +478,7 @@ export function ContactPaymentForm({
               Confirm & Place Order
             </>
           )}
-        </button>
+        </Button>
 
         <p className="text-center text-xs text-muted-foreground mt-4 leading-relaxed">
           By placing this order, you agree to our{" "}

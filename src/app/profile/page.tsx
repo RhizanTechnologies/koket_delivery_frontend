@@ -17,6 +17,7 @@ import {
   UserRating,
 } from "../services/userService";
 import { useAuth } from "../context/AuthContext";
+import { Button } from "@/components/ui/button";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -181,12 +182,9 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-background-2 flex items-center justify-center p-6">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
-          <button
-            onClick={fetchProfile}
-            className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover"
-          >
+          <Button onClick={fetchProfile} className="px-4 py-2">
             Try Again
-          </button>
+          </Button>
         </div>
       </div>
     );
