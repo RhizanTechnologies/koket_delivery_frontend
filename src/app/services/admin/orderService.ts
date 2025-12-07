@@ -3,6 +3,7 @@
  * Handles all order-related API calls for admin
  */
 import { apiClient } from "../api";
+import { logger } from "@/app/utils/logger";
 
 // Order Item type
 export interface OrderItemDTO {
@@ -57,7 +58,7 @@ export const getAllOrders = async (): Promise<Order[]> => {
     const response = await apiClient.get("/orders");
     return response.data;
   } catch (error: any) {
-    console.error("Failed to fetch all orders:", error);
+    logger.error("Failed to fetch all orders:", error);
     throw new Error(error.response?.data?.message || "Failed to fetch orders");
   }
 };
@@ -70,7 +71,7 @@ export const getOrderById = async (id: string): Promise<Order> => {
     const response = await apiClient.get(`/orders/${id}`);
     return response.data;
   } catch (error: any) {
-    console.error("Failed to fetch order:", error);
+    logger.error("Failed to fetch order:", error);
     throw new Error(error.response?.data?.message || "Failed to fetch order");
   }
 };
@@ -86,7 +87,7 @@ export const updateOrder = async (
     const response = await apiClient.put(`/orders/${id}`, payload);
     return response.data;
   } catch (error: any) {
-    console.error("Failed to update order:", error);
+    logger.error("Failed to update order:", error);
     throw new Error(error.response?.data?.message || "Failed to update order");
   }
 };
@@ -103,7 +104,7 @@ export const filterOrdersByStatus = async (
     });
     return response.data;
   } catch (error: any) {
-    console.error("Failed to filter orders:", error);
+    logger.error("Failed to filter orders:", error);
     throw new Error(error.response?.data?.message || "Failed to filter orders");
   }
 };

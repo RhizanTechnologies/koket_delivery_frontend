@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface FeaturedProductCardProps {
   images: string[];
@@ -51,7 +52,9 @@ export default function FeaturedProductCard({
           {displayImages.length > 1 && (
             <>
               {/* Left Arrow */}
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={(e) => {
                   e.preventDefault();
                   setCurrentImageIndex((prev) =>
@@ -62,10 +65,12 @@ export default function FeaturedProductCard({
                 aria-label="Previous image"
               >
                 <ChevronLeft className="w-5 h-5 text-gray-800" />
-              </button>
+              </Button>
 
               {/* Right Arrow */}
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={(e) => {
                   e.preventDefault();
                   setCurrentImageIndex((prev) =>
@@ -76,7 +81,7 @@ export default function FeaturedProductCard({
                 aria-label="Next image"
               >
                 <ChevronRight className="w-5 h-5 text-gray-800" />
-              </button>
+              </Button>
 
               {/* Image indicators (small dots) */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">

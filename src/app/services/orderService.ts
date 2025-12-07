@@ -1,4 +1,5 @@
 import { apiClient as api } from "./api";
+import { logger } from "@/app/utils/logger";
 
 export interface OrderItem {
   _id: string; // Cart item ID - backend will mark this as is_ordered: true
@@ -77,7 +78,7 @@ export async function getUserOrders(): Promise<Order[]> {
 
     return Array.isArray(data) ? data : [];
   } catch (error: any) {
-    console.error("Failed to fetch orders", error?.response?.data ?? error);
+    logger.error("Failed to fetch orders", error?.response?.data ?? error);
     throw error;
   }
 }
@@ -101,7 +102,7 @@ export async function getOrderById(orderId: string): Promise<Order> {
 
     return data;
   } catch (error: any) {
-    console.error("Failed to fetch order", error?.response?.data ?? error);
+    logger.error("Failed to fetch order", error?.response?.data ?? error);
     throw error;
   }
 }
@@ -149,7 +150,7 @@ export async function createOrder(
 
     return data;
   } catch (error: any) {
-    console.error("Failed to create order", error?.response?.data ?? error);
+    logger.error("Failed to create order", error?.response?.data ?? error);
     throw error;
   }
 }

@@ -1,3 +1,4 @@
+import { logger } from "@/app/utils/logger";
 /**
  * Admin Services Index
  * Re-exports all admin-related services for convenient imports

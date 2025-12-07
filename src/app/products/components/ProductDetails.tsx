@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Star, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,9 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { addToCart, type AddToCartPayload } from "@/app/services/cartService";
 import type { ProductDetail } from "@/app/types/product";
 import { toast } from "react-toastify";
+import { useAuth } from "@/app/context/AuthContext";
+import { getErrorMessage, getSuccessMessage } from "@/app/utils/errorHandler";
 
 const currencyFormatter = new Intl.NumberFormat("en-ET", {
   style: "currency",
@@ -64,6 +68,8 @@ interface ProductDetailsProps {
 }
 
 export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
+  const router = useRouter();
+  const { isLoggedIn } = useAuth();
   const weightOptions = buildWeightOptions(product);
   const [selectedWeight, setSelectedWeight] = useState<WeightOption | null>(
     weightOptions[0] ?? null
@@ -91,6 +97,13 @@ export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
   const ratingValue = Math.min(5, Math.max(0, Math.round(averageRating)));
 
   const handleAddToCart = async () => {
+    // Check if user is logged in
+    if (!isLoggedIn) {
+      toast.info("Please log in to add items to your cart");
+      router.push("/auth/login");
+      return;
+    }
+
     // Validation: for weight-based products, ensure a weight is selected
     if (
       product?.kilo_to_price_map &&
@@ -101,6 +114,8 @@ export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
         return;
       }
     }
+
+    setIsAddingToCart(true);
 
     setIsAddingToCart(true);
 
@@ -132,7 +147,7 @@ export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
       }
 
       await addToCart(payload);
-      toast.success("Added to cart successfully!");
+      toast.success(getSuccessMessage("add", "Item"));
 
       // Clear form
       setMessage("");
@@ -143,10 +158,7 @@ export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
         onCartUpdate();
       }
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ??
-        error?.message ??
-        "Failed to add to cart";
+      const errorMessage = getErrorMessage(error, "Failed to add item to cart");
       toast.error(errorMessage);
     } finally {
       setIsAddingToCart(false);
@@ -274,12 +286,11 @@ export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
           <label className="mb-2 block text-sm font-medium">
             Message on cake (Optional)
           </label>
-          <textarea
+          <Textarea
             rows={3}
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             placeholder="e.g. Happy Birthday!"
-            className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
@@ -288,12 +299,11 @@ export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
           <label className="mb-2 block text-sm font-medium">
             Additional instructions (Optional)
           </label>
-          <textarea
+          <Textarea
             rows={3}
             value={additionalDescription}
             onChange={(event) => setAdditionalDescription(event.target.value)}
             placeholder="Allergies, delivery notes, or decoration details"
-            className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
