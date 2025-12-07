@@ -19,7 +19,9 @@ export default function LoadingState({
     <div
       className={cn(
         "flex flex-col items-center justify-center px-4 text-center",
-        fullScreen ? "min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50" : "py-12",
+        fullScreen
+          ? "min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50"
+          : "py-12",
         className
       )}
     >
@@ -36,9 +38,7 @@ export default function LoadingState({
         </div>
       </div>
       <p className="mt-6 text-gray-700 font-medium text-lg">{message}</p>
-      {subtitle && (
-        <p className="mt-2 text-gray-500 text-sm">{subtitle}</p>
-      )}
+      {subtitle && <p className="mt-2 text-gray-500 text-sm">{subtitle}</p>}
     </div>
   );
 }

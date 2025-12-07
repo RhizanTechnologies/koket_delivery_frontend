@@ -3,7 +3,7 @@
  * Centralized logging that can be disabled in production
  */
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+const isDevelopment = process.env.NODE_ENV === "development";
 
 export const logger = {
   /**
@@ -11,7 +11,7 @@ export const logger = {
    */
   error: (message: string, error?: any) => {
     if (isDevelopment) {
-      console.error(`[ERROR] ${message}`, error || '');
+      console.error(`[ERROR] ${message}`, error || "");
     }
   },
 
@@ -20,7 +20,7 @@ export const logger = {
    */
   warn: (message: string, data?: any) => {
     if (isDevelopment) {
-      console.warn(`[WARN] ${message}`, data || '');
+      console.warn(`[WARN] ${message}`, data || "");
     }
   },
 
@@ -29,7 +29,7 @@ export const logger = {
    */
   info: (message: string, data?: any) => {
     if (isDevelopment) {
-      console.log(`[INFO] ${message}`, data || '');
+      console.log(`[INFO] ${message}`, data || "");
     }
   },
 
@@ -38,7 +38,7 @@ export const logger = {
    */
   debug: (message: string, data?: any) => {
     if (isDevelopment) {
-      console.debug(`[DEBUG] ${message}`, data || '');
+      console.debug(`[DEBUG] ${message}`, data || "");
     }
   },
 };

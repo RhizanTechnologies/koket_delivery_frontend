@@ -57,10 +57,7 @@ export const registerUser = async (
     const response = await apiClient.post<AuthResponse>("/auth/register", data);
     return response.data;
   } catch (error: any) {
-    logger.error(
-      "Registration failed:",
-      error.response?.data || error.message
-    );
+    logger.error("Registration failed:", error.response?.data || error.message);
     throw error;
   }
 };
