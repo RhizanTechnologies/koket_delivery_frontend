@@ -234,12 +234,12 @@ export function handleError(
   fallbackMessage?: string
 ): string {
   const errorMessage = getErrorMessage(error, fallbackMessage);
-  
+
   logger.error(`${context}:`, {
     error: error instanceof Error ? error.message : String(error),
     stack: error instanceof Error ? error.stack : undefined,
   });
-  
+
   return errorMessage;
 }
 
@@ -281,27 +281,27 @@ export async function retryRequest<T>(
   delayMs: number = 1000
 ): Promise<T> {
   let lastError: any;
-  
+
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await fn();
     } catch (error) {
       lastError = error;
-      
+
       // Don't retry on client errors (4xx)
-      if (error && typeof error === 'object' && 'response' in error) {
+      if (error && typeof error === "object" && "response" in error) {
         const status = (error as any).response?.status;
         if (status && status >= 400 && status < 500) {
           throw error;
         }
       }
-      
+
       // Wait before retrying
       if (i < maxRetries - 1) {
-        await new Promise(resolve => setTimeout(resolve, delayMs * (i + 1)));
+        await new Promise((resolve) => setTimeout(resolve, delayMs * (i + 1)));
       }
     }
   }
-  
+
   throw lastError;
 }

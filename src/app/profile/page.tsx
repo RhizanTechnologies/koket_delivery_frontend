@@ -126,7 +126,7 @@ export default function ProfilePage() {
         email: data.email,
         phone_number: data.phone,
       });
-      
+
       if (!validation.success) {
         setError(validation.error);
         toast.error(validation.error);

@@ -3,7 +3,12 @@
  * Logs all API calls with request and response details
  */
 
-import { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+} from "axios";
 import { logger } from "./logger";
 
 /**
@@ -58,10 +63,14 @@ export function setupApiLogger(axiosInstance: AxiosInstance) {
       return config;
     },
     (error: AxiosError) => {
-      logger.error("API Request Error", {
-        message: error.message,
-        config: error.config,
-      }, "API");
+      logger.error(
+        "API Request Error",
+        {
+          message: error.message,
+          config: error.config,
+        },
+        "API"
+      );
       return Promise.reject(error);
     }
   );
@@ -84,7 +93,9 @@ export function setupApiLogger(axiosInstance: AxiosInstance) {
 
       const logLevel = response.status >= 400 ? "warn" : "http";
       logger[logLevel](
-        `API Response: ${response.status} ${response.config.method?.toUpperCase()} ${response.config.url}`,
+        `API Response: ${
+          response.status
+        } ${response.config.method?.toUpperCase()} ${response.config.url}`,
         responseLog,
         "API"
       );
@@ -104,7 +115,9 @@ export function setupApiLogger(axiosInstance: AxiosInstance) {
       };
 
       logger.error(
-        `API Error: ${status} ${error.config?.method?.toUpperCase()} ${error.config?.url}`,
+        `API Error: ${status} ${error.config?.method?.toUpperCase()} ${
+          error.config?.url
+        }`,
         errorLog,
         "API"
       );
@@ -177,7 +190,11 @@ function sanitizeData(data: any): any {
 
   // Recursively sanitize object
   Object.keys(sanitized).forEach((key) => {
-    if (sensitiveKeys.some((sensitive) => key.toLowerCase().includes(sensitive.toLowerCase()))) {
+    if (
+      sensitiveKeys.some((sensitive) =>
+        key.toLowerCase().includes(sensitive.toLowerCase())
+      )
+    ) {
       sanitized[key] = "[REDACTED]";
     } else if (typeof sanitized[key] === "object" && sanitized[key] !== null) {
       sanitized[key] = sanitizeData(sanitized[key]);

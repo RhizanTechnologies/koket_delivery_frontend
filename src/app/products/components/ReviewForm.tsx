@@ -36,7 +36,7 @@ export function ReviewForm({
 
     // Validate input data with Zod
     const validation = validateSafe(reviewSchema, { rating, comment });
-    
+
     if (!validation.success) {
       setError(validation.error);
       toast.error(validation.error);

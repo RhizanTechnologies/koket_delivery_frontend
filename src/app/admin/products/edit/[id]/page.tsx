@@ -182,7 +182,7 @@ export default function EditProductPage() {
         categoryId,
         subcategoryId,
       });
-      
+
       if (!validation.success) {
         toast.error(validation.error);
         setSubmitting(false);

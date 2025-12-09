@@ -133,7 +133,9 @@ function logToConsole(entry: LogEntry) {
   const color = getLogColor(entry.level);
   const prefix = `${color}[${entry.level}]${resetColor}`;
   const timestamp = `\x1b[90m${entry.timestamp}${resetColor}`;
-  const contextStr = entry.context ? `\x1b[90m[${entry.context}]${resetColor}` : "";
+  const contextStr = entry.context
+    ? `\x1b[90m[${entry.context}]${resetColor}`
+    : "";
 
   const logMessage = `${timestamp} ${prefix} ${contextStr} ${entry.message}`;
 

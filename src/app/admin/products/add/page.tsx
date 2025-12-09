@@ -243,7 +243,7 @@ export default function AddProductPage() {
         size: productData.size,
         quantity: productData.quantity,
       });
-      
+
       if (!validation.success) {
         setError(validation.error);
         toast.error(validation.error);

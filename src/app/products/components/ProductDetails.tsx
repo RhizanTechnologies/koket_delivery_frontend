@@ -148,7 +148,7 @@ export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
 
       // Validate input data with Zod before sending to API
       const validation = validateSafe(addToCartSchema, payload);
-      
+
       if (!validation.success) {
         toast.error(validation.error);
         setIsAddingToCart(false);

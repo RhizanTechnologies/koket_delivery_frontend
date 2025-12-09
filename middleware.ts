@@ -33,7 +33,7 @@ function verifyToken(token: string): { valid: boolean; role?: string } {
   try {
     // Decode JWT payload (basic decode without verification)
     const payload = JSON.parse(atob(token.split(".")[1]));
-    
+
     // Check if token is expired
     if (payload.exp && payload.exp * 1000 < Date.now()) {
       return { valid: false };
@@ -59,7 +59,9 @@ export function middleware(request: NextRequest) {
   if (isAdminRoute(pathname)) {
     // Check if user has access token
     if (!accessToken) {
-      console.log(`[Middleware] No access token - redirecting to login from ${pathname}`);
+      console.log(
+        `[Middleware] No access token - redirecting to login from ${pathname}`
+      );
       const loginUrl = new URL("/auth/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
@@ -67,9 +69,11 @@ export function middleware(request: NextRequest) {
 
     // Verify token and check role
     const tokenVerification = verifyToken(accessToken);
-    
+
     if (!tokenVerification.valid) {
-      console.log(`[Middleware] Invalid token - redirecting to login from ${pathname}`);
+      console.log(
+        `[Middleware] Invalid token - redirecting to login from ${pathname}`
+      );
       const loginUrl = new URL("/auth/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
@@ -77,7 +81,9 @@ export function middleware(request: NextRequest) {
 
     // Check if user has admin role
     if (tokenVerification.role !== "admin") {
-      console.log(`[Middleware] Non-admin user attempting to access ${pathname}`);
+      console.log(
+        `[Middleware] Non-admin user attempting to access ${pathname}`
+      );
       const homeUrl = new URL("/", request.url);
       return NextResponse.redirect(homeUrl);
     }
@@ -89,10 +95,12 @@ export function middleware(request: NextRequest) {
   // For auth routes - redirect if already logged in
   if (isAuthRoute(pathname) && accessToken) {
     const tokenVerification = verifyToken(accessToken);
-    
+
     if (tokenVerification.valid) {
-      console.log(`[Middleware] Already logged in - redirecting from ${pathname}`);
-      
+      console.log(
+        `[Middleware] Already logged in - redirecting from ${pathname}`
+      );
+
       // Redirect admin users to admin panel, regular users to home
       const redirectUrl = tokenVerification.role === "admin" ? "/admin" : "/";
       return NextResponse.redirect(new URL(redirectUrl, request.url));

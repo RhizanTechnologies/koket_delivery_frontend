@@ -38,7 +38,7 @@ function ContactForm() {
     try {
       // Validate input data with Zod
       const validation = validateSafe(contactSchema, formData);
-      
+
       if (!validation.success) {
         setError(validation.error);
         toast.error(validation.error);
@@ -49,7 +49,7 @@ function ContactForm() {
       // TODO: Call API to submit contact form
       console.log("Form submitted:", validation.data);
       toast.success("Message sent successfully! We'll get back to you soon.");
-      
+
       // Reset form
       setFormData({
         name: "",
@@ -60,7 +60,8 @@ function ContactForm() {
         message: "",
       });
     } catch (err: any) {
-      const errorMsg = err.message || "Failed to send message. Please try again.";
+      const errorMsg =
+        err.message || "Failed to send message. Please try again.";
       setError(errorMsg);
       toast.error(errorMsg);
     } finally {

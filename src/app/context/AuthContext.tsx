@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem("accessToken", tokens.accessToken);
       // Also set cookies for middleware access
       setCookie("accessToken", tokens.accessToken, 7);
-      
+
       if (tokens.refreshToken) {
         localStorage.setItem("refreshToken", tokens.refreshToken);
         setCookie("refreshToken", tokens.refreshToken, 30);
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    
+
     // Also delete cookies
     deleteCookie("accessToken");
     deleteCookie("refreshToken");

@@ -3,9 +3,10 @@
 ## 🎯 Quick Access Guide
 
 ### Zod Validation
+
 ```typescript
 // Import schema
-import { loginSchema } from '@/app/schemas/authSchemas';
+import { loginSchema } from "@/app/schemas/authSchemas";
 
 // Validate data
 const result = loginSchema.safeParse(formData);
@@ -19,15 +20,16 @@ if (!result.success) {
 ---
 
 ### Error Handling
+
 ```typescript
 // Throw custom errors
-import { AppError } from '@/app/utils/errorHandler';
-throw new AppError('Not found', 404, 'RESOURCE_NOT_FOUND');
+import { AppError } from "@/app/utils/errorHandler";
+throw new AppError("Not found", 404, "RESOURCE_NOT_FOUND");
 
 // Wrap risky code
 <ErrorBoundary fallback={<CustomError />}>
   <RiskyComponent />
-</ErrorBoundary>
+</ErrorBoundary>;
 ```
 
 **Files:** `src/app/components/ErrorBoundary.tsx`, `src/app/utils/errorHandler.ts`
@@ -35,12 +37,13 @@ throw new AppError('Not found', 404, 'RESOURCE_NOT_FOUND');
 ---
 
 ### Logging
-```typescript
-import { logger } from '@/app/utils/logger';
 
-logger.info('User logged in', { userId: '123' }, 'Auth');
-logger.warn('Low stock', { productId: 'abc' }, 'Inventory');
-logger.error('Payment failed', { error }, 'Payment');
+```typescript
+import { logger } from "@/app/utils/logger";
+
+logger.info("User logged in", { userId: "123" }, "Auth");
+logger.warn("Low stock", { productId: "abc" }, "Inventory");
+logger.error("Payment failed", { error }, "Payment");
 ```
 
 **Files:** `src/app/utils/logger.ts`, `src/app/utils/apiLogger.ts`
@@ -50,44 +53,49 @@ logger.error('Payment failed', { error }, 'Payment');
 ### React Query - Quick Start
 
 **Fetch Data:**
+
 ```typescript
 import { useProductsQuery } from '@/app/hooks/useProductsQuery';
 
 function Component() {
   const { data, isLoading, error } = useProductsQuery();
-  
+
   if (isLoading) return <Loading />;
   if (error) return <Error error={error} />;
-  
+
   return <div>{data.map(...)}</div>;
 }
 ```
 
 **Mutate Data:**
+
 ```typescript
-import { useCreateProduct } from '@/app/hooks/useProductsQuery';
+import { useCreateProduct } from "@/app/hooks/useProductsQuery";
 
 function Component() {
   const createProduct = useCreateProduct();
-  
+
   const handleSubmit = async (data) => {
     await createProduct.mutateAsync(data);
     // Cache automatically updated!
   };
-  
+
   return <form onSubmit={handleSubmit}>...</form>;
 }
 ```
 
 **Cart Operations (Optimistic):**
+
 ```typescript
-import { useAddToCart } from '@/app/hooks/useCartQuery';
+import { useAddToCart } from "@/app/hooks/useCartQuery";
 
 function AddButton({ productId }) {
   const addToCart = useAddToCart();
-  
+
   return (
-    <button onClick={() => addToCart.mutate({ product_id: productId, quantity: 1 })}>
+    <button
+      onClick={() => addToCart.mutate({ product_id: productId, quantity: 1 })}
+    >
       Add to Cart
     </button>
   );
@@ -131,6 +139,7 @@ src/app/
 ## 🔑 Available Hooks
 
 ### Products
+
 - `useProductsQuery()` - All products
 - `useProductQuery(id)` - Single product
 - `useProductsByCategoryQuery(categoryId)` - By category
@@ -139,6 +148,7 @@ src/app/
 - `useDeleteProduct()` - Delete (admin)
 
 ### Cart
+
 - `useCartQuery()` - Cart items
 - `useAddToCart()` - Add item (optimistic)
 - `useRemoveFromCart()` - Remove item (optimistic)
@@ -146,6 +156,7 @@ src/app/
 - `useClearCart()` - Clear cart
 
 ### Orders
+
 - `useOrdersQuery()` - User's orders
 - `useOrderQuery(id)` - Single order
 - `useCreateOrder()` - Place order
@@ -153,6 +164,7 @@ src/app/
 - `useCancelOrder()` - Cancel order
 
 ### Common
+
 - `useCategoriesQuery()` - All categories
 - `useProfileQuery()` - User profile
 - `useUpdateProfile()` - Update profile
@@ -164,6 +176,7 @@ src/app/
 ## ⚙️ Configuration
 
 ### Query Stale Times
+
 - Products: **5 minutes**
 - Categories: **10 minutes**
 - Profile: **5 minutes**
@@ -171,6 +184,7 @@ src/app/
 - Cart: **1 minute**
 
 ### Cache Settings
+
 - GC Time: **10 minutes**
 - Retry: **2 attempts**
 - Exponential backoff enabled
@@ -180,6 +194,7 @@ src/app/
 ## 🛡️ Protected Routes
 
 All `/admin/*` routes are protected by middleware:
+
 - Requires valid JWT token in cookies
 - Requires admin role
 - Auto-redirects to login if unauthorized
@@ -189,13 +204,16 @@ All `/admin/*` routes are protected by middleware:
 ## 🐛 Debugging
 
 ### Check Logs
+
 Browser Console → Structured logs with timestamps and context
 
 ### React Query DevTools
+
 - Look for floating icon at bottom of screen (dev mode only)
 - Click to inspect all queries, mutations, and cache
 
 ### Check Errors
+
 Components wrapped in ErrorBoundary will show friendly error UI
 
 ---
@@ -203,42 +221,47 @@ Components wrapped in ErrorBoundary will show friendly error UI
 ## 📝 Common Patterns
 
 ### Loading State
+
 ```typescript
 const { data, isLoading } = useQuery();
 if (isLoading) return <LoadingSpinner />;
 ```
 
 ### Error State
+
 ```typescript
 const { data, error, isError } = useQuery();
 if (isError) return <ErrorState error={error} />;
 ```
 
 ### Mutation with Feedback
+
 ```typescript
 const mutation = useMutation();
 
 const handleSubmit = async () => {
   try {
     await mutation.mutateAsync(data);
-    toast.success('Success!');
+    toast.success("Success!");
   } catch (error) {
-    toast.error('Failed!');
+    toast.error("Failed!");
   }
 };
 ```
 
 ### Manual Refetch
+
 ```typescript
 const { data, refetch } = useQuery();
 
-<button onClick={() => refetch()}>Refresh</button>
+<button onClick={() => refetch()}>Refresh</button>;
 ```
 
 ### Invalidate Cache
+
 ```typescript
-import { useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from '@/app/config/queryClient';
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/app/config/queryClient";
 
 const queryClient = useQueryClient();
 

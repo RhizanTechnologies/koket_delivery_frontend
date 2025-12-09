@@ -39,7 +39,8 @@ export default function Error({ error, reset }: ErrorProps) {
 
           {/* Error Message */}
           <p className="text-gray-600 mb-6">
-            We encountered an unexpected error. Don't worry, it's not your fault.
+            We encountered an unexpected error. Don't worry, it's not your
+            fault.
           </p>
 
           {/* Error Details (only in development) */}

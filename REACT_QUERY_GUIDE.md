@@ -1,11 +1,13 @@
 # React Query Implementation Guide
 
 ## Overview
+
 This project now uses React Query (TanStack Query) for efficient data fetching, caching, and state management. This provides automatic background refetching, optimistic updates, and better user experience.
 
 ## Setup
 
 React Query is already configured and integrated:
+
 - ✅ QueryClient configured in `src/app/config/queryClient.ts`
 - ✅ QueryProvider wraps the app in `src/app/layout.tsx`
 - ✅ Custom hooks created for all major data operations
@@ -14,6 +16,7 @@ React Query is already configured and integrated:
 ## Available Hooks
 
 ### Products
+
 ```typescript
 import {
   useProductsQuery,
@@ -37,7 +40,7 @@ function ProductsList() {
 // Fetch single product
 function ProductDetail({ id }: { id: string }) {
   const { data: product, isLoading } = useProductQuery(id);
-  
+
   return <div>{product?.name}</div>;
 }
 
@@ -55,6 +58,7 @@ function CreateProductForm() {
 ```
 
 ### Cart (with Optimistic Updates)
+
 ```typescript
 import {
   useCartQuery,
@@ -110,6 +114,7 @@ function QuantitySelector({ itemId, currentQty }: Props) {
 ```
 
 ### Orders
+
 ```typescript
 import {
   useOrdersQuery,
@@ -148,6 +153,7 @@ function CheckoutButton() {
 ```
 
 ### Categories & User Profile
+
 ```typescript
 import {
   useCategoriesQuery,
@@ -181,6 +187,7 @@ function ProfilePage() {
 ## Key Features
 
 ### 1. Automatic Caching
+
 Data is cached automatically. Subsequent requests for the same data return cached results instantly.
 
 ```typescript
@@ -192,6 +199,7 @@ const { data } = useProductsQuery();
 ```
 
 ### 2. Optimistic Updates
+
 Cart operations update the UI immediately, then sync with the server.
 
 ```typescript
@@ -203,13 +211,16 @@ Cart operations update the UI immediately, then sync with the server.
 ```
 
 ### 3. Automatic Refetching
+
 Data refetches automatically:
+
 - When window regains focus
 - When network reconnects
 - After specified stale time
 - When you invalidate queries
 
 ### 4. Loading & Error States
+
 Built-in loading and error handling:
 
 ```typescript
@@ -221,6 +232,7 @@ return <ProductsList products={data} />;
 ```
 
 ### 5. Cache Invalidation
+
 Mutations automatically invalidate related queries:
 
 ```typescript
@@ -237,29 +249,30 @@ Query keys are organized for easy cache management:
 
 ```typescript
 // Products
-queryKeys.products.all              // ["products"]
-queryKeys.products.detail(id)       // ["products", "detail", id]
-queryKeys.products.list({ category }) // ["products", "list", { category }]
+queryKeys.products.all; // ["products"]
+queryKeys.products.detail(id); // ["products", "detail", id]
+queryKeys.products.list({ category }); // ["products", "list", { category }]
 
 // Cart
-queryKeys.cart.all                  // ["cart"]
+queryKeys.cart.all; // ["cart"]
 
 // Orders
-queryKeys.orders.all                // ["orders"]
-queryKeys.orders.detail(id)         // ["orders", "detail", id]
+queryKeys.orders.all; // ["orders"]
+queryKeys.orders.detail(id); // ["orders", "detail", id]
 
 // Categories
-queryKeys.categories.all            // ["categories"]
+queryKeys.categories.all; // ["categories"]
 
 // User
-queryKeys.user.profile()            // ["user", "profile"]
-queryKeys.user.orders()             // ["user", "orders"]
-queryKeys.user.reviews()            // ["user", "reviews"]
+queryKeys.user.profile(); // ["user", "profile"]
+queryKeys.user.orders(); // ["user", "orders"]
+queryKeys.user.reviews(); // ["user", "reviews"]
 ```
 
 ## Development Tools
 
 In development mode, React Query DevTools are available:
+
 - Click the floating icon at the bottom of the screen
 - View all queries and their states
 - See cached data
@@ -269,6 +282,7 @@ In development mode, React Query DevTools are available:
 ## Migration Guide
 
 ### Before (Direct API Calls)
+
 ```typescript
 // ❌ Old way
 const [products, setProducts] = useState([]);
@@ -276,14 +290,16 @@ const [loading, setLoading] = useState(false);
 
 useEffect(() => {
   setLoading(true);
-  api.get('/products')
-    .then(res => setProducts(res.data))
-    .catch(err => console.error(err))
+  api
+    .get("/products")
+    .then((res) => setProducts(res.data))
+    .catch((err) => console.error(err))
     .finally(() => setLoading(false));
 }, []);
 ```
 
 ### After (React Query)
+
 ```typescript
 // ✅ New way
 const { data: products, isLoading } = useProductsQuery();
@@ -302,6 +318,7 @@ const { data: products, isLoading } = useProductsQuery();
 ## Configuration
 
 Default settings (can be customized in `queryClient.ts`):
+
 - **Stale Time**: 5 minutes (products), 1 minute (cart), 2 minutes (orders)
 - **Cache Time**: 10 minutes (garbage collection)
 - **Retry**: 2 attempts with exponential backoff
@@ -311,18 +328,23 @@ Default settings (can be customized in `queryClient.ts`):
 ## Troubleshooting
 
 ### Data not updating?
+
 Check if you're invalidating the correct query keys after mutations.
 
 ### Too many requests?
+
 Increase `staleTime` in query configuration.
 
 ### Cached data is stale?
+
 Decrease `staleTime` or manually invalidate with:
+
 ```typescript
 queryClient.invalidateQueries({ queryKey: queryKeys.products.all });
 ```
 
 ### Need fresh data immediately?
+
 ```typescript
 const { refetch } = useProductsQuery();
 await refetch(); // Force immediate refetch

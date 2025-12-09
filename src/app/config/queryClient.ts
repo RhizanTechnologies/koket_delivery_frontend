@@ -13,29 +13,29 @@ const queryConfig: DefaultOptions = {
   queries: {
     // Stale time: Data is considered fresh for 5 minutes
     staleTime: 5 * 60 * 1000, // 5 minutes
-    
+
     // Cache time: Unused data remains in cache for 10 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
-    
+
     // Retry failed requests 2 times
     retry: 2,
-    
+
     // Retry delay with exponential backoff
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    
+
     // Refetch on window focus (useful for real-time updates)
     refetchOnWindowFocus: false,
-    
+
     // Refetch on reconnect
     refetchOnReconnect: true,
-    
+
     // Refetch on mount if data is stale
     refetchOnMount: true,
   },
   mutations: {
     // Retry failed mutations once
     retry: 1,
-    
+
     // Log mutation errors
     onError: (error) => {
       logger.error("Mutation error:", error, "ReactQuery");
@@ -62,13 +62,13 @@ export const queryKeys = {
     details: () => [...queryKeys.products.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.products.details(), id] as const,
   },
-  
+
   // Cart
   cart: {
     all: ["cart"] as const,
     items: () => [...queryKeys.cart.all, "items"] as const,
   },
-  
+
   // Orders
   orders: {
     all: ["orders"] as const,
@@ -77,7 +77,7 @@ export const queryKeys = {
     details: () => [...queryKeys.orders.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.orders.details(), id] as const,
   },
-  
+
   // Categories
   categories: {
     all: ["categories"] as const,
@@ -85,7 +85,7 @@ export const queryKeys = {
     details: () => [...queryKeys.categories.all, "detail"] as const,
     detail: (id: string) => [...queryKeys.categories.details(), id] as const,
   },
-  
+
   // User/Profile
   user: {
     all: ["user"] as const,
@@ -93,13 +93,14 @@ export const queryKeys = {
     orders: () => [...queryKeys.user.all, "orders"] as const,
     reviews: () => [...queryKeys.user.all, "reviews"] as const,
   },
-  
+
   // Reviews
   reviews: {
     all: ["reviews"] as const,
-    byProduct: (productId: string) => [...queryKeys.reviews.all, "product", productId] as const,
+    byProduct: (productId: string) =>
+      [...queryKeys.reviews.all, "product", productId] as const,
   },
-  
+
   // Admin
   admin: {
     all: ["admin"] as const,

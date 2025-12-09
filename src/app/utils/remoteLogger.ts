@@ -123,9 +123,9 @@ export class FilteredLogger implements RemoteLogger {
 /**
  * Example: Sentry Integration (pseudo-code)
  * Install @sentry/browser and configure:
- * 
+ *
  * import * as Sentry from "@sentry/browser";
- * 
+ *
  * export class SentryLogger implements RemoteLogger {
  *   log(entry: LogEntry): void {
  *     if (entry.level === LogLevel.ERROR) {
@@ -150,9 +150,9 @@ export class FilteredLogger implements RemoteLogger {
 /**
  * Example: LogRocket Integration (pseudo-code)
  * Install logrocket and configure:
- * 
+ *
  * import LogRocket from "logrocket";
- * 
+ *
  * export class LogRocketLogger implements RemoteLogger {
  *   log(entry: LogEntry): void {
  *     if (entry.level === LogLevel.ERROR) {
@@ -168,9 +168,9 @@ export class FilteredLogger implements RemoteLogger {
 /**
  * Example: Datadog Integration (pseudo-code)
  * Install @datadog/browser-logs and configure:
- * 
+ *
  * import { datadogLogs } from "@datadog/browser-logs";
- * 
+ *
  * export class DatadogLogger implements RemoteLogger {
  *   log(entry: LogEntry): void {
  *     const logMethod = {
@@ -180,7 +180,7 @@ export class FilteredLogger implements RemoteLogger {
  *       [LogLevel.DEBUG]: datadogLogs.logger.debug,
  *       [LogLevel.HTTP]: datadogLogs.logger.info,
  *     }[entry.level];
- * 
+ *
  *     logMethod(entry.message, entry.data, {
  *       context: entry.context,
  *       url: entry.url,
@@ -198,7 +198,7 @@ export function setupRemoteLogging() {
   // Example: Only send errors and warnings to remote in production
   if (process.env.NODE_ENV === "production") {
     const remoteEndpoint = process.env.NEXT_PUBLIC_LOG_ENDPOINT;
-    
+
     if (remoteEndpoint) {
       const baseLogger = new BatchLogger(remoteEndpoint, 20, 10000);
       const filteredLogger = new FilteredLogger(baseLogger, [

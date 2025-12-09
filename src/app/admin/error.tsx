@@ -39,7 +39,8 @@ export default function AdminError({ error, reset }: AdminErrorProps) {
 
           {/* Error Message */}
           <p className="text-gray-600 mb-6 text-center">
-            An error occurred in the admin panel. Please try again or return to the dashboard.
+            An error occurred in the admin panel. Please try again or return to
+            the dashboard.
           </p>
 
           {/* Error Details (development only) */}
@@ -68,7 +69,7 @@ export default function AdminError({ error, reset }: AdminErrorProps) {
               <RefreshCw className="h-4 w-4" />
               Try Again
             </Button>
-            
+
             <div className="flex gap-3">
               <Link href="/admin" className="flex-1">
                 <Button
@@ -79,7 +80,7 @@ export default function AdminError({ error, reset }: AdminErrorProps) {
                   Admin Dashboard
                 </Button>
               </Link>
-              
+
               <Link href="/" className="flex-1">
                 <Button
                   variant="outline"

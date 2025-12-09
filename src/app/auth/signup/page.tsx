@@ -35,7 +35,7 @@ function SignUpPage() {
         password,
         confirmPassword,
       });
-      
+
       if (!validation.success) {
         setError(validation.error);
         setLoading(false);

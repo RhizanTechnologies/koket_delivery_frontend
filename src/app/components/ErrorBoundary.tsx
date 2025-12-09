@@ -77,7 +77,11 @@ interface ErrorFallbackProps {
   compact?: boolean;
 }
 
-export function ErrorFallback({ error, reset, compact = false }: ErrorFallbackProps) {
+export function ErrorFallback({
+  error,
+  reset,
+  compact = false,
+}: ErrorFallbackProps) {
   if (compact) {
     return (
       <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg">

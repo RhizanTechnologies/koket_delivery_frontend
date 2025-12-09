@@ -28,7 +28,7 @@ function LoginPage() {
     try {
       // Validate input data with Zod
       const validation = validateSafe(loginSchema, { email, password });
-      
+
       if (!validation.success) {
         setError(validation.error);
         setLoading(false);

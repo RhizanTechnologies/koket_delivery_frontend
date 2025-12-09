@@ -165,7 +165,7 @@ export default function CheckoutPage() {
 
       // Validate order data with Zod
       const validation = validateSafe(orderSchema, orderPayload);
-      
+
       if (!validation.success) {
         toast.error(validation.error);
         setIsSubmitting(false);
