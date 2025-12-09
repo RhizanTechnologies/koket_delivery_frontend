@@ -18,6 +18,8 @@ import {
 } from "../services/userService";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "@/components/ui/button";
+import { profileUpdateSchema } from "../schemas";
+import { validateSafe } from "../utils/validation";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -118,15 +120,25 @@ export default function ProfilePage() {
       setLoading(true);
       setError(null);
 
-      // Import the update function
-      const { updateUserProfile } = await import("../services/profileService");
-
-      // Call API to update profile
-      await updateUserProfile({
+      // Validate input data with Zod
+      const validation = validateSafe(profileUpdateSchema, {
         name: data.fullName,
         email: data.email,
         phone_number: data.phone,
       });
+      
+      if (!validation.success) {
+        setError(validation.error);
+        toast.error(validation.error);
+        setLoading(false);
+        return;
+      }
+
+      // Import the update function
+      const { updateUserProfile } = await import("../services/profileService");
+
+      // Call API to update profile
+      await updateUserProfile(validation.data);
 
       // Update local state
       setUser({

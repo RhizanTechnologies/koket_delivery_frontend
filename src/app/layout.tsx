@@ -7,6 +7,8 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { ToastProvider } from "@/components/ToastProvider";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { QueryProvider } from "./providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,15 +41,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${kaushanScript.variable} antialiased`}
       >
-        <AuthProvider>
-          <CartProvider>
-            <Navbar />
-            <ScrollToTop />
-            {children}
-            <Footer />
-            <ToastProvider />
-          </CartProvider>
-        </AuthProvider>
+        <QueryProvider>
+          <AuthProvider>
+            <CartProvider>
+              <ErrorBoundary>
+                <Navbar />
+                <ScrollToTop />
+                {children}
+                <Footer />
+                <ToastProvider />
+              </ErrorBoundary>
+            </CartProvider>
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );

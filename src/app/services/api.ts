@@ -3,6 +3,7 @@ import axios, {
   AxiosInstance,
   InternalAxiosRequestConfig,
 } from "axios";
+import { setupApiLogger } from "@/app/utils/apiLogger";
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5001/api/v1";
@@ -14,6 +15,9 @@ export const apiClient: AxiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+// Setup API request/response logging
+setupApiLogger(apiClient);
 
 // Request interceptor to add auth token
 apiClient.interceptors.request.use(

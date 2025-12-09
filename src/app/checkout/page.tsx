@@ -12,6 +12,8 @@ import LoadingState from "@/components/LoadingState";
 import { createOrder, type OrderItem } from "@/app/services/orderService";
 import { toast } from "react-toastify";
 import { getErrorMessage, getSuccessMessage } from "@/app/utils/errorHandler";
+import { orderSchema } from "@/app/schemas";
+import { validateSafe } from "@/app/utils/validation";
 
 interface CheckoutItem {
   id: string;
@@ -130,15 +132,6 @@ export default function CheckoutPage() {
     recipientPhone: string;
     paymentProof: File | null;
   }) => {
-    if (
-      !formData.deliveryDate ||
-      !formData.recipientPhone ||
-      !formData.paymentProof
-    ) {
-      toast.error("Please fill all required fields");
-      return;
-    }
-
     if (items.length === 0) {
       toast.error("No items in cart");
       return;
@@ -170,8 +163,17 @@ export default function CheckoutPage() {
         total_price: total,
       };
 
+      // Validate order data with Zod
+      const validation = validateSafe(orderSchema, orderPayload);
+      
+      if (!validation.success) {
+        toast.error(validation.error);
+        setIsSubmitting(false);
+        return;
+      }
+
       // Create the order - backend will mark the cart items as is_ordered: true
-      await createOrder(orderPayload);
+      await createOrder(validation.data);
 
       // Set flag to prevent redirect to cart
       setOrderPlaced(true);

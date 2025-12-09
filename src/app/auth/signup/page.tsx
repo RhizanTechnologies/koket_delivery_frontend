@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { GoogleAuthButton, AuthDivider } from "../components";
 import { registerUser } from "@/app/services/authService";
 import { useAuth } from "@/app/context/AuthContext";
+import { registerSchema } from "@/app/schemas";
+import { validateSafe } from "@/app/utils/validation";
 
 function SignUpPage() {
   const { login } = useAuth();
@@ -23,18 +25,27 @@ function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
     setLoading(true);
+
     try {
-      const response = await registerUser({
+      // Validate input data with Zod
+      const validation = validateSafe(registerSchema, {
         name: fullName,
         email,
         password,
+        confirmPassword,
+      });
+      
+      if (!validation.success) {
+        setError(validation.error);
+        setLoading(false);
+        return;
+      }
+
+      const response = await registerUser({
+        name: validation.data.name,
+        email: validation.data.email,
+        password: validation.data.password,
       });
 
       const role: "customer" | "admin" =

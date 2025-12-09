@@ -17,6 +17,8 @@ import type { ProductDetail } from "@/app/types/product";
 import { toast } from "react-toastify";
 import { useAuth } from "@/app/context/AuthContext";
 import { getErrorMessage, getSuccessMessage } from "@/app/utils/errorHandler";
+import { addToCartSchema } from "@/app/schemas";
+import { validateSafe } from "@/app/utils/validation";
 
 const currencyFormatter = new Intl.NumberFormat("en-ET", {
   style: "currency",
@@ -117,8 +119,6 @@ export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
 
     setIsAddingToCart(true);
 
-    setIsAddingToCart(true);
-
     try {
       const payload: AddToCartPayload = {
         product_id: product._id,
@@ -146,7 +146,16 @@ export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
         payload.additional_description = additionalDescription.trim();
       }
 
-      await addToCart(payload);
+      // Validate input data with Zod before sending to API
+      const validation = validateSafe(addToCartSchema, payload);
+      
+      if (!validation.success) {
+        toast.error(validation.error);
+        setIsAddingToCart(false);
+        return;
+      }
+
+      await addToCart(validation.data);
       toast.success(getSuccessMessage("add", "Item"));
 
       // Clear form

@@ -2,6 +2,23 @@
  * Utility functions for handling and displaying user-friendly error messages
  */
 
+import { logger } from "./logger";
+
+/**
+ * Standardized API Error Response Format
+ */
+export interface ApiErrorResponse {
+  success: false;
+  message: string;
+  statusCode: number;
+  errors?: Record<string, string[]> | string[];
+  timestamp?: string;
+  path?: string;
+}
+
+/**
+ * API Error Interface
+ */
 interface ApiError {
   response?: {
     data?: {
@@ -13,6 +30,21 @@ interface ApiError {
     status?: number;
   };
   message?: string;
+}
+
+/**
+ * Custom Application Error Class
+ */
+export class AppError extends Error {
+  constructor(
+    public message: string,
+    public statusCode: number = 500,
+    public isOperational: boolean = true
+  ) {
+    super(message);
+    this.name = "AppError";
+    Error.captureStackTrace(this, this.constructor);
+  }
 }
 
 /**
@@ -174,4 +206,102 @@ export function getSuccessMessage(
   return `${resource.charAt(0).toUpperCase()}${resource.slice(
     1
   )}${actionText}!`;
+}
+
+/**
+ * Create standardized API error response
+ */
+export function createApiErrorResponse(
+  message: string,
+  statusCode: number = 500,
+  errors?: Record<string, string[]> | string[]
+): ApiErrorResponse {
+  return {
+    success: false,
+    message: formatErrorMessage(message),
+    statusCode,
+    errors,
+    timestamp: new Date().toISOString(),
+  };
+}
+
+/**
+ * Handle and log errors consistently
+ */
+export function handleError(
+  error: unknown,
+  context: string,
+  fallbackMessage?: string
+): string {
+  const errorMessage = getErrorMessage(error, fallbackMessage);
+  
+  logger.error(`${context}:`, {
+    error: error instanceof Error ? error.message : String(error),
+    stack: error instanceof Error ? error.stack : undefined,
+  });
+  
+  return errorMessage;
+}
+
+/**
+ * Check if error is a network error
+ */
+export function isNetworkError(error: any): boolean {
+  return (
+    error?.message?.toLowerCase().includes("network") ||
+    error?.message?.toLowerCase().includes("fetch") ||
+    error?.code === "ECONNREFUSED" ||
+    error?.code === "ENOTFOUND" ||
+    !error?.response
+  );
+}
+
+/**
+ * Check if error is an authentication error
+ */
+export function isAuthError(error: any): boolean {
+  const statusCode = error?.response?.status || error?.statusCode;
+  return statusCode === 401 || statusCode === 403;
+}
+
+/**
+ * Check if error is a validation error
+ */
+export function isValidationError(error: any): boolean {
+  const statusCode = error?.response?.status || error?.statusCode;
+  return statusCode === 400 || statusCode === 422;
+}
+
+/**
+ * Retry logic for failed requests
+ */
+export async function retryRequest<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  delayMs: number = 1000
+): Promise<T> {
+  let lastError: any;
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      
+      // Don't retry on client errors (4xx)
+      if (error && typeof error === 'object' && 'response' in error) {
+        const status = (error as any).response?.status;
+        if (status && status >= 400 && status < 500) {
+          throw error;
+        }
+      }
+      
+      // Wait before retrying
+      if (i < maxRetries - 1) {
+        await new Promise(resolve => setTimeout(resolve, delayMs * (i + 1)));
+      }
+    }
+  }
+  
+  throw lastError;
 }
