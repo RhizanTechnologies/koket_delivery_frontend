@@ -191,16 +191,6 @@ src/app/
 
 ---
 
-## 🛡️ Protected Routes
-
-All `/admin/*` routes are protected by middleware:
-
-- Requires valid JWT token in cookies
-- Requires admin role
-- Auto-redirects to login if unauthorized
-
----
-
 ## 🐛 Debugging
 
 ### Check Logs

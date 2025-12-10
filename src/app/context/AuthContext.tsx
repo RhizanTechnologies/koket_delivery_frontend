@@ -8,7 +8,6 @@ import {
   ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
-import { setCookie, deleteCookie } from "@/app/utils/cookies";
 
 type User = {
   id: string;
@@ -63,12 +62,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("user", JSON.stringify(userData));
     if (tokens) {
       localStorage.setItem("accessToken", tokens.accessToken);
-      // Also set cookies for middleware access
-      setCookie("accessToken", tokens.accessToken, 7);
-
       if (tokens.refreshToken) {
         localStorage.setItem("refreshToken", tokens.refreshToken);
-        setCookie("refreshToken", tokens.refreshToken, 30);
       }
     }
   };
@@ -78,11 +73,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-
-    // Also delete cookies
-    deleteCookie("accessToken");
-    deleteCookie("refreshToken");
-
     router.push("/");
   };
 

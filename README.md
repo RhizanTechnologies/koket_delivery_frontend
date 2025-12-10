@@ -10,6 +10,7 @@ A modern, production-ready e-commerce web application for a bakery and pastry sh
 ## ✨ Features
 
 ### 🛍️ Customer Features
+
 - **Product Catalog**: Browse products with advanced filtering and search
 - **Shopping Cart**: Add/remove items with optimistic updates for instant feedback
 - **Custom Cake Orders**: Design custom cakes with personalized requirements
@@ -19,6 +20,7 @@ A modern, production-ready e-commerce web application for a bakery and pastry sh
 - **Responsive Design**: Mobile-first design that works on all devices
 
 ### 👨‍💼 Admin Features
+
 - **Dashboard**: Analytics and overview of shop performance
 - **Product Management**: CRUD operations for products with image upload
 - **Order Management**: Process and update order statuses
@@ -27,10 +29,10 @@ A modern, production-ready e-commerce web application for a bakery and pastry sh
 - **Review Moderation**: Monitor and respond to customer reviews
 
 ### 🚀 Production-Ready Features
+
 - ✅ **Input Validation**: Comprehensive Zod schemas for all forms
 - ✅ **Error Boundaries**: Graceful error handling with user-friendly UI
 - ✅ **Enhanced Logging**: Structured logging with timestamps and context
-- ✅ **Route Protection**: Middleware-based authentication for admin routes
 - ✅ **React Query Caching**: Optimized data fetching with automatic caching
 - ✅ **Optimistic Updates**: Instant UI feedback for better UX
 - ✅ **TypeScript**: Full type safety across the application
@@ -38,18 +40,21 @@ A modern, production-ready e-commerce web application for a bakery and pastry sh
 ## 🛠️ Tech Stack
 
 ### Core
+
 - **Framework**: [Next.js 15](https://nextjs.org/) with App Router
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **UI Library**: [React 19](https://react.dev/)
 - **Styling**: [TailwindCSS 4](https://tailwindcss.com/)
 
 ### Data & State Management
+
 - **Data Fetching**: [TanStack Query (React Query)](https://tanstack.com/query/latest)
 - **API Client**: [Axios](https://axios-http.com/)
 - **Form Validation**: [Zod](https://zod.dev/)
 - **State Management**: React Context + React Query
 
 ### Development Tools
+
 - **Linting**: ESLint
 - **Type Checking**: TypeScript
 - **Dev Tools**: React Query DevTools
@@ -57,37 +62,42 @@ A modern, production-ready e-commerce web application for a bakery and pastry sh
 ## 📦 Installation
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm or yarn
 - Backend API server running
 
 ### Setup
 
 1. **Clone the repository**
+
 ```bash
 git clone https://github.com/Koket-Bakery-and-pastry/frontend.git
 cd frontend
 ```
 
 2. **Install dependencies**
+
 ```bash
 npm install
 ```
 
 3. **Set up environment variables**
-Create a `.env.local` file in the root directory:
+   Create a `.env.local` file in the root directory:
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000/api
 NEXT_PUBLIC_JWT_SECRET=your-jwt-secret
 ```
 
 4. **Run the development server**
+
 ```bash
 npm run dev
 ```
 
 5. **Open your browser**
-Navigate to [http://localhost:3000](http://localhost:3000)
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## 📁 Project Structure
 
@@ -135,14 +145,14 @@ src/app/
 This project uses React Query for efficient data fetching and caching:
 
 ```typescript
-import { useProductsQuery } from '@/app/hooks/useProductsQuery';
+import { useProductsQuery } from "@/app/hooks/useProductsQuery";
 
 function ProductsList() {
   const { data: products, isLoading, error } = useProductsQuery();
-  
+
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorState error={error} />;
-  
+
   return <ProductGrid products={products} />;
 }
 ```
@@ -154,7 +164,7 @@ See [REACT_QUERY_GUIDE.md](./REACT_QUERY_GUIDE.md) for comprehensive usage examp
 All forms use Zod schemas for type-safe validation:
 
 ```typescript
-import { loginSchema } from '@/app/schemas/authSchemas';
+import { loginSchema } from "@/app/schemas/authSchemas";
 
 const result = loginSchema.safeParse(formData);
 if (!result.success) {
@@ -172,13 +182,6 @@ Global error boundaries catch and display user-friendly error messages:
   <YourComponent />
 </ErrorBoundary>
 ```
-
-### Route Protection
-
-Admin routes are automatically protected by middleware:
-- `/admin/*` routes require authentication and admin role
-- Unauthorized users are redirected to login
-- JWT tokens validated on every request
 
 ## 📚 Documentation
 
@@ -221,6 +224,7 @@ The easiest way to deploy is using [Vercel](https://vercel.com):
 ### Environment Variables for Production
 
 Ensure these are set in your production environment:
+
 - `NEXT_PUBLIC_API_URL` - Backend API URL
 - `NEXT_PUBLIC_JWT_SECRET` - JWT signing secret
 
@@ -244,6 +248,7 @@ Ensure these are set in your production environment:
 ### React Query Settings
 
 Default cache configuration in `src/app/config/queryClient.ts`:
+
 - **Stale Time**: 5 minutes (products), 2 minutes (orders), 1 minute (cart)
 - **Cache Time**: 10 minutes
 - **Retry**: 2 attempts with exponential backoff
@@ -251,6 +256,7 @@ Default cache configuration in `src/app/config/queryClient.ts`:
 ### Custom Breakpoints
 
 Tailwind breakpoints defined in `globals.css`:
+
 - `xss`: 320px (iPhone 5/SE)
 - `xs`: 360px (Small Android)
 - `sm`: 400px (Medium phones)
@@ -266,16 +272,19 @@ Tailwind breakpoints defined in `globals.css`:
 ### Common Issues
 
 **React Query not fetching data:**
+
 - Check if QueryProvider is wrapping your app in `layout.tsx`
 - Verify API endpoint is correct
 - Check browser console for errors
 
 **Authentication not working:**
+
 - Verify JWT_SECRET matches backend
-- Check if cookies are enabled
-- Review middleware configuration in `middleware.ts`
+- Check browser console for errors
+- Ensure tokens are stored in localStorage
 
 **Build errors:**
+
 - Clear `.next` folder: `rm -rf .next`
 - Delete `node_modules` and reinstall: `rm -rf node_modules && npm install`
 - Check TypeScript errors: `npx tsc --noEmit`
@@ -287,6 +296,7 @@ This project is licensed under the MIT License.
 ## 👥 Team
 
 **Koket Bakery & Pastry Team**
+
 - Repository: [github.com/Koket-Bakery-and-pastry](https://github.com/Koket-Bakery-and-pastry)
 
 ## 🙏 Acknowledgments
