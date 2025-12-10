@@ -91,6 +91,14 @@ function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <div className="text-right mt-1">
+                <Link
+                  href="/auth/forgot-password"
+                  className="text-sm text-primary hover:text-primary-hover transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
             {error && <p className="text-destructive text-sm mt-1">{error}</p>}
