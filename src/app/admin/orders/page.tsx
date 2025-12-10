@@ -92,12 +92,37 @@ export default function OrdersPage() {
     return matchesSearch && matchesFromDate && matchesToDate;
   });
 
+  // Only reset page when filter/search changes, NOT when orders are updated
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, fromDate, toDate, categoryFilter, itemsPerPage, orders]);
+  }, [search, fromDate, toDate, categoryFilter, itemsPerPage, filterStatus]);
 
-  const totalItems = filteredOrders.length;
-  const paginatedOrders = filteredOrders.slice(
+  // Sort orders: pending first, then accepted, then by most recent date
+  const sortedOrders = [...filteredOrders].sort((a, b) => {
+    // Priority order: pending > accepted > completed > rejected
+    const statusPriority: Record<OrderStatus, number> = {
+      pending: 0,
+      accepted: 1,
+      completed: 2,
+      rejected: 3,
+    };
+
+    const priorityA = statusPriority[a.status] ?? 4;
+    const priorityB = statusPriority[b.status] ?? 4;
+
+    // First sort by status priority
+    if (priorityA !== priorityB) {
+      return priorityA - priorityB;
+    }
+
+    // Then sort by date (most recent first)
+    const dateA = new Date(a.created_at || a.date || 0).getTime();
+    const dateB = new Date(b.created_at || b.date || 0).getTime();
+    return dateB - dateA;
+  });
+
+  const totalItems = sortedOrders.length;
+  const paginatedOrders = sortedOrders.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -255,7 +280,7 @@ export default function OrdersPage() {
           />
 
           {/* Orders List */}
-          <div className="space-y-6">
+          <div className="space-y-6 mt-8">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mb-4"></div>

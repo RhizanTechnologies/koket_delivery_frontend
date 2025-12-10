@@ -5,19 +5,15 @@ import { toast } from "react-toastify";
 import { Product, UpdateProductDto } from "../../../../types/product";
 import { productSchema } from "@/app/schemas";
 import { validateSafe } from "@/app/utils/validation";
-
-const API_BASE_URL = "http://localhost:5001";
-
-interface Category {
-  _id: string;
-  name: string;
-}
-
-interface SubCategory {
-  _id: string;
-  name: string;
-  category_id: string;
-}
+import {
+  getAdminProductById,
+  getCategories,
+  getSubcategories,
+  updateAdminProduct,
+  resolveImageUrl,
+  type Category,
+  type SubCategory,
+} from "@/app/services/admin/productService";
 
 export default function EditProductPage() {
   const router = useRouter();
@@ -34,40 +30,21 @@ export default function EditProductPage() {
   // Fetch product data, categories, and subcategories
   useEffect(() => {
     const fetchData = async () => {
+      if (!id || typeof id !== "string") return;
+
       try {
         setLoading(true);
 
-        // Fetch product
-        const productResponse = await fetch(
-          `${API_BASE_URL}/api/v1/products/${id}`
-        );
-        if (!productResponse.ok) throw new Error("Failed to fetch product");
-        const productData = await productResponse.json();
-        setProduct(productData.product || productData.data || productData);
+        const [productData, categoriesData, subcategoriesData] =
+          await Promise.all([
+            getAdminProductById(id),
+            getCategories(),
+            getSubcategories(),
+          ]);
 
-        // Fetch categories
-        const categoriesResponse = await fetch(
-          `${API_BASE_URL}/api/v1/categories`
-        );
-        if (categoriesResponse.ok) {
-          const categoriesData = await categoriesResponse.json();
-          setCategories(
-            categoriesData.categories || categoriesData.data || categoriesData
-          );
-        }
-
-        // Fetch subcategories
-        const subcategoriesResponse = await fetch(
-          `${API_BASE_URL}/api/v1/subcategories`
-        );
-        if (subcategoriesResponse.ok) {
-          const subcategoriesData = await subcategoriesResponse.json();
-          setSubcategories(
-            subcategoriesData.subcategories ||
-              subcategoriesData.data ||
-              subcategoriesData
-          );
-        }
+        setProduct(productData as Product);
+        setCategories(categoriesData);
+        setSubcategories(subcategoriesData);
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error(
@@ -78,7 +55,7 @@ export default function EditProductPage() {
       }
     };
 
-    if (id) fetchData();
+    fetchData();
   }, [id]);
 
   const handleInputChange = (field: keyof UpdateProductDto, value: string) => {
@@ -161,7 +138,7 @@ export default function EditProductPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!product) return;
+    if (!product || !id || typeof id !== "string") return;
     setSubmitting(true);
 
     try {
@@ -205,17 +182,7 @@ export default function EditProductPage() {
         });
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/v1/products/${id}`, {
-        method: "PUT",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update product");
-      }
-
-      await response.json();
+      await updateAdminProduct(id, formData);
       toast.success("Product updated successfully!");
       router.push("/admin/products");
     } catch (error) {
@@ -383,7 +350,7 @@ export default function EditProductPage() {
                   {product.images.map((imageUrl, index) => (
                     <div key={index} className="relative">
                       <img
-                        src={`${API_BASE_URL}${imageUrl}`}
+                        src={resolveImageUrl(imageUrl)}
                         alt={`Product image ${index + 1}`}
                         className="w-full h-24 object-cover rounded border"
                       />

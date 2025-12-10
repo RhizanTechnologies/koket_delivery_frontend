@@ -4,26 +4,13 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { productSchema } from "@/app/schemas";
 import { validateSafe } from "@/app/utils/validation";
-
-const API_BASE_URL = "http://localhost:5001";
-
-interface Category {
-  _id: string;
-  name: string;
-  subcategories?: SubCategory[];
-}
-
-interface SubCategory {
-  _id: string;
-  name: string;
-  category_id: string;
-  status: string;
-  kilo_to_price_map?: Record<string, number>;
-  upfront_payment: number;
-  is_pieceable: boolean;
-  price: number;
-  created_at: string;
-}
+import {
+  getCategories,
+  getSubcategories,
+  createAdminProduct,
+  type Category,
+  type SubCategory,
+} from "@/app/services/admin/productService";
 
 interface CreateProductDto {
   name: string;
@@ -65,31 +52,13 @@ export default function AddProductPage() {
         setLoading(true);
         setError(null);
 
-        // Fetch categories
-        const categoriesResponse = await fetch(
-          `${API_BASE_URL}/api/v1/categories`
-        );
-        if (!categoriesResponse.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-        const categoriesData = await categoriesResponse.json();
-        setCategories(
-          categoriesData.categories || categoriesData.data || categoriesData
-        );
+        const [categoriesData, subcategoriesData] = await Promise.all([
+          getCategories(),
+          getSubcategories(),
+        ]);
 
-        // Fetch subcategories
-        const subcategoriesResponse = await fetch(
-          `${API_BASE_URL}/api/v1/subcategories`
-        );
-        if (!subcategoriesResponse.ok) {
-          throw new Error("Failed to fetch subcategories");
-        }
-        const subcategoriesData = await subcategoriesResponse.json();
-        setSubcategories(
-          subcategoriesData.subcategories ||
-            subcategoriesData.data ||
-            subcategoriesData
-        );
+        setCategories(categoriesData);
+        setSubcategories(subcategoriesData);
       } catch (error) {
         console.error("Error fetching data:", error);
         const message =
@@ -302,17 +271,7 @@ export default function AddProductPage() {
         formData.append("pieces", productData.quantity.toString());
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/v1/products`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create product");
-      }
-
-      await response.json();
+      await createAdminProduct(formData);
       toast.success("Product created successfully!");
       router.push("/admin/products");
     } catch (error) {

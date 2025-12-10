@@ -7,6 +7,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import { useState } from "react";
+import { resolveImageUrl } from "@/app/services/admin/productService";
 
 interface ProductCardProps {
   product: Product;
@@ -39,9 +40,9 @@ export default function ProductCard({
   // Get all images (prioritize images array, fallback to image_url)
   const productImages =
     product.images && product.images.length > 0
-      ? product.images.map((img) => `http://localhost:5001${img}`)
+      ? product.images.map((img) => resolveImageUrl(img))
       : product.image_url
-      ? [`http://localhost:5001${product.image_url}`]
+      ? [resolveImageUrl(product.image_url)]
       : ["/assets/placeholder-product.png"];
 
   const nextImage = () => {

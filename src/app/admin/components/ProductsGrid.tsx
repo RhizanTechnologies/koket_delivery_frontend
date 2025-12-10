@@ -1,5 +1,6 @@
 import { Product } from "../../types/product";
 import ProductCard from "./ProductCard";
+import { useRouter } from "next/navigation";
 
 interface ProductsGridProps {
   products: Product[];
@@ -14,6 +15,8 @@ export default function ProductsGrid({
   onEdit,
   onDelete,
 }: ProductsGridProps) {
+  const router = useRouter();
+
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 px-4">
@@ -54,10 +57,7 @@ export default function ProductsGrid({
           >
             <ProductCard
               product={product}
-              onView={() => {
-                // Implement view functionality if needed
-                console.log("View product:", product._id);
-              }}
+              onView={() => router.push(`/admin/products/${product._id}`)}
               onEdit={() => onEdit(product._id)}
               onDelete={() => onDelete(idx, product._id)}
             />
