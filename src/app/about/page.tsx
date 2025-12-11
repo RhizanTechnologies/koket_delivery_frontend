@@ -5,8 +5,8 @@ import { Header, PageHeader } from "@/components";
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background-2">
-      <div className="py-6 sm:py-8 md:py-12">
-        <div className="section-spacing mb-8 sm:mb-10">
+      <div className="">
+        <div className="mb-6 sm:mb-8 md:mb-12">
           <PageHeader
             title="About Koket Bakery & Pastry"
             subtitle="Creating sweet memories with passion and dedication since 2020"

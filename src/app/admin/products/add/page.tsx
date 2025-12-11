@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { productSchema } from "@/app/schemas";
+import { validateSafe } from "@/app/utils/validation";
 import {
   getCategories,
   getSubcategories,
@@ -200,42 +202,43 @@ export default function AddProductPage() {
     setSubmitting(true);
     setError(null);
 
-    // Validation
-    if (
-      !productData.name?.trim() ||
-      !productData.description?.trim() ||
-      !productData.categoryId ||
-      !productData.subcategoryId
-    ) {
-      const message =
-        "Please fill all required fields: Product Name, Description, Category, and Subcategory";
-      setError(message);
-      toast.error(message);
-      setSubmitting(false);
-      return;
-    }
-
-    // Additional validation based on subcategory type
-    if (!selectedSubcategory?.is_pieceable && !productData.size) {
-      const message = "Please select a size for this product";
-      setError(message);
-      toast.error(message);
-      setSubmitting(false);
-      return;
-    }
-
-    if (
-      selectedSubcategory?.is_pieceable &&
-      (!productData.quantity || productData.quantity < 1)
-    ) {
-      const message = "Please enter a valid quantity";
-      setError(message);
-      toast.error(message);
-      setSubmitting(false);
-      return;
-    }
-
     try {
+      // Validate with Zod schema
+      const validation = validateSafe(productSchema, {
+        name: productData.name,
+        description: productData.description,
+        categoryId: productData.categoryId,
+        subcategoryId: productData.subcategoryId,
+        size: productData.size,
+        quantity: productData.quantity,
+      });
+
+      if (!validation.success) {
+        setError(validation.error);
+        toast.error(validation.error);
+        setSubmitting(false);
+        return;
+      }
+
+      // Additional validation based on subcategory type
+      if (!selectedSubcategory?.is_pieceable && !productData.size) {
+        const message = "Please select a size for this product";
+        setError(message);
+        toast.error(message);
+        setSubmitting(false);
+        return;
+      }
+
+      if (
+        selectedSubcategory?.is_pieceable &&
+        (!productData.quantity || productData.quantity < 1)
+      ) {
+        const message = "Please enter a valid quantity";
+        setError(message);
+        toast.error(message);
+        setSubmitting(false);
+        return;
+      }
       // Prepare FormData for image upload
       const formData = new FormData();
       formData.append("name", productData.name);

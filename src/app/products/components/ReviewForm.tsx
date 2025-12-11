@@ -7,6 +7,9 @@ import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { reviewSchema } from "@/app/schemas";
+import { validateSafe } from "@/app/utils/validation";
+import { toast } from "react-toastify";
 
 interface ReviewFormProps {
   onSubmit: (payload: { rating: number; comment: string }) => void;
@@ -21,6 +24,7 @@ export function ReviewForm({
 }: ReviewFormProps) {
   const [rating, setRating] = useState(defaultRating);
   const [comment, setComment] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setRating(defaultRating);
@@ -28,7 +32,18 @@ export function ReviewForm({
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    onSubmit({ rating, comment });
+    setError(null);
+
+    // Validate input data with Zod
+    const validation = validateSafe(reviewSchema, { rating, comment });
+
+    if (!validation.success) {
+      setError(validation.error);
+      toast.error(validation.error);
+      return;
+    }
+
+    onSubmit(validation.data);
     setComment("");
     setRating(defaultRating);
   };
@@ -73,6 +88,8 @@ export function ReviewForm({
             disabled={isSubmitting}
           />
         </div>
+
+        {error && <p className="text-destructive text-sm">{error}</p>}
 
         <div className="flex gap-3">
           <Button

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Product, UpdateProductDto } from "../../../../types/product";
+import { productSchema } from "@/app/schemas";
+import { validateSafe } from "@/app/utils/validation";
 import {
   getAdminProductById,
   getCategories,
@@ -140,8 +142,6 @@ export default function EditProductPage() {
     setSubmitting(true);
 
     try {
-      const formData = new FormData();
-
       // Extract IDs from objects if needed
       const categoryId =
         typeof product.category_id === "object"
@@ -151,6 +151,22 @@ export default function EditProductPage() {
         typeof product.subcategory_id === "object" && product.subcategory_id
           ? product.subcategory_id._id
           : product.subcategory_id;
+
+      // Validate with Zod schema
+      const validation = validateSafe(productSchema, {
+        name: product.name,
+        description: product.description,
+        categoryId,
+        subcategoryId,
+      });
+
+      if (!validation.success) {
+        toast.error(validation.error);
+        setSubmitting(false);
+        return;
+      }
+
+      const formData = new FormData();
 
       // Append updated product data
       if (product.name) formData.append("name", product.name);
