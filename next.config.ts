@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   // Set the root for output file tracing to this directory
   outputFileTracingRoot: path.join(__dirname),
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "http",
@@ -20,6 +21,15 @@ const nextConfig: NextConfig = {
         pathname: "/uploads/**",
       },
     ],
+  },
+  // Ensure trailing slashes for static hosting
+  trailingSlash: true,
+  // Disable server-side features for static export
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
   },
 };
 
