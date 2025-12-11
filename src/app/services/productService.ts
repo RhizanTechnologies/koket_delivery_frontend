@@ -4,6 +4,7 @@
  */
 import type { ProductDetail, ProductSummary } from "@/app/types/product";
 import { apiClient as api } from "./api";
+import { logger } from "@/app/utils/logger";
 
 interface ProductsResponse {
   message: string;
@@ -34,7 +35,7 @@ export async function getProducts(): Promise<ProductSummary[]> {
     const { data } = await api.get<ProductsResponse>("/products");
     return data.products;
   } catch (error: any) {
-    console.error("Failed to fetch products", error?.response?.data ?? error);
+    logger.error("Failed to fetch products", error?.response?.data ?? error);
     throw error;
   }
 }
@@ -47,7 +48,7 @@ export async function getProductById(id: string): Promise<ProductDetail> {
     const { data } = await api.get<ProductResponse>(`/products/${id}`);
     return data.product;
   } catch (error: any) {
-    console.error(
+    logger.error(
       `Failed to fetch product ${id}`,
       error?.response?.data ?? error
     );
@@ -74,7 +75,7 @@ export async function createProductReview(payload: ReviewPayload) {
 
     return data;
   } catch (error: any) {
-    console.error("Failed to submit review", error?.response?.data ?? error);
+    logger.error("Failed to submit review", error?.response?.data ?? error);
     throw error;
   }
 }

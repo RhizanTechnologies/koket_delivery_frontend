@@ -145,12 +145,12 @@ function ProductsPage() {
                 <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
                   {error}
                 </p>
-                <button
+                <Button
                   onClick={() => window.location.reload()}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all"
+                  className="px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl"
                 >
                   Try Again
-                </button>
+                </Button>
               </div>
             </div>
           )}
@@ -181,7 +181,7 @@ function ProductsPage() {
                   We couldn't find any products matching your criteria. Try
                   adjusting your filters or search terms.
                 </p>
-                <button
+                <Button
                   onClick={() =>
                     setFilters({
                       category: "All Products",
@@ -190,7 +190,7 @@ function ProductsPage() {
                       sort: "name",
                     })
                   }
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all inline-flex items-center gap-2"
+                  className="px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl inline-flex items-center gap-2"
                 >
                   <svg
                     className="w-4 h-4"
@@ -206,7 +206,7 @@ function ProductsPage() {
                     />
                   </svg>
                   Clear All Filters
-                </button>
+                </Button>
               </div>
             </div>
           )}

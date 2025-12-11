@@ -1,4 +1,5 @@
 import { apiClient } from "./api";
+import { logger } from "@/app/utils/logger";
 
 export interface Subcategory {
   _id: string;
@@ -20,7 +21,7 @@ export const getCategories = async (): Promise<Category[]> => {
     const res = await apiClient.get("/categories");
     return res.data.categories;
   } catch (error: any) {
-    console.error("Error fetching categories:", error);
+    logger.error("Error fetching categories:", error);
     throw new Error("Failed to load categories");
   }
 };

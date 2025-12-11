@@ -3,6 +3,7 @@
 
 import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ProductGalleryProps {
   images?: string[];
@@ -48,20 +49,24 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
         {/* Navigation Arrows - Hidden on single image */}
         {galleryImages.length > 1 && (
           <>
-            <button
+            <Button
               onClick={prevImage}
               aria-label="Previous image"
+              variant="ghost"
+              size="icon"
               className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-2 sm:p-2.5 hover:bg-white dark:hover:bg-gray-900 shadow-lg transition-all hover:scale-110 active:scale-95"
             >
               <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-foreground" />
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={nextImage}
               aria-label="Next image"
+              variant="ghost"
+              size="icon"
               className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-2 sm:p-2.5 hover:bg-white dark:hover:bg-gray-900 shadow-lg transition-all hover:scale-110 active:scale-95"
             >
               <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-foreground" />
-            </button>
+            </Button>
           </>
         )}
 
@@ -77,11 +82,12 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
       {galleryImages.length > 1 && (
         <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb-2">
           {galleryImages.map((image, index) => (
-            <button
+            <Button
               key={index}
+              variant="ghost"
               onClick={() => setCurrentImage(index)}
               aria-label={`View image ${index + 1}`}
-              className={`flex-shrink-0 h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 overflow-hidden rounded-lg sm:rounded-xl border-2 transition-all ${
+              className={`flex-shrink-0 h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 overflow-hidden rounded-lg sm:rounded-xl border-2 transition-all p-0 ${
                 currentImage === index
                   ? "border-primary ring-2 ring-primary/20 scale-105"
                   : "border-border hover:border-primary/50 opacity-70 hover:opacity-100"
@@ -96,11 +102,10 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
                 }
                 className="h-full w-full object-cover"
               />
-            </button>
+            </Button>
           ))}
         </div>
       )}
     </div>
   );
 }
-// ...existing code...

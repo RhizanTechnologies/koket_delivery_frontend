@@ -3,6 +3,7 @@
  * Handles all user management API calls for admin
  */
 import { apiClient } from "../api";
+import { logger } from "@/app/utils/logger";
 
 export interface UserRating {
   product: {
@@ -67,7 +68,7 @@ export const getAllCustomers = async (): Promise<CustomerWithStats[]> => {
       totalSpent: user.totalSpent || user.total_spent || 0,
     }));
   } catch (error: any) {
-    console.error("Failed to fetch customers:", error);
+    logger.error("Failed to fetch customers:", error);
     throw new Error(
       error.response?.data?.message || "Failed to fetch customers"
     );
@@ -83,7 +84,7 @@ export const getUserById = async (id: string): Promise<User> => {
     const response = await apiClient.get(`/users/${id}`);
     return response.data.user || response.data;
   } catch (error: any) {
-    console.error("Failed to fetch user:", error);
+    logger.error("Failed to fetch user:", error);
     throw new Error(error.response?.data?.message || "Failed to fetch user");
   }
 };
@@ -95,7 +96,7 @@ export const deleteUser = async (id: string): Promise<void> => {
   try {
     await apiClient.delete(`/users/${id}`);
   } catch (error: any) {
-    console.error("Failed to delete user:", error);
+    logger.error("Failed to delete user:", error);
     throw new Error(error.response?.data?.message || "Failed to delete user");
   }
 };
@@ -115,7 +116,7 @@ export const getAdminProfile = async (): Promise<User> => {
     const response = await apiClient.get("/users/profile");
     return response.data.user || response.data;
   } catch (error: any) {
-    console.error("Failed to fetch profile:", error);
+    logger.error("Failed to fetch profile:", error);
     throw new Error(error.response?.data?.message || "Failed to fetch profile");
   }
 };
@@ -131,7 +132,7 @@ export const updateAdminProfile = async (
     const response = await apiClient.put("/users/profile", payload);
     return response.data.user || response.data;
   } catch (error: any) {
-    console.error("Failed to update profile:", error);
+    logger.error("Failed to update profile:", error);
     throw new Error(
       error.response?.data?.message || "Failed to update profile"
     );

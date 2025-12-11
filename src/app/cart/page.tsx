@@ -10,6 +10,7 @@ import { useCart } from "@/app/context/CartContext";
 import LoadingState from "@/components/LoadingState";
 import { updateCartItem, removeFromCart } from "@/app/services/cartService";
 import { toast } from "react-toastify";
+import { getErrorMessage, getSuccessMessage } from "@/app/utils/errorHandler";
 
 interface CartItemData {
   id: string;
@@ -113,12 +114,11 @@ export default function ShoppingCartPage() {
       setItems(
         items.map((item) => (item.id === id ? { ...item, quantity } : item))
       );
-
       // Refresh cart context
       await refreshCart();
     } catch (error: any) {
       console.error("Failed to update quantity:", error);
-      toast.error("Failed to update quantity");
+      toast.error(getErrorMessage(error, "Failed to update quantity"));
     }
   };
 
@@ -134,10 +134,10 @@ export default function ShoppingCartPage() {
       // Refresh cart context
       await refreshCart();
 
-      toast.success("Item removed from cart");
+      toast.success(getSuccessMessage("remove", "Item"));
     } catch (error: any) {
       console.error("Failed to delete item:", error);
-      toast.error("Failed to remove item");
+      toast.error(getErrorMessage(error, "Failed to remove item from cart"));
     }
   };
 
