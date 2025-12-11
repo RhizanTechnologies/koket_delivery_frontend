@@ -62,8 +62,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("user", JSON.stringify(userData));
     if (tokens) {
       localStorage.setItem("accessToken", tokens.accessToken);
-      if (tokens.refreshToken)
+      if (tokens.refreshToken) {
         localStorage.setItem("refreshToken", tokens.refreshToken);
+      }
     }
   };
 
@@ -72,7 +73,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-
     router.push("/");
   };
 

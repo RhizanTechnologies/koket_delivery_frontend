@@ -8,8 +8,14 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "http",
+        hostname: "backend.koket-bakery.com",
+        port: "",
+        pathname: "/uploads/**",
+      },
+      {
         protocol: "https",
-        hostname: "backend-om79.onrender.com",
+        hostname: "backend.koket-bakery.com",
         port: "",
         pathname: "/uploads/**",
       },

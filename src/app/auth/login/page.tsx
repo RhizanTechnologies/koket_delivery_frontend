@@ -9,6 +9,8 @@ import { GoogleAuthButton, AuthDivider } from "../components";
 import { loginUser } from "@/app/services/authService";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
+import { loginSchema } from "@/app/schemas";
+import { validateSafe } from "@/app/utils/validation";
 
 function LoginPage() {
   const { login } = useAuth();
@@ -24,7 +26,16 @@ function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await loginUser({ email, password });
+      // Validate input data with Zod
+      const validation = validateSafe(loginSchema, { email, password });
+
+      if (!validation.success) {
+        setError(validation.error);
+        setLoading(false);
+        return;
+      }
+
+      const response = await loginUser(validation.data);
       const role: "customer" | "admin" =
         response.user.role === "admin" ? "admin" : "customer";
       login(
@@ -80,6 +91,14 @@ function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <div className="text-right mt-1">
+                <Link
+                  href="/auth/forgot-password"
+                  className="text-sm text-primary hover:text-primary-hover transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
             {error && <p className="text-destructive text-sm mt-1">{error}</p>}

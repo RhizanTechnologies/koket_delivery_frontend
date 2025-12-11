@@ -14,6 +14,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { contactSchema } from "@/app/schemas";
+import { validateSafe } from "@/app/utils/validation";
+import { toast } from "react-toastify";
 
 function ContactForm() {
   const [formData, setFormData] = useState({
@@ -24,11 +27,46 @@ function ContactForm() {
     subject: "",
     message: "",
   });
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Handle form submission
+    setError(null);
+    setLoading(true);
+
+    try {
+      // Validate input data with Zod
+      const validation = validateSafe(contactSchema, formData);
+
+      if (!validation.success) {
+        setError(validation.error);
+        toast.error(validation.error);
+        setLoading(false);
+        return;
+      }
+
+      // TODO: Call API to submit contact form
+      console.log("Form submitted:", validation.data);
+      toast.success("Message sent successfully! We'll get back to you soon.");
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        inquiryType: "",
+        subject: "",
+        message: "",
+      });
+    } catch (err: any) {
+      const errorMsg =
+        err.message || "Failed to send message. Please try again.";
+      setError(errorMsg);
+      toast.error(errorMsg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -145,11 +183,14 @@ function ContactForm() {
           />
         </div>
 
+        {error && <p className="text-destructive text-sm">{error}</p>}
+
         <Button
           type="submit"
           className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+          disabled={loading}
         >
-          Send Message
+          {loading ? "Sending..." : "Send Message"}
         </Button>
       </form>
     </div>
