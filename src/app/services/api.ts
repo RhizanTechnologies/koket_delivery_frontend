@@ -13,7 +13,10 @@ export const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    "Accept": "application/json",
   },
+  withCredentials: false, // Set to true only if backend supports credentials
+  timeout: 30000, // 30 seconds timeout
 });
 
 // Setup API request/response logging
