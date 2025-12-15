@@ -65,9 +65,10 @@ export const registerUser = async (
 /**
  * Refresh access token
  */
-export const refreshToken = async (
-  refreshToken: string
-): Promise<{ accessToken: string }> => {
+export const refreshToken = async (refreshToken: string): Promise<{
+  user: User;
+  tokens: AuthTokens;
+}> => {
   try {
     const response = await apiClient.post("/auth/refresh", { refreshToken });
     return response.data;

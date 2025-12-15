@@ -54,33 +54,55 @@ apiClient.interceptors.response.use(
         if (typeof window !== "undefined") {
           const refreshToken = localStorage.getItem("refreshToken");
           if (refreshToken) {
+            // Call refresh endpoint
             const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
               refreshToken,
             });
-            const { accessToken } = response.data;
-            localStorage.setItem("accessToken", accessToken);
+            
+            // Extract tokens and user from response
+            const { tokens, user } = response.data;
+            
+            // Store new tokens
+            localStorage.setItem("accessToken", tokens.accessToken);
+            if (tokens.refreshToken) {
+              localStorage.setItem("refreshToken", tokens.refreshToken);
+            }
+            
+            // Update user data if provided
+            if (user) {
+              localStorage.setItem("user", JSON.stringify(user));
+            }
 
+            // Retry original request with new access token
             if (originalRequest.headers) {
-              originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+              originalRequest.headers.Authorization = `Bearer ${tokens.accessToken}`;
             }
             return apiClient(originalRequest);
           } else {
-            // No refresh token available, clear auth state but don't redirect
-            // Let the ProtectedRoute handle the redirect
+            // No refresh token available, clear auth state
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
             localStorage.removeItem("user");
+            
+            // Redirect to login if not already on auth page
+            if (!window.location.pathname.startsWith("/auth")) {
+              window.location.href = "/auth/login";
+            }
           }
         }
-      } catch (refreshError) {
-        // Refresh failed, clear auth state
+      } catch (refreshError: any) {
+        // Refresh failed (expired or invalid refresh token)
+        console.error("Token refresh failed:", refreshError.response?.data || refreshError.message);
+        
         if (typeof window !== "undefined") {
+          // Clear all auth data
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
           localStorage.removeItem("user");
-          // Only redirect if we're not already on auth pages
+          
+          // Force logout and redirect to login
           if (!window.location.pathname.startsWith("/auth")) {
-            window.location.href = "/auth/login";
+            window.location.href = "/auth/login?session=expired";
           }
         }
         return Promise.reject(refreshError);
@@ -90,5 +112,28 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+/**
+ * Manually refresh the access token using refresh token
+ * @param refreshToken - The refresh token
+ * @returns Promise with user and tokens
+ */
+export async function refreshAccessToken(refreshToken: string): Promise<{
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+  };
+}> {
+  const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+    refreshToken,
+  });
+  return response.data;
+}
 
 export default apiClient;
