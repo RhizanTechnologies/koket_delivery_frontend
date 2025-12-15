@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GoogleAuthButton, AuthDivider } from "../components";
 import { loginUser } from "@/app/services/authService";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 import { loginSchema } from "@/app/schemas";
 import { validateSafe } from "@/app/utils/validation";
@@ -15,10 +15,21 @@ import { validateSafe } from "@/app/utils/validation";
 function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [sessionExpired, setSessionExpired] = useState(false);
+
+  // Check if redirected due to expired session
+  useEffect(() => {
+    if (searchParams.get("session") === "expired") {
+      setSessionExpired(true);
+      // Clear the query param after showing message
+      setTimeout(() => setSessionExpired(false), 5000);
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,6 +112,15 @@ function LoginPage() {
               </div>
             </div>
 
+            {/* Session Expired Message */}
+            {sessionExpired && (
+              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200 px-4 py-3 rounded-lg text-sm">
+                <p className="font-medium">Session Expired</p>
+                <p className="text-xs mt-1">Your session has expired. Please log in again.</p>
+              </div>
+            )}
+
+            {/* Error Message */}
             {error && <p className="text-destructive text-sm mt-1">{error}</p>}
 
             <Button
