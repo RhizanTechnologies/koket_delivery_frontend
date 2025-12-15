@@ -8,7 +8,7 @@ import { logger } from "@/app/utils/logger";
 /** Base URL for resolving asset/image paths */
 const ASSET_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/api\/v1\/?$/, "") ??
-  "https://backend-om79.onrender.com";
+  "http://localhost:5001";
 
 /**
  * Resolve image URL - converts relative paths to absolute URLs

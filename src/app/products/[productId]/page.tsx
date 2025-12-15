@@ -29,7 +29,7 @@ const ReviewsList = dynamic(() =>
 const ASSET_BASE_URL =
   process.env.NEXT_PUBLIC_ASSET_BASE_URL ??
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/api\/v1\/?$/, "") ??
-  "https://backend-om79.onrender.com";
+  "http://localhost:5001";
 
 const currencyFormatter = new Intl.NumberFormat("en-ET", {
   style: "currency",

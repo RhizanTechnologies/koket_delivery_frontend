@@ -55,8 +55,7 @@ export default function OrderCard({
   };
 
   const IMAGE_BASE_URL =
-    process.env.NEXT_PUBLIC_IMAGE_BASE_URL ||
-    "https://backend-om79.onrender.com";
+    process.env.NEXT_PUBLIC_IMAGE_BASE_URL || "http://localhost:5001";
 
   return (
     <div className="border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
@@ -95,7 +94,7 @@ export default function OrderCard({
             <div>
               <p className="text-xs text-gray-500">Customer</p>
               <p className="font-medium text-gray-800">
-                {order.customer || order.user_details?.name || "Unknown"}
+                {order.user_id?.name || order.user_id?.name || "Unknown"}
               </p>
             </div>
           </div>
@@ -139,7 +138,7 @@ export default function OrderCard({
                   <div className="flex justify-between items-center">
                     <div>
                       <span className="font-medium text-gray-800">
-                        {item.product_details?.name ||
+                        {item.product?.name ||
                           `Product ${item.product_id?.slice(-6) || index + 1}`}
                       </span>
                       <span className="text-gray-500 ml-2">
@@ -148,12 +147,9 @@ export default function OrderCard({
                         {item.pieces ? ` (${item.pieces} pcs)` : ""}
                       </span>
                     </div>
-                    {item.product_details?.price && (
+                    {item.product?.price && (
                       <span className="font-semibold text-pink-600">
-                        ETB{" "}
-                        {(item.product_details.price * item.quantity).toFixed(
-                          2
-                        )}
+                        ETB {(item.product.price * item.quantity).toFixed(2)}
                       </span>
                     )}
                   </div>

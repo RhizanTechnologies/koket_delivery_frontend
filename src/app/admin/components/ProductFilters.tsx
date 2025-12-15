@@ -39,9 +39,7 @@ export default function ProductFiltersComponent({
         setLoading(true);
 
         // Fetch categories
-        const categoriesResponse = await fetch(
-          `${API_BASE_URL}/api/v1/categories`
-        );
+        const categoriesResponse = await fetch(`${API_BASE_URL}/categories`);
         if (categoriesResponse.ok) {
           const categoriesData = await categoriesResponse.json();
           setCategories(
@@ -51,7 +49,7 @@ export default function ProductFiltersComponent({
 
         // Fetch subcategories
         const subcategoriesResponse = await fetch(
-          `${API_BASE_URL}/api/v1/subcategories`
+          `${API_BASE_URL}/subcategories`
         );
         if (subcategoriesResponse.ok) {
           const subcategoriesData = await subcategoriesResponse.json();

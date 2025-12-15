@@ -6,12 +6,14 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { Link } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { FaBars } from "react-icons/fa";
 import StatCard from "./components/DashboardCard";
 import OrderDistributionCard from "./components/DistributionCard";
 import TopSellingProductsCard from "./components/TopSellingProductsCard";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { getDashboardOverview } from "@/app/services/admin/analyticsService";
+import { DashboardOverviewDTO } from "@/app/types/analytics";
 
 function AdminPage() {
   const categories = [
@@ -37,79 +39,86 @@ function AdminPage() {
   }
 
   // derive the data shown on the page based on the selected report range
-  const { stats, orderStatuses, topProducts } = useMemo(() => {
+  const [overview, setOverview] = useState<DashboardOverviewDTO | null>(null);
+  const [loadingOverview, setLoadingOverview] = useState(false);
+
+  useEffect(() => {
+    const loadOverview = async () => {
+      try {
+        setLoadingOverview(true);
+        const data = await getDashboardOverview();
+        setOverview(data);
+      } catch (err) {
+        console.error("Failed to load dashboard overview:", err);
+      } finally {
+        setLoadingOverview(false);
+      }
+    };
+    loadOverview();
+  }, []);
+
+  const periodData = (() => {
+    if (!overview) return null;
     switch (reportRange) {
       case "Weekly Report":
-        return {
-          stats: {
-            totalRevenue: "$10,450.00",
-            activeOrders: "8",
-            customRequests: "3",
-            totalProducts: "14",
-            subtextRevenue: "From 28 orders",
-          },
-          orderStatuses: [
-            { label: "Pending", count: 12, color: "#FACC15" },
-            { label: "Confirmed", count: 6, color: "#3B82F6" },
-            { label: "In Progress", count: 5, color: "#D946EF" },
-            { label: "Completed", count: 20, color: "#22C55E" },
-            { label: "Cancelled", count: 2, color: "#EF4444" },
-          ],
-          topProducts: [
-            { name: "Chocolate Cake", revenue: 4200 },
-            { name: "Vanilla Cupcakes", revenue: 2200 },
-            { name: "Red Velvet Cake", revenue: 1350 },
-            { name: "Lemon Tart", revenue: 900 },
-          ],
-        };
+        return overview.weekly;
       case "Annual Report":
-        return {
-          stats: {
-            totalRevenue: "$128,200.00",
-            activeOrders: "120",
-            customRequests: "40",
-            totalProducts: "18",
-            subtextRevenue: "From 3,100 orders",
-          },
-          orderStatuses: [
-            { label: "Pending", count: 40, color: "#FACC15" },
-            { label: "Confirmed", count: 200, color: "#3B82F6" },
-            { label: "In Progress", count: 60, color: "#D946EF" },
-            { label: "Completed", count: 2800, color: "#22C55E" },
-            { label: "Cancelled", count: 100, color: "#EF4444" },
-          ],
-          topProducts: [
-            { name: "Chocolate Cake", revenue: 45200 },
-            { name: "Vanilla Cupcakes", revenue: 31200 },
-            { name: "Red Velvet Cake", revenue: 21000 },
-            { name: "Assorted Cookies", revenue: 16000 },
-          ],
-        };
+        return overview.monthly;
       case "Daily Report":
       default:
-        return {
-          stats: {
-            totalRevenue: "$1,500.00",
-            activeOrders: "2",
-            customRequests: "1",
-            totalProducts: "15",
-            subtextRevenue: "From 6 orders",
-          },
-          orderStatuses: [
-            { label: "Pending", count: 5, color: "#FACC15" },
-            { label: "Confirmed", count: 2, color: "#3B82F6" },
-            { label: "In Progress", count: 3, color: "#D946EF" },
-            { label: "Completed", count: 4, color: "#22C55E" },
-            { label: "Cancelled", count: 1, color: "#EF4444" },
-          ],
-          topProducts: [
-            { name: "Chocolate Cake", revenue: 1500 },
-            { name: "Vanilla Cupcakes", revenue: 1200 },
-            { name: "Red Velvet Cake", revenue: 1000 },
-          ],
-        };
+        return overview.today;
     }
-  }, [reportRange]);
+  })();
+
+  const stats = periodData
+    ? {
+        totalRevenue: `ETB ${Number(
+          periodData.total_revenue || 0
+        ).toLocaleString()}`,
+        activeOrders: String(periodData.orders_by_status?.pending || 0),
+        customRequests: String(periodData.orders_by_status?.pending || 0),
+        totalProducts: String(periodData.top_products?.length || 0),
+        subtextRevenue: `From ${periodData.revenue_trend?.length || 0} points`,
+      }
+    : {
+        totalRevenue: "$0.00",
+        activeOrders: "0",
+        customRequests: "0",
+        totalProducts: "0",
+        subtextRevenue: "",
+      };
+
+  const orderStatuses = periodData
+    ? [
+        {
+          label: "Pending",
+          count: periodData.orders_by_status?.pending || 0,
+          color: "#FACC15",
+        },
+        {
+          label: "Accepted",
+          count: periodData.orders_by_status?.accepted || 0,
+          color: "#3B82F6",
+        },
+        {
+          label: "Completed",
+          count: periodData.orders_by_status?.completed || 0,
+          color: "#22C55E",
+        },
+        {
+          label: "Rejected",
+          count: periodData.orders_by_status?.rejected || 0,
+          color: "#EF4444",
+        },
+      ]
+    : [];
+
+  const topProducts = periodData
+    ? periodData.top_products?.map((p: any) => ({
+        name: p.product_name,
+        revenue: p.revenue,
+      })) || []
+    : [];
 
   return (
     <ProtectedRoute requireAdmin>
@@ -193,12 +202,12 @@ function AdminPage() {
             subtext="Needs attention"
             iconType="orders"
           />
-          <StatCard
+          {/* <StatCard
             title="Custom Requests"
             value={stats.customRequests}
             subtext="Pending Requests"
             iconType="requests"
-          />
+          /> */}
           <StatCard
             title="Total Products"
             value={stats.totalProducts}
@@ -209,7 +218,6 @@ function AdminPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-4 sm:px-6 lg:px-16 mb-8">
           <OrderDistributionCard statuses={orderStatuses} />
-          <TopSellingProductsCard products={topProducts} />
         </div>
       </div>
     </ProtectedRoute>
