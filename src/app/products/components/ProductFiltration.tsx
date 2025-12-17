@@ -109,7 +109,7 @@ export default function ProductFiltration({
 
   // ✅ UI (unchanged)
   return (
-    <div className="bg-background-2 px-3 xss:px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24 pt-6">
+    <div className="bg-background-2 px-3 section-spacing-x pt-6">
       <div className="max-w-7xl ">
         {/* Mobile */}
         <div className="mb-6 block 2xl:hidden">
@@ -189,7 +189,7 @@ export default function ProductFiltration({
                 onChange={(e) =>
                   setFilters((prev) => ({ ...prev, search: e.target.value }))
                 }
-                className="w-full pl-14 pr-6 py-6 text-lg bg-white border rounded-lg"
+                className="w-full pl-14 pr-6 py-5 text-lg bg-white border rounded-lg"
               />
             </div>
           </div>
@@ -199,7 +199,7 @@ export default function ProductFiltration({
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full bg-white border rounded-lg px-2 md:px-4 py-3 flex items-center justify-between"
+                  className="w-full bg-white border rounded-lg px-2 md:px-4 py-5 flex items-center justify-between"
                 >
                   <span className="line-clamp-1">
                     {sortOptions.find((s) => s.value === sort)?.label ||
@@ -232,7 +232,7 @@ export default function ProductFiltration({
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full bg-white border rounded-lg px-2 md:px-4 py-3 flex items-center justify-between"
+                  className="w-full bg-white border rounded-lg px-2 md:px-4 py-5 flex items-center justify-between"
                 >
                   <span className="line-clamp-1">
                     {subcategory || "All Products"}

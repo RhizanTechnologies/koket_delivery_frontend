@@ -10,7 +10,7 @@ import MethodCards from "./components/MethodCards";
 
 export default function ContactPage() {
   return (
-    <div className="bg-background ">
+    <div className="bg-background-2 ">
       <PageHeader
         title="Get in Touch"
         subtitle="Have a question about cakes our cakes or want to discuss a custom order? We’d love to hear from you!"
@@ -18,7 +18,7 @@ export default function ContactPage() {
       <div className=" ">
         <div className="">
           {/* Main Content */}
-          <div className=" space-y-12 ">
+          <div className=" space-y-8 ">
             {/* Header */}
 
             {/* Contact Method Cards */}

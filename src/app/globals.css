@@ -1,195 +1,238 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* ===============================
+   Custom Variant
+================================ */
 @custom-variant dark (&:is(.dark *));
 
+/* ===============================
+   Theme Tokens
+================================ */
 @theme inline {
-  --breakpoint-xss: 320px; /* iPhone 5 / SE (1st gen) */
-  --breakpoint-xs: 360px; /* Common small Androids (Pixel 2, Galaxy S7) */
-  --breakpoint-sm: 400px; /* Medium phones */
-  --breakpoint-md: 480px; /* Large phones / small tablets */
-  --breakpoint-lg: 640px; /* Small tablets */
-  --breakpoint-xl: 768px; /* Tablets (portrait) */
-  --breakpoint-2xl: 1024px; /* Small laptops / iPad landscape */
-  --breakpoint-3xl: 1280px; /* Desktops */
+  /* Breakpoints */
+  --breakpoint-xss: 320px;
+  --breakpoint-xs: 360px;
+  --breakpoint-sm: 400px;
+  --breakpoint-md: 480px;
+  --breakpoint-lg: 640px;
+  --breakpoint-xl: 768px;
+  --breakpoint-2xl: 1024px;
+  --breakpoint-3xl: 1280px;
   --breakpoint-4xl: 1536px;
+
+  /* Fonts */
+  --font-sans: 'Poppins', system-ui, sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-logo: 'Pacifico', cursive;
+
+  /* Colors mapping */
   --color-background: var(--background);
   --color-background-2: var(--background-2);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-kaushan: var(--font-kaushan);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
+
   --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 6px);
 }
+
+/* ===============================
+   Light Mode – Cake Theme
+================================ */
 :root {
-  /* === Base === */
-  --radius: 0.625rem;
-  --background: #f8effa;
-  --background-2: #fffaff;
-  --foreground: #000000;
-  --foreground-hover: #1a1a1a;
+  --radius: 0.75rem;
 
-  /* === Cards / Containers === */
-  --card: #ffffff;
-  --card-foreground: #000000;
+  /* Base */
+  --background: #FFF8F3;
+  /* Vanilla cream */
+  --background-2: #FFFFFF;
+  --foreground: #3B1F1A;
+  /* Cocoa */
 
-  /* === Popovers / Dropdowns === */
-  --popover: #ffffff;
-  --popover-foreground: #000000;
+  /* Cards */
+  --card: #FFFFFF;
+  --card-foreground: #3B1F1A;
 
-  /* === Primary Button / Brand === */
-  --primary: #c967ac;
-  --primary-hover: #b45499;
-  --primary-foreground: #ffffff;
+  /* Popovers */
+  --popover: #FFFFFF;
+  --popover-foreground: #3B1F1A;
 
-  /* === Secondary Button / Accent Surfaces === */
-  --secondary: #f3e1f7;
-  --secondary-hover: #e5c9ed;
-  --secondary-foreground: #000000;
+  /* Primary – Strawberry */
+  /* Primary – Raspberry Cake */
+  --primary: #E0566F;
+  --primary-foreground: #FFFFFF;
+  --ring: #E0566F;
 
-  /* === Muted Text / Surfaces === */
-  --muted: #f4e7f6;
-  --muted-foreground: #6b6b6b;
+  /* Secondary – Buttercream */
+  --secondary: #FFF1D6;
+  --secondary-foreground: #3B1F1A;
 
-  /* === Accent (Borders, Highlights, etc.) === */
-  --accent: #ebd7f0;
-  --accent-hover: #e2c1e8;
-  --accent-foreground: #000000;
+  /* Accent – Gold Sprinkles */
+  --accent: #FAD7A0;
+  --accent-foreground: #3B1F1A;
 
-  /* === Destructive (Delete / Danger) === */
-  --destructive: #f44336;
-  --destructive-hover: #d32f2f;
-  --destructive-foreground: #ffffff;
+  /* Muted – Dough */
+  --muted: #F3E8DE;
+  --muted-foreground: #7A5E54;
 
-  /* === Borders / Inputs / Rings === */
-  --border: #e5cce9;
-  --input: #e5cce9;
-  --ring: #c967ac;
+  /* Destructive */
+  --destructive: #E14C4C;
 
-  /* === Charts / Data Visualizations === */
-  --chart-1: #c967ac;
-  --chart-2: #f44336;
-  --chart-3: #f3e1f7;
-  --chart-4: #6b6b6b;
-  --chart-5: #ebd7f0;
+  /* Borders / Inputs */
+  --border: #EAD6C8;
+  --input: #EAD6C8;
+  /* --ring: #F3A6B1; */
 
-  /* === Sidebar / Navigation === */
-  --sidebar: #ffffff;
-  --sidebar-foreground: #000000;
-  --sidebar-primary: #c967ac;
-  --sidebar-primary-hover: #b45499;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ebd7f0;
-  --sidebar-accent-hover: #e2c1e8;
-  --sidebar-accent-foreground: #000000;
-  --sidebar-border: #e5cce9;
-  --sidebar-ring: #c967ac;
+  /* Charts */
+  --chart-1: #F3A6B1;
+  --chart-2: #C97C5D;
+  --chart-3: #FFF1D6;
+  --chart-4: #3B1F1A;
+  --chart-5: #FAD7A0;
 
-  /* === Transitions (Optional Enhancement) === */
-  --transition-fast: 0.15s ease-in-out;
-  --transition-medium: 0.25s ease-in-out;
+  /* Sidebar */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #3B1F1A;
+  --sidebar-primary: #F3A6B1;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #FFF1D6;
+  --sidebar-accent-foreground: #3B1F1A;
+  --sidebar-border: #EAD6C8;
+  --sidebar-ring: #F3A6B1;
 }
 
+/* ===============================
+   Dark Mode – Chocolate Cake
+================================ */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #1E0F0B;
+  --background-2: #2B1611;
+  --foreground: #FFF1E6;
+
+  --card: #2B1611;
+  --card-foreground: #FFF1E6;
+
+  --popover: #2B1611;
+  --popover-foreground: #FFF1E6;
+
+  --primary: #F3A6B1;
+  --primary-foreground: #2B1611;
+
+  --secondary: #3A1F19;
+  --secondary-foreground: #FFF1E6;
+
+  --accent: #5A2C22;
+  --accent-foreground: #FFF1E6;
+
+  --muted: #3A1F19;
+  --muted-foreground: #D1B6AA;
+  --border: #3A1F19;
+  --input: #3A1F19;
+  --ring: #F3A6B1;
+
+  --sidebar: #2B1611;
+  --sidebar-foreground: #FFF1E6;
+  --sidebar-primary: #F3A6B1;
+  --sidebar-primary-foreground: #2B1611;
+  --sidebar-accent: #3A1F19;
+  --sidebar-accent-foreground: #FFF1E6;
+  --sidebar-border: #3A1F19;
+  --sidebar-ring: #F3A6B1;
 }
 
+/* ===============================
+     Base Layer
+  ================================ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
+    font-family: var(--font-sans);
     @apply bg-background text-foreground;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    letter-spacing: -0.02em;
   }
 }
 
-/* Professional section spacing with consistent scale */
+/* ===============================
+     Layout Utilities
+  ================================ */
 .section-spacing {
-  @apply px-4 xs:px-5 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20
-         py-8 xs:py-10 sm:py-12 md:py-16 lg:py-20 xl:py-24 2xl:py-28;
+  @apply px-4 xs:px-5 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-8 xs:py-10 sm:py-12 md:py-16 lg:py-20 xl:py-24 2xl:py-28;
 }
 
-/* Container with max-width for better readability */
 .section-container {
   @apply mx-auto max-w-7xl px-4 xs:px-5 sm:px-6 lg:px-8;
 }
 
-/* Vertical spacing utilities */
 .section-spacing-y {
   @apply py-8 xs:py-10 sm:py-12 md:py-16 lg:py-20 xl:py-24 2xl:py-28;
+}
+
+.section-spacing-t {
+  @apply pt-8 xs:pt-10 sm:pt-12 md:pt-16 lg:pt-20 xl:pt-24 2xl:pt-28;
 }
 
 .section-spacing-x {
   @apply px-4 xs:px-5 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20;
 }
 
+.section-spacing-b {
+  @apply pb-8 xs:pb-10 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24 2xl:pb-28;
+}
+
+/* ===============================
+     Animations
+  ================================ */
 @keyframes fadeInUp {
   0% {
     opacity: 0;
     transform: translateY(40px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -204,9 +247,11 @@
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -216,12 +261,25 @@
   animation: gradient 3s ease infinite;
 }
 
-/* Hide scrollbar but keep functionality */
+/* ===============================
+     UI Feel Enhancements
+  ================================ */
+.card {
+  @apply rounded-2xl bg-card border border-border shadow-sm;
+}
+
+.btn {
+  @apply rounded-xl transition-all shadow-sm hover:shadow-md;
+}
+
+/* ===============================
+     Scrollbar
+  ================================ */
 .scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
 }

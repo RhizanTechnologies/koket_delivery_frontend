@@ -20,8 +20,8 @@ function ValueCard({
           <Icon className={`w-6 h-6 ${iconColor}`} />
         </div>
       </div>
-      <h3 className="font-semibold text-foreground mb-2">{title}</h3>
-      <p className="text-sm text-muted-foreground text-balance">
+      <h3 className="font-semibold text-xl text-foreground mb-2">{title}</h3>
+      <p className="text-base text-muted-foreground text-balance">
         {description}
       </p>
     </div>

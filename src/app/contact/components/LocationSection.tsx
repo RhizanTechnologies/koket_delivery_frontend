@@ -3,7 +3,7 @@ import { MapPin } from "lucide-react";
 function LocationSection() {
   return (
     <div
-      className="bg-muted rounded-lg px-4 py-32 max-w-4xl mx-auto text-center"
+      className="bg-card rounded-lg px-4 py-32 max-w-4xl mx-auto text-center"
       // style={{backgroundImage: 'url("assets/location.jpg")', backgroundSize: 'cover', backgroundPosition: 'center'}}
     >
       <div className="flex justify-center mb-4">

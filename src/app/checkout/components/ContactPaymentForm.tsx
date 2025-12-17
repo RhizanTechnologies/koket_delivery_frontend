@@ -91,9 +91,9 @@ export function ContactPaymentForm({
 
       <div className="space-y-6">
         {/* Payment Instructions - MOVED TO TOP */}
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20 border-2 border-blue-400 dark:border-blue-600 rounded-xl p-5 sm:p-6 shadow-md">
+        <div className="bg-secondary border border-border rounded-xl p-5 sm:p-6 shadow-md">
           <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-primary/80 flex items-center justify-center flex-shrink-0">
               <svg
                 className="w-5 h-5 text-white"
                 fill="none"
@@ -109,10 +109,10 @@ export function ContactPaymentForm({
               </svg>
             </div>
             <div>
-              <h3 className="text-lg font-bold text-blue-900 dark:text-blue-100 mb-1">
+              <h3 className="text-lg font-bold text-foreground mb-1">
                 Payment Instructions
               </h3>
-              <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
+              <p className="text-sm text-primary dark:text-primary font-medium">
                 Please pay 30% of the total amount to confirm your order
               </p>
             </div>
@@ -120,11 +120,14 @@ export function ContactPaymentForm({
 
           <div className="space-y-4">
             {/* Bank Account */}
-            <div className="bg-white dark:bg-gray-900 rounded-lg p-4 border border-blue-300 dark:border-blue-700">
+            <div
+              className="bg-white dark:bg-gray-900 rounded-lg p-4 border border-border
+"
+            >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <svg
-                    className="w-5 h-5 text-blue-600"
+                    className="w-5 h-5 text-primary"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -152,7 +155,7 @@ export function ContactPaymentForm({
                       btn.textContent = originalText;
                     }, 2000);
                   }}
-                  className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-xs font-medium px-3 py-1 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all flex items-center gap-1"
+                  className="text-xs font-medium px-3 py-1 rounded-md bg-accent hover:bg-accent/80 text-accent-foreground transition-all flex items-center gap-1"
                 >
                   <svg
                     className="w-3 h-3"
@@ -170,7 +173,7 @@ export function ContactPaymentForm({
                   Copy
                 </Button>
               </div>
-              <div className="bg-blue-50 dark:bg-blue-950/50 rounded-md px-3 py-3 text-center">
+              <div className="bg-muted dark:bg-muted rounded-md px-3 py-3 text-center">
                 <span className="text-base sm:text-lg font-mono font-bold text-gray-900 dark:text-gray-100">
                   1234-5678-9012
                 </span>
@@ -182,7 +185,7 @@ export function ContactPaymentForm({
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <svg
-                    className="w-5 h-5 text-blue-600"
+                    className="w-5 h-5 text-primary"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -210,7 +213,7 @@ export function ContactPaymentForm({
                       btn.textContent = originalText;
                     }, 2000);
                   }}
-                  className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-xs font-medium px-3 py-1 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all flex items-center gap-1"
+                  className="text-primary hover:text-primary dark:text-primary dark:hover:text-primary text-xs font-medium px-3 py-1 rounded-md bg-blue-100 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all flex items-center gap-1"
                 >
                   <svg
                     className="w-3 h-3"

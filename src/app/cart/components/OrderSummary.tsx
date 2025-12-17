@@ -9,25 +9,30 @@ interface OrderSummaryProps {
   selectedIds: string[];
 }
 
-export function OrderSummary({ subtotal, total, selectedIds }: OrderSummaryProps) {
+export function OrderSummary({
+  subtotal,
+  total,
+  selectedIds,
+}: OrderSummaryProps) {
   // Build checkout URL with selected item IDs
-  const checkoutUrl = selectedIds.length > 0 
-    ? `/checkout?items=${selectedIds.join(",")}` 
-    : "/checkout";
+  const checkoutUrl =
+    selectedIds.length > 0
+      ? `/checkout?items=${selectedIds.join(",")}`
+      : "/checkout";
 
   return (
-    <div className="border-2 border-blue-400 rounded-lg p-6 bg-white">
+    <div className="border-3 border-border rounded-lg p-6 bg-white">
       <h2 className="text-2xl font-semibold text-foreground mb-6">
         Order Summary
       </h2>
       <div className="space-y-4">
         <div className="flex justify-between text-muted-foreground">
           <span>Subtotal</span>
-          <span>${subtotal.toFixed(2)}</span>
+          <span>ETB {subtotal.toFixed(2)}</span>
         </div>
         <div className="border-t border-border pt-4 flex justify-between font-semibold text-lg">
           <span className="text-foreground">Total</span>
-          <span className="text-primary">${total.toFixed(2)}</span>
+          <span className="text-primary">ETB {total.toFixed(2)}</span>
         </div>
       </div>
 

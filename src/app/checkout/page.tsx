@@ -206,7 +206,7 @@ export default function CheckoutPage() {
               subtitle="Complete your order and secure your delicious treats from Koket Bakery & Pastry"
             />
           </div>
-          <div className="grid grid-cols-1 3xl:grid-cols-3 gap-6 sm:gap-8 mb-8 section-spacing">
+          <div className="grid grid-cols-1 3xl:grid-cols-3 gap-6 sm:gap-8 mb-8 section-spacing-x">
             {/* Order Summary - Right Side */}
             <div className="lg:col-span-1 order-1 3xl:order-2">
               <div className="sticky top-4 sm:top-6 lg:top-8 space-y-6">
@@ -243,17 +243,17 @@ export default function CheckoutPage() {
                     <div className="flex justify-between text-base">
                       <span className="text-muted-foreground">Subtotal</span>
                       <span className="font-semibold text-foreground">
-                        ${subtotal.toFixed(2)}
+                        ETB {subtotal.toFixed(2)}
                       </span>
                     </div>
 
                     {/* Total */}
                     <div className="border-t-2 border-border pt-4 flex justify-between items-center">
-                      <span className="text-lg font-semibold text-foreground">
+                      <span className="text-base font-semibold text-foreground">
                         Total Price
                       </span>
-                      <span className="text-2xl font-bold text-primary">
-                        ${total.toFixed(2)}
+                      <span className="text-base font-bold text-primary">
+                        ETB {total.toFixed(2)}
                       </span>
                     </div>
 
@@ -280,8 +280,8 @@ export default function CheckoutPage() {
                             <span className="text-sm font-bold text-foreground">
                               Pay Now (30%)
                             </span>
-                            <span className="text-2xl font-bold text-primary">
-                              ${(total * 0.3).toFixed(2)}
+                            <span className="text-base font-bold text-primary">
+                              ETB {(total * 0.3).toFixed(2)}
                             </span>
                           </div>
                           <p className="text-xs text-muted-foreground leading-relaxed">
@@ -296,7 +296,7 @@ export default function CheckoutPage() {
                             Remaining Balance
                           </span>
                           <span className="font-bold text-foreground">
-                            ${(total * 0.7).toFixed(2)}
+                            ETB {(total * 0.7).toFixed(2)}
                           </span>
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">

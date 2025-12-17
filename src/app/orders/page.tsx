@@ -96,7 +96,7 @@ export default function OrdersPage() {
             />
           </div>
 
-          <div className="section-spacing-x">
+          <div className="section-spacing-x pb-8">
             {orders.length === 0 ? (
               <div className="flex items-center justify-center min-h-[500px] py-12 sm:py-16">
                 <div className="max-w-md w-full text-center">
@@ -493,7 +493,7 @@ export default function OrdersPage() {
                                 Total Price
                               </span>
                               <span className="text-base font-bold text-foreground">
-                                ${order.total_price.toFixed(2)}
+                                ETB {order.total_price.toFixed(2)}
                               </span>
                             </div>
                             <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
@@ -514,7 +514,7 @@ export default function OrdersPage() {
                                 Upfront Paid (30%)
                               </span>
                               <span className="text-base font-bold text-green-700 dark:text-green-400">
-                                ${order.upfront_paid.toFixed(2)}
+                                ETB {order.upfront_paid.toFixed(2)}
                               </span>
                             </div>
                             <div className="flex justify-between items-center p-3 bg-primary/10 rounded-lg border border-primary/30">
@@ -535,7 +535,7 @@ export default function OrdersPage() {
                                 Remaining Balance
                               </span>
                               <span className="text-base font-bold text-primary">
-                                $
+                                ETB{" "}
                                 {(
                                   order.total_price - order.upfront_paid
                                 ).toFixed(2)}

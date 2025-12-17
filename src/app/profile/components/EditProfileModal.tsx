@@ -17,9 +17,13 @@ interface EditProfileModalProps {
   user: {
     fullName: string;
     email: string;
-    phone: string;
+    phone_number: string;
   };
-  onSave: (data: { fullName: string; email: string; phone: string }) => void;
+  onSave: (data: {
+    fullName: string;
+    email: string;
+    phone_number: string;
+  }) => void;
 }
 
 export function EditProfileModal({
@@ -56,30 +60,16 @@ export function EditProfileModal({
               className="mt-1"
             />
           </div>
-          <div>
-            <Label htmlFor="email" className="text-sm font-medium">
-              Email
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              placeholder="you@example.com"
-              className="mt-1"
-            />
-          </div>
+
           <div>
             <Label htmlFor="phone" className="text-sm font-medium">
               Phone Number
             </Label>
             <Input
               id="phone"
-              value={formData.phone}
+              value={formData.phone_number}
               onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
+                setFormData({ ...formData, phone_number: e.target.value })
               }
               placeholder="+251 900 112 233"
               className="mt-1"

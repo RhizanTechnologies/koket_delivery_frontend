@@ -19,17 +19,15 @@ export default function LoadingState({
     <div
       className={cn(
         "flex flex-col items-center justify-center px-4 text-center",
-        fullScreen
-          ? "min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50"
-          : "py-12",
+        fullScreen ? "min-h-screen bg-background" : "py-12",
         className
       )}
     >
       <div className="relative">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-pink-200 border-t-pink-500 mx-auto"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary border-t-secondary mx-auto"></div>
         <div className="absolute inset-0 flex items-center justify-center">
           <svg
-            className="w-8 h-8 text-pink-500"
+            className="w-8 h-8 text-primary"
             fill="currentColor"
             viewBox="0 0 20 20"
           >

@@ -9,7 +9,7 @@ import {
 
 export default function Home() {
   return (
-    <main className="bg-background">
+    <main className="bg-white">
       <Hero />
       <CategorySection />
       <FeaturedSection />

@@ -23,7 +23,7 @@ export interface User {
   name: string;
   email: string;
   role: "admin" | "user";
-  phone?: string;
+  phone_number?: string;
   profile_image?: string;
   googleId?: string;
   created_at?: string;
@@ -123,6 +123,7 @@ export const deleteUser = async (id: string): Promise<void> => {
 export const getProfile = async (): Promise<User> => {
   try {
     const response = await apiClient.get("/users/profile");
+    console.log("Fetched profile:", response.data);
     return response.data.user || response.data;
   } catch (error: any) {
     logger.error("Failed to fetch profile:", error);

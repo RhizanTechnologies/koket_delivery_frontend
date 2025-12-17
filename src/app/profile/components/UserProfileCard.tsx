@@ -17,7 +17,7 @@ interface UserProfileCardProps {
   user: {
     name: string;
     email: string;
-    phone: string;
+    phone_number: string;
     joinedDate: string;
     initials: string;
     profileImage?: string;
@@ -69,10 +69,12 @@ export function UserProfileCard({
                     Joined {user.joinedDate}
                   </span>
                 </div>
-                {user.phone && (
+                {user.phone_number && (
                   <div className="flex items-center gap-2">
                     <Phone className="h-4 w-4 text-gray-500" />
-                    <span className="text-xs md:text-sm">{user.phone}</span>
+                    <span className="text-xs md:text-sm">
+                      {user.phone_number}
+                    </span>
                   </div>
                 )}
               </div>

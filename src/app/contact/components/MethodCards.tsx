@@ -1,6 +1,6 @@
 import React from "react";
 import ContactMethodCard from "./ContactMethodCard";
-import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 
 function MethodCards() {
   return (
@@ -9,30 +9,30 @@ function MethodCards() {
         <ContactMethodCard
           icon={Phone}
           label="Call"
-          text1="(555) 123-4567"
+          text1="+251912700250"
           text2="test"
-          iconColor="text-pink-400"
+          iconColor="text-green-400"
         />
         <ContactMethodCard
           icon={Mail}
           label="Email Us"
           text1="hello@sweetdelights.com"
-          text2="mWe reply within 24 hours"
+          text2="We reply within 24 hours"
           iconColor="text-blue-400"
         />
         <ContactMethodCard
           icon={MapPin}
-          label="Cup Cakes"
-          text1="hello@sweetdelights.com"
-          text2="mWe reply within 24 hours"
+          label="Location"
+          text1="Tulu Dimtu, Addis Ababa"
+          text2="We reply within 24 hours"
           iconColor="text-orange-400"
         />
         <ContactMethodCard
-          icon={Clock}
-          label="Cup Cakes"
-          text1="hello@sweetdelights.com"
-          text2="mWe reply within 24 hours"
-          iconColor="text-pink-400"
+          icon={MessageCircle}
+          label="Telegram"
+          text1="@hamzisho"
+          text2="We reply within 24 hours"
+          iconColor="text-blue-400"
         />
       </div>
     </div>

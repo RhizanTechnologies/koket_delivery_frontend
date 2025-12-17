@@ -1,5 +1,3 @@
-// ...existing code...
-import React from "react";
 import Link from "next/link";
 import {
   FaFacebookF,
@@ -11,42 +9,54 @@ import {
 
 function Footer() {
   return (
-    <footer className="bg-[#D9D6D6] px-6 md:px-12 lg:px-24 py-8 md:pt-12 mt-8">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
+    <footer className="bg-foreground text-background px-6 md:px-12 lg:px-24 py-12 md:py-16">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8 mb-8">
         {/* Brand */}
         <div className="flex flex-col">
-          <div className="text-primary text-xl sm:text-2xl font-kaushan mb-2">
-            Koket Bakery And Pastry
+          <div className="text-primary text-xl sm:text-2xl font-kaushan mb-3">
+            Koket Bakery
           </div>
-          <p className="text-foreground text-sm sm:text-sm max-w-md">
-            Creating memorable moments with delicious custom cakes and desserts
-            since 2020.
+          <p className="text-background/80 text-sm sm:text-base max-w-md">
+            Handcrafted cakes and desserts created with passion and premium
+            ingredients for every celebration.
           </p>
         </div>
 
         {/* Quick Links */}
         <div>
-          <div className="text-primary font-kaushan mb-2 text-lg sm:text-xl">
+          <div className="text-primary font-semibold mb-4 text-base sm:text-lg">
             Quick Links
           </div>
           <ul className="space-y-2 text-sm">
             <li>
-              <Link href="/products" className="hover:text-primary-hover">
+              <Link
+                href="/products"
+                className="text-background/80 hover:text-primary transition-colors"
+              >
                 Products
               </Link>
             </li>
             <li>
-              <Link href="/custom-cake" className="hover:text-primary-hover">
+              <Link
+                href="/custom-cake"
+                className="text-background/80 hover:text-primary transition-colors"
+              >
                 Custom Order
               </Link>
             </li>
             <li>
-              <Link href="/about" className="hover:text-primary-hover">
+              <Link
+                href="/about"
+                className="text-background/80 hover:text-primary transition-colors"
+              >
                 About Us
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="hover:text-primary-hover">
+              <Link
+                href="/contact"
+                className="text-background/80 hover:text-primary transition-colors"
+              >
                 Contact
               </Link>
             </li>
@@ -55,20 +65,25 @@ function Footer() {
 
         {/* Contact */}
         <div>
-          <div className="text-primary font-kaushan mb-2 text-lg sm:text-xl">
-            Contact
+          <div className="text-primary font-semibold mb-4 text-base sm:text-lg">
+            Contact Us
           </div>
-          <ul className="text-sm space-y-1">
-            <li className="break-words">123, Bakery Street</li>
-            <li>Adama City, SC 12345</li>
-            <li>Phone: (+251) 900-123-456</li>
+          <ul className="text-sm space-y-2 text-background/80">
+            <li className="break-words">Tulu Dimtu in front of Shewa Supermarket</li>
+            <li>Addis Ababa</li>
+            <li>
+              Phone:{" "}
+              <span className="hover:text-primary cursor-pointer">
+                +251 900-123-456
+              </span>
+            </li>
             <li>
               Email:{" "}
               <Link
-                href="mailto:hello@sweetcake.com"
-                className="hover:text-primary-hover"
+                href="mailto:hello@koketbakery.com"
+                className="text-primary hover:text-primary/80 transition-colors"
               >
-                hello@sweetcake.com
+                hello@koketbakery.com
               </Link>
             </li>
           </ul>
@@ -76,51 +91,61 @@ function Footer() {
 
         {/* Social */}
         <div>
-          <div className="text-primary font-kaushan mb-2 text-lg sm:text-xl">
+          <div className="text-primary font-semibold mb-4 text-base sm:text-lg">
             Follow Us
           </div>
-          <div className="flex gap-4 mt-2 text-2xl sm:text-3xl">
+          <div className="flex gap-4 mt-2 text-2xl">
             <a
               href="#"
               aria-label="Facebook"
-              className="hover:text-primary-hover"
+              className="text-background/80 hover:text-primary transition-colors"
             >
               <FaFacebookF />
             </a>
             <a
               href="#"
               aria-label="Instagram"
-              className="hover:text-primary-hover"
+              className="text-background/80 hover:text-primary transition-colors"
             >
               <FaInstagram />
             </a>
             <a
               href="#"
               aria-label="TikTok"
-              className="hover:text-primary-hover"
+              className="text-background/80 hover:text-primary transition-colors"
             >
               <FaTiktok />
             </a>
-            <a href="#" aria-label="X" className="hover:text-primary-hover">
+            <a
+              href="#"
+              aria-label="X"
+              className="text-background/80 hover:text-primary transition-colors"
+            >
               <FaXTwitter />
             </a>
           </div>
         </div>
       </div>
 
-      <div className="mt-8 border-t border-border pt-6">
+      <div className="border-t border-background/20 pt-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-foreground text-sm sm:text-base">
+          <div className="flex items-center gap-2 text-background/70 text-sm sm:text-base">
             <FaRegCopyright />
-            <span>Velour Cake. All Rights reserved</span>
+            <span>Koket Bakery. All rights reserved</span>
           </div>
 
-          <div className="text-sm text-foreground">
-            <span className="hidden sm:inline">Designed with care • </span>
-            <Link href="/terms" className="hover:text-primary-hover mr-2">
+          <div className="text-sm text-background/70">
+            <span className="hidden sm:inline">Crafted with care • </span>
+            <Link
+              href="/terms"
+              className="text-background/80 hover:text-primary transition-colors mr-3"
+            >
               Terms
             </Link>
-            <Link href="/privacy" className="hover:text-primary-hover">
+            <Link
+              href="/privacy"
+              className="text-background/80 hover:text-primary transition-colors"
+            >
               Privacy
             </Link>
           </div>
