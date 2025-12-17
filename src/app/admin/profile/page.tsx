@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import {
   getAdminProfile,
   updateAdminProfile,
+  uploadProfileImage,
   type User,
 } from "@/app/services/admin/userService";
 
@@ -70,6 +71,22 @@ export default function AdminProfilePage() {
     }
   };
 
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setSaving(true);
+      const updated = await uploadProfileImage(file);
+      setProfile(updated);
+      toast.success("Profile image updated");
+    } catch (err: any) {
+      console.error("Image upload failed:", err);
+      toast.error(err?.message || "Failed to upload image");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handlePasswordUpdate = (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordMessage(null);
@@ -120,6 +137,18 @@ export default function AdminProfilePage() {
                   ) : (
                     "👤"
                   )}
+                </div>
+                <div className="ml-3">
+                  <label className="text-sm text-gray-600 block mb-1">
+                    Change Image
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    disabled={saving}
+                    className="text-sm"
+                  />
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold">

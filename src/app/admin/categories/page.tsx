@@ -3,10 +3,18 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import {
   Category,
-  CreateCategoryDto,
   CreateSubCategoryDto,
   UpdateSubCategoryDto,
 } from "../../types/category";
+import {
+  getCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  createSubCategory,
+  updateSubCategory,
+  deleteSubCategory,
+} from "../../services/categoryService";
 import HeroSection from "../components/HeroSection";
 import CategoryForm from "../components/CategoryForm";
 import SubCategoryForm, {
@@ -14,8 +22,6 @@ import SubCategoryForm, {
 } from "../components/SubCategoryForm";
 import CategoriesGrid from "../components/CategoriesGrid";
 import ConfirmationModal from "../components/ConfirmationModal";
-
-const API_BASE_URL = "https://backend-om79.onrender.com";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -45,16 +51,8 @@ export default function CategoriesPage() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const categoriesResponse = await fetch(
-          `${API_BASE_URL}/api/v1/categories`
-        );
-        if (!categoriesResponse.ok)
-          throw new Error("Failed to fetch categories");
-
-        const categoriesData = await categoriesResponse.json();
-        setCategories(
-          categoriesData.categories || categoriesData.data || categoriesData
-        );
+        const data = await getCategories();
+        setCategories(data);
       } catch (err) {
         console.error("Error fetching data:", err);
         const message =
@@ -72,29 +70,12 @@ export default function CategoriesPage() {
   // Add new category
   const handleAddCategory = async (name: string) => {
     try {
-      const createCategoryDto: CreateCategoryDto = {
+      const newCategory = await createCategory({
         name: name.trim(),
         description: `Category for ${name}`,
-      };
-
-      const response = await fetch(`${API_BASE_URL}/api/v1/categories`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(createCategoryDto),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create category");
-      }
-
-      const newCategory = await response.json();
-      setCategories((prev) => [
-        ...prev,
-        newCategory.category || newCategory.data || newCategory,
-      ]);
+      setCategories((prev) => [...prev, newCategory]);
       toast.success("Category created successfully!");
     } catch (err) {
       console.error("Error creating category:", err);
@@ -119,31 +100,16 @@ export default function CategoriesPage() {
         description: `Updated category for ${name}`,
       };
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/categories/${editingCategory._id}`,
-        {
-          method: "PUT", // Changed to PUT based on your route
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updateCategoryDto),
-        }
+      const updatedCategory = await updateCategory(
+        editingCategory._id,
+        updateCategoryDto
       );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update category");
-      }
-
-      const updatedCategory = await response.json();
       setCategories((prev) =>
         prev.map((cat) =>
           cat._id === editingCategory._id
             ? {
                 ...cat,
-                ...(updatedCategory.category ||
-                  updatedCategory.data ||
-                  updatedCategory),
+                ...updatedCategory,
               }
             : cat
         )
@@ -164,18 +130,7 @@ export default function CategoriesPage() {
     if (!deleteCategoryModal) return;
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/categories/${deleteCategoryModal._id}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to delete category");
-      }
-
+      await deleteCategory(deleteCategoryModal._id);
       setCategories((prev) =>
         prev.filter((cat) => cat._id !== deleteCategoryModal._id)
       );
@@ -218,31 +173,11 @@ export default function CategoriesPage() {
           Object.keys(kilo_to_price_map).length > 0 && { kilo_to_price_map }),
       };
 
-      const response = await fetch(`${API_BASE_URL}/api/v1/subcategories`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(createSubCategoryDto),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create sub-category");
-      }
-
-      await response.json();
+      await createSubCategory(createSubCategoryDto);
 
       // Refresh categories to get updated data with subcategories
-      const categoriesResponse = await fetch(
-        `${API_BASE_URL}/api/v1/categories`
-      );
-      if (categoriesResponse.ok) {
-        const categoriesData = await categoriesResponse.json();
-        setCategories(
-          categoriesData.categories || categoriesData.data || categoriesData
-        );
-      }
+      const refreshed = await getCategories();
+      setCategories(refreshed);
 
       setAddingSubCategory(null);
       toast.success("Sub-category created successfully!");
@@ -308,34 +243,13 @@ export default function CategoriesPage() {
           Object.keys(kilo_to_price_map).length > 0 && { kilo_to_price_map }),
       };
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/subcategories/${editingSubCategory.subCategoryId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updateSubCategoryDto),
-        }
+      await updateSubCategory(
+        editingSubCategory.subCategoryId,
+        updateSubCategoryDto
       );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update sub-category");
-      }
-
-      await response.json();
-
-      // Refresh categories to get updated data
-      const categoriesResponse = await fetch(
-        `${API_BASE_URL}/api/v1/categories`
-      );
-      if (categoriesResponse.ok) {
-        const categoriesData = await categoriesResponse.json();
-        setCategories(
-          categoriesData.categories || categoriesData.data || categoriesData
-        );
-      }
+      const refreshed = await getCategories();
+      setCategories(refreshed);
 
       setEditingSubCategory(null);
       toast.success("Sub-category updated successfully!");
@@ -353,28 +267,10 @@ export default function CategoriesPage() {
     if (!deleteSubCategoryModal) return;
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/subcategories/${deleteSubCategoryModal.subCategoryId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      await deleteSubCategory(deleteSubCategoryModal.subCategoryId);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to delete sub-category");
-      }
-
-      // Refresh categories to get updated data
-      const categoriesResponse = await fetch(
-        `${API_BASE_URL}/api/v1/categories`
-      );
-      if (categoriesResponse.ok) {
-        const categoriesData = await categoriesResponse.json();
-        setCategories(
-          categoriesData.categories || categoriesData.data || categoriesData
-        );
-      }
+      const refreshed = await getCategories();
+      setCategories(refreshed);
 
       setDeleteSubCategoryModal(null);
       toast.success("Sub-category deleted successfully!");

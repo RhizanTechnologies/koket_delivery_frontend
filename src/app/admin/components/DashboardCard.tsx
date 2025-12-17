@@ -1,41 +1,67 @@
-import React, { FC, JSX } from "react";
-import { DollarSign, ClipboardList, Gift, Package } from "lucide-react";
-
-type IconType = "revenue" | "orders" | "requests" | "products";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DollarSign,
+  Package,
+  ShoppingCart,
+  Users,
+  TrendingUp,
+  TrendingDown,
+} from "lucide-react";
 
 interface StatCardProps {
   title: string;
-  value: string | number;
-  subtext?: string;
-  iconType: IconType;
+  value: string;
+  subtext: string;
+  iconType: "revenue" | "orders" | "products" | "customers" | "requests";
+  trend?: number;
 }
 
-const icons: Record<IconType, JSX.Element> = {
-  revenue: <DollarSign className="text-green-500 w-6 h-6" />,
-  orders: <ClipboardList className="text-yellow-500 w-6 h-6" />,
-  requests: <Gift className="text-yellow-500 w-6 h-6" />,
-  products: <Package className="text-purple-500 w-6 h-6" />,
-};
+export default function StatCard({
+  title,
+  value,
+  subtext,
+  iconType,
+  trend,
+}: StatCardProps) {
+  const icons = {
+    revenue: <DollarSign className="h-5 w-5 text-green-500" />,
+    orders: <ShoppingCart className="h-5 w-5 text-blue-500" />,
+    products: <Package className="h-5 w-5 text-purple-500" />,
+    customers: <Users className="h-5 w-5 text-orange-500" />,
+    requests: <Package className="h-5 w-5 text-yellow-500" />,
+  };
 
-const StatCard: FC<StatCardProps> = ({ title, value, subtext, iconType }) => {
+  const trendColor = trend
+    ? trend > 0
+      ? "text-green-500"
+      : trend < 0
+      ? "text-red-500"
+      : "text-gray-500"
+    : "";
+
   return (
-    <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 w-full h-24 sm:h-28 md:h-32">
-      <div className="flex-1">
-        <p className="text-xs sm:text-sm md:text-base text-gray-500">{title}</p>
-        <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800">
-          {value}
-        </h3>
-        {subtext && (
-          <p className="text-[10px] sm:text-xs md:text-sm text-gray-400 mt-1">
-            {subtext}
-          </p>
-        )}
-      </div>
-      <div className="ml-4 flex-shrink-0 transform scale-100 sm:scale-110 md:scale-125">
+    <Card className="hover:shadow-md transition-shadow duration-300">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
         {icons[iconType]}
-      </div>
-    </div>
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{value}</div>
+        <div className="flex items-center justify-between mt-2">
+          <p className="text-xs text-muted-foreground">{subtext}</p>
+          {trend !== undefined && (
+            <div className={`flex items-center text-xs ${trendColor}`}>
+              {trend > 0 ? (
+                <TrendingUp className="h-3 w-3 mr-1" />
+              ) : trend < 0 ? (
+                <TrendingDown className="h-3 w-3 mr-1" />
+              ) : null}
+              {trend > 0 ? "+" : ""}
+              {trend}%
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
-};
-
-export default StatCard;
+}

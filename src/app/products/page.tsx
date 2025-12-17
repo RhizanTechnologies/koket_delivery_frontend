@@ -13,9 +13,9 @@ import { Button } from "@/components/ui/button";
 const ASSET_BASE_URL =
   process.env.NEXT_PUBLIC_ASSET_BASE_URL ??
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/api\/v1\/?$/, "") ??
-  "https://backend-om79.onrender.com";
+  "http://localhost:5001";
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 12;
 
 function ProductsPage() {
   const [allProducts, setAllProducts] = useState<ProductSummary[]>([]);
@@ -81,11 +81,25 @@ function ProductsPage() {
       );
     }
 
+    const getEffectivePrice = (product: ProductSummary) => {
+      // prefer product kilo map, fallback to subcategory kilo map
+      const kiloMap =
+        product.kilo_to_price_map ?? product.subcategory_id?.kilo_to_price_map;
+
+      if (kiloMap && Object.keys(kiloMap).length > 0) {
+        // get the cheapest kilo price
+        return Math.min(...Object.values(kiloMap));
+      }
+
+      // fallback to normal price
+      return product.price ?? 0;
+    };
+
     // Sorting
     if (filters.sort === "priceAsc") {
-      products.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
+      products.sort((a, b) => getEffectivePrice(a) - getEffectivePrice(b));
     } else if (filters.sort === "priceDesc") {
-      products.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+      products.sort((a, b) => getEffectivePrice(b) - getEffectivePrice(a));
     } else {
       products.sort((a, b) => a.name.localeCompare(b.name));
     }
@@ -109,7 +123,7 @@ function ProductsPage() {
   return (
     <div className="bg-background-2 min-h-screen">
       <div>
-        <div className="mb-6 sm:mb-8 md:mb-12">
+        <div className="mb-2 sm:mb-5 md:mb-6">
           {" "}
           <PageHeader
             title="Our Products"
@@ -119,7 +133,7 @@ function ProductsPage() {
 
         <ProductFiltration filters={filters} setFilters={setFilters} />
 
-        <div className="section-spacing mt-8">
+        <div className="section-spacing-x pb-10 mt-8 bg-background-2">
           {/* Error State */}
           {error && (
             <div className="flex items-center justify-center min-h-[400px] py-12">
@@ -225,14 +239,16 @@ function ProductsPage() {
                 ) {
                   const prices = Object.values(product.kilo_to_price_map);
                   const minPrice = Math.min(...prices);
-                  displayPrice = `$${minPrice.toFixed(2)}`;
+                  displayPrice = `ETB ${minPrice.toFixed(2)}`;
                 }
                 // Check if product is pieceable (sold per piece with subcategory price)
                 else if (
                   product.is_pieceable &&
                   product.subcategory_id?.price
                 ) {
-                  displayPrice = `$${product.subcategory_id.price.toFixed(2)}`;
+                  displayPrice = `ETB ${product.subcategory_id.price.toFixed(
+                    2
+                  )}`;
                 }
 
                 return (
@@ -259,7 +275,7 @@ function ProductsPage() {
       {/* Pagination Controls */}
       {!error && totalPages > 1 && (
         <div className="section-spacing-x pb-2">
-          <div className="flex flex-col lg:flex-row justify-center items-center gap-4 py-6 sm:py-8 bg-card border-2 border-border rounded-xl p-4 sm:p-6">
+          <div className="flex flex-col-reverse justify-center items-center gap-4 py-6 sm:py-8 bg-card ">
             <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
               <span className="font-medium">
                 Page {page} of {totalPages}
@@ -272,7 +288,7 @@ function ProductsPage() {
             <div className="flex items-center gap-2">
               {/* Previous Button */}
               <Button
-                className="w-10 h-10 sm:w-auto sm:px-4 sm:py-2 rounded-lg bg-card border-2 border-border text-foreground font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/10 hover:border-primary transition-all flex items-center justify-center gap-2"
+                className="w-10 h-10 sm:w-auto sm:px-4 sm:py-2 rounded-lg bg-card border-2  border-border text-foreground font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/10 hover:border-primary transition-all flex items-center justify-center gap-2"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
               >
@@ -298,12 +314,12 @@ function ProductsPage() {
                   {
                     length: Math.min(
                       totalPages,
-                      window.innerWidth < 640 ? 3 : 5
+                      window.innerWidth < 640 ? 2 : 3
                     ),
                   },
                   (_, i) => {
                     let pageNum;
-                    const maxPages = window.innerWidth < 640 ? 3 : 5;
+                    const maxPages = window.innerWidth < 640 ? 2 : 3;
 
                     if (totalPages <= maxPages) {
                       pageNum = i + 1;
@@ -318,7 +334,7 @@ function ProductsPage() {
                     return (
                       <Button
                         key={pageNum}
-                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg font-bold transition-all text-sm sm:text-base ${
+                        className={`w-9 h-9 xl:w-10 xl:h-10 rounded-lg font-bold transition-all text-sm sm:text-base ${
                           page === pageNum
                             ? "bg-primary text-primary-foreground shadow-lg scale-110"
                             : "bg-card border-2 border-border text-foreground hover:bg-primary/10 hover:border-primary"

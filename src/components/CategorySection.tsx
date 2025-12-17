@@ -59,7 +59,7 @@ const cardVariants: Variants = {
 
 function CategorySection() {
   return (
-    <section className="bg-background section-spacing-y">
+    <section className="bg-background/50 section-spacing-y">
       <div className="section-container">
         {/* Section heading */}
         <motion.div

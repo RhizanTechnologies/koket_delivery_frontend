@@ -1,6 +1,4 @@
 "use client";
-
-import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaShoppingCart } from "react-icons/fa";
@@ -21,16 +19,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, LogOut, Check } from "lucide-react";
+import { User, LogOut, Check, Menu } from "lucide-react";
 import { useAuth } from "@/app/context/AuthContext";
 import { useCart } from "@/app/context/CartContext";
 import Image from "next/image";
+import { useState, useEffect } from "react"; // Add these imports
 
 function Navbar() {
   const pathname = usePathname() || "/";
   const { user, isLoggedIn, isLoading, logout } = useAuth();
   const { cartCount } = useCart();
   const isAdmin = user?.role === "admin";
+
+  // State for scroll detection
+  const [showNavbar, setShowNavbar] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isNearTop, setIsNearTop] = useState(false);
 
   // Don't show authenticated state while still loading
   const showAsLoggedIn = !isLoading && isLoggedIn;
@@ -55,29 +59,93 @@ function Navbar() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   const desktopLinkClass = (href: string) =>
-    `2xl:text-lg transition-colors ${
-      isActive(href)
-        ? "text-primary font-semibold"
-        : "text-foreground hover:text-primary"
+    `2xl:text-lg font-medium transition-colors ${
+      isActive(href) ? "text-primary" : "text-foreground hover:text-primary"
     }`;
 
   const mobileLinkClass = (href: string) =>
-    `text-lg font-medium ${
+    `text-base font-medium ${
       isActive(href)
-        ? "text-primary font-semibold"
+        ? "text-primary"
         : "text-foreground hover:text-primary transition-colors"
     }`;
+
+  // Handle scroll detection
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const nearTop = currentScrollY < 100; // Consider "near top" when less than 100px from top
+
+      // Show when scrolling up
+      if (currentScrollY < lastScrollY) {
+        setShowNavbar(true);
+      }
+      // Hide when scrolling down (except when near top)
+      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowNavbar(false);
+      }
+
+      // Always show when near top of page
+      if (nearTop) {
+        setShowNavbar(true);
+      }
+
+      setIsNearTop(nearTop);
+      setLastScrollY(currentScrollY);
+    };
+
+    // Add hover detection for desktop
+    const handleMouseMove = (e: MouseEvent) => {
+      if (e.clientY < 100) {
+        // When mouse is near top 100px of viewport
+        setShowNavbar(true);
+      } else if (!isNearTop && lastScrollY > 100) {
+        // Hide if mouse moves away and we're not near top (with delay)
+        setTimeout(() => {
+          if (e.clientY >= 100) {
+            setShowNavbar(false);
+          }
+        }, 500);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [lastScrollY, isNearTop]);
+
+  // Navbar classes with transition
+  const navbarClasses = `
+    bg-background/90 border-b border-border w-full hidden xl:flex py-4 items-center justify-between 
+    px-4 lg:px-6 xl:px-10 2xl:px-16 3xl:px-24 z-50
+    fixed top-0 left-0 right-0
+    transition-transform duration-300 ease-in-out
+    ${showNavbar ? "translate-y-0" : "-translate-y-full"}
+    backdrop-blur-md
+  `;
+
+  const mobileNavbarClasses = `
+    w-full flex xl:hidden px-4 py-3 items-center justify-between 
+    bg-background/80 backdrop-blur-md border-b border-border z-50
+    fixed top-0 left-0 right-0
+    transition-transform duration-300 ease-in-out
+    ${showNavbar ? "translate-y-0" : "-translate-y-full"}
+  `;
 
   return (
     <>
       {/* ================= Desktop Navbar ================= */}
-      <nav className="bg-white w-full hidden xl:flex py-4 items-center justify-between px-4 lg:px-6 xl:px-10 2xl:px-16 3xl:px-24">
+      <nav className={navbarClasses}>
         {/* Logo */}
         <Link href="/" className="cursor-pointer">
           <Image
-            src="/assets/logo.jpg"
+            src="/assets/logo.png"
             alt="Koket Bakery Logo"
-            className="h-[50px] w-auto "
+            className="h-[50px] w-auto"
             width={100}
             height={100}
           />
@@ -98,7 +166,7 @@ function Navbar() {
 
         {/* Right Section */}
         <div className="flex items-center gap-4 2xl:gap-8">
-          {/* ===== BEFORE LOGIN (Same for both user/admin) ===== */}
+          {/* ===== BEFORE LOGIN ===== */}
           {!showAsLoggedIn && (
             <>
               <Link
@@ -107,14 +175,14 @@ function Navbar() {
               >
                 <FaShoppingCart size={30} />
                 {cartCount > 0 && (
-                  <Badge className="absolute -top-2 -right-3 text-[13px] font-semibold bg-secondary text-secondary-foreground rounded-full px-1.5 py-0.5 animate-bounce">
+                  <Badge className="absolute -top-2 -right-3 text-[13px] font-semibold bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 animate-bounce">
                     {cartCount}
                   </Badge>
                 )}
               </Link>
               <Link
                 href="/auth/login"
-                className="bg-primary hover:bg-primary-hover text-primary-foreground font-semibold px-4 py-1 rounded-full transition-colors cursor-pointer "
+                className="bg-primary hover:bg-primary-hover text-primary-foreground font-semibold px-5 py-2 rounded-lg transition-colors cursor-pointer text-sm"
               >
                 Login
               </Link>
@@ -133,7 +201,7 @@ function Navbar() {
                   >
                     <FaShoppingCart size={30} />
                     {cartCount > 0 && (
-                      <Badge className="absolute -top-2 -right-3 text-[13px] font-semibold bg-secondary text-secondary-foreground rounded-full px-1.5 py-0.5 animate-bounce">
+                      <Badge className="absolute -top-2 -right-3 text-[13px] font-semibold bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 animate-bounce">
                         {cartCount}
                       </Badge>
                     )}
@@ -148,23 +216,20 @@ function Navbar() {
 
                     <DropdownMenuContent
                       align="end"
-                      className="w-40 p-1 bg-background border border-border text-foreground rounded-md shadow-md"
+                      className="w-40 p-1 bg-background border border-border text-foreground rounded-lg shadow-lg"
                     >
                       <DropdownMenuItem asChild>
                         <Link
                           href="/orders"
-                          className={`flex items-center justify-between rounded-md px-2 py-1.5 transition-colors cursor-pointer ${
+                          className={`flex items-center justify-between rounded-md px-3 py-2 transition-colors cursor-pointer ${
                             pathname.startsWith("/orders")
-                              ? "bg-primary text-primary-foreground"
-                              : "hover:bg-primary-hover hover:text-primary-foreground"
+                              ? "bg-primary/10 text-primary"
+                              : "hover:bg-secondary"
                           }`}
                         >
                           My Orders
                           {pathname.startsWith("/orders") && (
-                            <Check
-                              size={14}
-                              className="text-primary-foreground"
-                            />
+                            <Check size={14} className="text-primary" />
                           )}
                         </Link>
                       </DropdownMenuItem>
@@ -172,18 +237,15 @@ function Navbar() {
                       <DropdownMenuItem asChild>
                         <Link
                           href="/profile"
-                          className={`flex items-center justify-between px-2 py-1.5 rounded-md transition-colors cursor-pointer ${
+                          className={`flex items-center justify-between px-3 py-2 rounded-md transition-colors cursor-pointer ${
                             pathname.startsWith("/profile")
-                              ? "bg-primary text-primary-foreground"
-                              : "hover:bg-primary-hover hover:text-primary-foreground"
+                              ? "bg-primary/10 text-primary"
+                              : "hover:bg-secondary"
                           }`}
                         >
                           My Profile
                           {pathname.startsWith("/profile") && (
-                            <Check
-                              size={14}
-                              className="text-primary-foreground"
-                            />
+                            <Check size={14} className="text-primary" />
                           )}
                         </Link>
                       </DropdownMenuItem>
@@ -193,9 +255,9 @@ function Navbar() {
                       <DropdownMenuItem asChild>
                         <Button
                           onClick={logout}
-                          className="flex items-center gap-2 px-2 py-1.5 w-full rounded-md bg-secondary text-secondary-foreground hover:bg-secondary-hover transition-colors cursor-pointer"
+                          className="flex items-center gap-2 px-3 py-2 w-full rounded-md bg-secondary text-foreground hover:bg-secondary-hover transition-colors cursor-pointer text-sm"
                         >
-                          <LogOut size={14} className="text-destructive" />{" "}
+                          <LogOut size={14} className="text-destructive" />
                           Logout
                         </Button>
                       </DropdownMenuItem>
@@ -215,23 +277,20 @@ function Navbar() {
 
                   <DropdownMenuContent
                     align="end"
-                    className="w-40 p-1 bg-background border border-border text-foreground rounded-md shadow-md"
+                    className="w-40 p-1 bg-background border border-border text-foreground rounded-lg shadow-lg"
                   >
                     <DropdownMenuItem asChild>
                       <Link
                         href="/profile"
-                        className={`flex items-center justify-between px-2 py-1.5 rounded-md transition-colors cursor-pointer ${
+                        className={`flex items-center justify-between px-3 py-2 rounded-md transition-colors cursor-pointer ${
                           pathname.startsWith("/profile")
-                            ? "bg-primary text-primary-foreground"
-                            : "hover:bg-primary-hover hover:text-primary-foreground"
+                            ? "bg-primary/10 text-primary"
+                            : "hover:bg-secondary"
                         }`}
                       >
                         My Profile
                         {pathname.startsWith("/admin/profile") && (
-                          <Check
-                            size={14}
-                            className="text-primary-foreground"
-                          />
+                          <Check size={14} className="text-primary" />
                         )}
                       </Link>
                     </DropdownMenuItem>
@@ -241,9 +300,10 @@ function Navbar() {
                     <DropdownMenuItem asChild>
                       <Button
                         onClick={logout}
-                        className="flex items-center gap-2 px-2 py-1.5 w-full rounded-md bg-secondary text-secondary-foreground hover:bg-secondary-hover transition-colors cursor-pointer"
+                        className="flex items-center gap-2 px-3 py-2 w-full rounded-md bg-secondary text-foreground hover:bg-secondary-hover transition-colors cursor-pointer text-sm"
                       >
-                        <LogOut size={14} className="text-destructive" /> Logout
+                        <LogOut size={14} className="text-destructive" />
+                        Logout
                       </Button>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -255,11 +315,11 @@ function Navbar() {
       </nav>
 
       {/* ================= Mobile Navbar ================= */}
-      <nav className="w-full flex xl:hidden px-4 py-4 items-center justify-between bg-white border-b border-border">
+      <nav className={mobileNavbarClasses}>
         {/* Logo */}
         <Link href="/" className="cursor-pointer">
           <Image
-            src="/assets/logo.jpg"
+            src="/assets/logo.png"
             alt="Koket Bakery Logo"
             className="h-[40px] w-auto"
             width={100}
@@ -267,34 +327,34 @@ function Navbar() {
           />
         </Link>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {/* ===== BEFORE LOGIN ===== */}
           {!showAsLoggedIn && (
             <>
               <Link
                 href="/cart"
-                className="relative text-primary text-xl 2xl:text-2xl transition-transform duration-200 hover:text-primary-hover hover:scale-110 cursor-pointer"
+                className="relative text-primary text-lg transition-transform duration-200 hover:text-primary-hover cursor-pointer"
                 aria-label={`Shopping cart ${
                   cartCount > 0 ? `with ${cartCount} items` : "(empty)"
                 }`}
               >
                 <FaShoppingCart size={27} aria-hidden="true" />
                 {cartCount > 0 && (
-                  <Badge className="absolute -top-2 -right-3 text-[10px] lg:text-[13px] font-semibold bg-secondary text-secondary-foreground rounded-full px-1.5 py-0.5 animate-bounce">
+                  <Badge className="absolute -top-2 -right-3 text-[10px] font-semibold bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 animate-bounce">
                     {cartCount}
                   </Badge>
                 )}
               </Link>
               <Link
                 href="/auth/login"
-                className="bg-primary hover:bg-primary-hover text-primary-foreground font-semibold px-2 md:px-4 py-1 rounded-full transition-colors cursor-pointer text-xs md:text-sm"
+                className="bg-primary hover:bg-primary-hover text-primary-foreground font-semibold px-3 py-1.5 rounded-lg transition-colors cursor-pointer text-xs"
               >
                 Login
               </Link>
             </>
           )}
 
-          {/* ===== AFTER LOGIN  ===== */}
+          {/* ===== AFTER LOGIN ===== */}
           {showAsLoggedIn && (
             <>
               {/* ✅ USER: Cart + Dropdown */}
@@ -302,14 +362,14 @@ function Navbar() {
                 <>
                   <Link
                     href="/cart"
-                    className="relative text-primary text-xl transition-colors duration-200 hover:text-primary-hover cursor-pointer"
+                    className="relative text-primary text-lg transition-colors duration-200 hover:text-primary-hover cursor-pointer"
                     aria-label={`Shopping cart ${
                       cartCount > 0 ? `with ${cartCount} items` : "(empty)"
                     }`}
                   >
                     <FaShoppingCart size={30} aria-hidden="true" />
                     {cartCount > 0 && (
-                      <Badge className="absolute -top-2 -right-3 text-[13px] font-semibold bg-secondary text-secondary-foreground rounded-full px-1.5 py-0.5 animate-bounce">
+                      <Badge className="absolute -top-2 -right-3 text-[13px] font-semibold bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 animate-bounce">
                         {cartCount}
                       </Badge>
                     )}
@@ -327,23 +387,20 @@ function Navbar() {
 
                     <DropdownMenuContent
                       align="end"
-                      className="w-40 p-1 bg-background border border-border text-foreground rounded-md shadow-md"
+                      className="w-40 p-1 bg-background border border-border text-foreground rounded-lg shadow-lg"
                     >
                       <DropdownMenuItem asChild>
                         <Link
                           href="/orders"
-                          className={`flex items-center justify-between rounded-md px-2 py-1.5 transition-colors cursor-pointer ${
+                          className={`flex items-center justify-between rounded-md px-3 py-2 transition-colors cursor-pointer ${
                             pathname.startsWith("/orders")
-                              ? "bg-primary text-primary-foreground"
-                              : "hover:bg-primary-hover hover:text-primary-foreground"
+                              ? "bg-primary/10 text-primary"
+                              : "hover:bg-secondary"
                           }`}
                         >
                           My Orders
                           {pathname.startsWith("/orders") && (
-                            <Check
-                              size={14}
-                              className="text-primary-foreground"
-                            />
+                            <Check size={14} className="text-primary" />
                           )}
                         </Link>
                       </DropdownMenuItem>
@@ -351,18 +408,15 @@ function Navbar() {
                       <DropdownMenuItem asChild>
                         <Link
                           href="/profile"
-                          className={`flex items-center justify-between rounded-md px-2 py-1.5 transition-colors  cursor-pointer ${
+                          className={`flex items-center justify-between rounded-md px-3 py-2 transition-colors cursor-pointer ${
                             pathname.startsWith("/profile")
-                              ? "bg-primary text-primary-foreground"
-                              : "hover:bg-primary-hover hover:text-primary-foreground"
+                              ? "bg-primary/10 text-primary"
+                              : "hover:bg-secondary"
                           }`}
                         >
                           My Profile
                           {pathname.startsWith("/profile") && (
-                            <Check
-                              size={14}
-                              className="text-primary-foreground"
-                            />
+                            <Check size={14} className="text-primary" />
                           )}
                         </Link>
                       </DropdownMenuItem>
@@ -372,9 +426,9 @@ function Navbar() {
                       <DropdownMenuItem asChild>
                         <Button
                           onClick={logout}
-                          className="flex items-center gap-2 px-2 py-1.5 w-full rounded-md bg-secondary text-secondary-foreground hover:bg-secondary-hover transition-colors cursor-pointer"
+                          className="flex items-center gap-2 px-3 py-2 w-full rounded-md bg-secondary text-foreground hover:bg-secondary-hover transition-colors cursor-pointer text-sm"
                         >
-                          <LogOut size={14} className="text-destructive" />{" "}
+                          <LogOut size={14} className="text-destructive" />
                           Logout
                         </Button>
                       </DropdownMenuItem>
@@ -394,23 +448,20 @@ function Navbar() {
 
                   <DropdownMenuContent
                     align="end"
-                    className="w-40 p-1 bg-background border border-border text-foreground rounded-md shadow-md"
+                    className="w-40 p-1 bg-background border border-border text-foreground rounded-lg shadow-lg"
                   >
                     <DropdownMenuItem asChild>
                       <Link
                         href="/admin/profile"
-                        className={`flex items-center justify-between rounded-md px-2 py-1.5 transition-colors cursor-pointer ${
+                        className={`flex items-center justify-between rounded-md px-3 py-2 transition-colors cursor-pointer ${
                           pathname.startsWith("/profile")
-                            ? "bg-primary text-primary-foreground"
-                            : "hover:bg-primary-hover hover:text-primary-foreground"
+                            ? "bg-primary/10 text-primary"
+                            : "hover:bg-secondary"
                         }`}
                       >
                         My Profile
                         {pathname.startsWith("/profile") && (
-                          <Check
-                            size={14}
-                            className="text-primary-foreground"
-                          />
+                          <Check size={14} className="text-primary" />
                         )}
                       </Link>
                     </DropdownMenuItem>
@@ -420,7 +471,7 @@ function Navbar() {
                     <DropdownMenuItem asChild>
                       <Button
                         onClick={logout}
-                        className="flex items-center gap-2 px-2 py-1.5 w-full rounded-md bg-secondary text-secondary-foreground hover:bg-secondary-hover transition-colors cursor-pointer"
+                        className="flex items-center gap-2 px-3 py-2 w-full rounded-md bg-secondary text-foreground hover:bg-secondary-hover transition-colors cursor-pointer text-sm"
                       >
                         <LogOut size={14} className="text-destructive" /> Logout
                       </Button>
@@ -437,34 +488,26 @@ function Navbar() {
               <Button
                 variant="outline"
                 size="icon"
-                className="border-border text-primary hover:bg-secondary transition-colors cursor-pointer"
+                className="border-border text-primary hover:bg-secondary transition-colors cursor-pointer bg-transparent"
                 aria-label="Open mobile menu"
               >
-                <svg
-                  width="24"
-                  height="24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <rect x="4" y="7" width="16" height="2" rx="1" />
-                  <rect x="4" y="15" width="16" height="2" rx="1" />
-                </svg>
+                <Menu size={24} aria-hidden="true" />
               </Button>
             </SheetTrigger>
 
             <SheetContent
               side="right"
-              className="p-6 w-4/5 max-w-xs bg-white border-r border-border"
+              className="p-6 w-4/5 max-w-xs bg-background border-l border-border"
             >
               <SheetHeader>
                 <SheetTitle>
-                  <span className="text-primary text-xl font-kaushan cursor-pointer">
+                  <span className="text-primary text-lg font-kaushan cursor-pointer">
                     Koket Bakery
                   </span>
                 </SheetTitle>
               </SheetHeader>
 
-              <div className="flex flex-col gap-6 mt-4 mb-8">
+              <div className="flex flex-col gap-4 mt-6">
                 {linksToDisplay.map((link) => (
                   <SheetClose asChild key={link.name}>
                     <Link

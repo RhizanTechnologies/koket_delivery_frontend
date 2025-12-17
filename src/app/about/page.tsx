@@ -21,9 +21,9 @@ export default function AboutPage() {
             </div>
             <div className="bg-card border-2 border-border rounded-2xl p-6 sm:p-8 md:p-10 shadow-lg">
               <div className="space-y-5 text-muted-foreground leading-relaxed text-base sm:text-lg">
-                <p className="flex items-start gap-3">
+                <p className="flex flex-col xl:flex-row xl:items-start items-center gap-3">
                   <svg
-                    className="w-6 h-6 text-primary flex-shrink-0 mt-1"
+                    className="w-6 h-6 text-primary flex-shrink-0 mt-1 "
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -43,9 +43,9 @@ export default function AboutPage() {
                     handcrafted desserts made with the finest ingredients.
                   </span>
                 </p>
-                <p className="flex items-start gap-3">
+                <p className="flex flex-col xl:flex-row xl:items-start items-center gap-3">
                   <svg
-                    className="w-6 h-6 text-primary flex-shrink-0 mt-1"
+                    className="w-6 h-6 text-primary flex-shrink-0 mt-1 "
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -64,9 +64,9 @@ export default function AboutPage() {
                     we pour our hearts into every order.
                   </span>
                 </p>
-                <p className="flex items-start gap-3">
+                <p className="flex flex-col xl:flex-row xl:items-start items-center gap-3">
                   <svg
-                    className="w-6 h-6 text-primary flex-shrink-0 mt-1"
+                    className="w-6 h-6 text-primary flex-shrink-0 mt-1 "
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

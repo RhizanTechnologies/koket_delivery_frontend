@@ -22,7 +22,7 @@ export type OrderStatus = "pending" | "accepted" | "rejected" | "completed";
 export interface Order {
   _id: string;
   order_items: OrderItemDTO[];
-  user_id: string;
+  // user_id: string;
   phone_number: string;
   total_price: number;
   upfront_paid: number;
@@ -34,7 +34,7 @@ export interface Order {
   updated_at: string;
   // Populated fields
   order_items_details?: any[];
-  user_details?: {
+  user_id?: {
     _id: string;
     name: string;
     email: string;

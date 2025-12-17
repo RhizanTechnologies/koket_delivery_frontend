@@ -30,7 +30,7 @@ export type ProductDetail = {
 
 // Combined order item with product details for display
 export type OrderItemWithDetails = OrderItem & {
-  product_details?: ProductDetail;
+  product?: ProductDetail;
 };
 
 // Legacy Product type for backward compatibility
@@ -49,7 +49,6 @@ export type Order = {
   _id?: string;
   id?: string; // Alias for _id
   order_items?: OrderItemWithDetails[];
-  user_id?: string;
   phone_number?: string;
   total_price?: number;
   upfront_paid?: number;
@@ -60,7 +59,7 @@ export type Order = {
   created_at?: string;
   updated_at?: string;
   // Populated fields
-  user_details?: {
+  user_id?: {
     _id: string;
     name: string;
     email: string;
@@ -106,7 +105,7 @@ export const mapOrderToDisplay = (order: Order): Order => {
   return {
     ...order,
     id: order._id,
-    customer: order.user_details?.name || "Unknown Customer",
+    customer: order.user_id?.name || "Unknown Customer",
     date: order.created_at
       ? new Date(order.created_at).toLocaleDateString("en-US", {
           year: "numeric",

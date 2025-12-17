@@ -42,6 +42,7 @@ export async function getUserProfile(): Promise<UserProfile> {
   try {
     const { data } = await api.get<ProfileResponse>("/users/profile");
 
+    console.log("Fetched user profile:", data);
     // Transform response to UserProfile format
     return {
       _id: data._id,

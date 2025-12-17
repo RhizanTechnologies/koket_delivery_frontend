@@ -138,3 +138,25 @@ export const updateAdminProfile = async (
     );
   }
 };
+
+/**
+ * Upload profile image
+ * PUT /api/v1/users/profile/image (multipart/form-data)
+ */
+export const uploadProfileImage = async (file: File): Promise<User> => {
+  try {
+    const form = new FormData();
+    form.append("profile_image", file);
+
+    const response = await apiClient.put("/users/profile/image", form, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    return response.data.user || response.data;
+  } catch (error: any) {
+    logger.error("Failed to upload profile image:", error);
+    throw new Error(
+      error.response?.data?.message || "Failed to upload profile image"
+    );
+  }
+};

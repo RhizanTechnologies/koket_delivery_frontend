@@ -29,7 +29,7 @@ const ReviewsList = dynamic(() =>
 const ASSET_BASE_URL =
   process.env.NEXT_PUBLIC_ASSET_BASE_URL ??
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/api\/v1\/?$/, "") ??
-  "https://backend-om79.onrender.com";
+  "http://localhost:5001";
 
 const currencyFormatter = new Intl.NumberFormat("en-ET", {
   style: "currency",
@@ -247,7 +247,7 @@ export default function ProductPage() {
   return (
     <main className="min-h-screen bg-background-2">
       {/* Breadcrumb Navigation */}
-      <div className="border-b border-border bg-background">
+      <div className="bg-background-2 pt-3">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 py-3 sm:py-4 text-sm">
             <a
@@ -272,7 +272,7 @@ export default function ProductPage() {
       </div>
 
       {/* Product Section */}
-      <section className="mx-auto max-w-7xl px-4 py-6 sm:py-8 md:py-12 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-3  sm:px-6 lg:px-8">
         <div className="grid gap-6 sm:gap-8 lg:gap-12 2xl:grid-cols-2">
           <Suspense
             fallback={
@@ -291,7 +291,7 @@ export default function ProductPage() {
       </section>
 
       {/* Reviews Section */}
-      <section className="border-t border-border bg-card/30">
+      <section className=" bg-card/30">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:py-12 md:py-16 sm:px-6 lg:px-8">
           <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>

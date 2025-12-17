@@ -7,13 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// Select removed — inquiryType/subject removed
 import { contactSchema } from "@/app/schemas";
 import { validateSafe } from "@/app/utils/validation";
 import { toast } from "react-toastify";
@@ -23,8 +17,6 @@ function ContactForm() {
     name: "",
     email: "",
     phone: "",
-    inquiryType: "",
-    subject: "",
     message: "",
   });
   const [error, setError] = useState<string | null>(null);
@@ -55,8 +47,6 @@ function ContactForm() {
         name: "",
         email: "",
         phone: "",
-        inquiryType: "",
-        subject: "",
         message: "",
       });
     } catch (err: any) {
@@ -96,18 +86,15 @@ function ContactForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">
-              Email <span className="text-destructive">*</span>
-            </Label>
+            <Label htmlFor="email">Email (optional)</Label>
             <Input
               id="email"
               type="email"
-              placeholder="Your@email.com"
+              placeholder="you@example.com"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              required
             />
           </div>
         </div>
@@ -129,43 +116,10 @@ function ContactForm() {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="inquiryType">
-              Inquiry Type <span className="text-destructive">*</span>
-            </Label>
-            <Select
-              value={formData.inquiryType}
-              onValueChange={(value) =>
-                setFormData({ ...formData, inquiryType: value })
-              }
-            >
-              <SelectTrigger id="inquiryType">
-                <SelectValue placeholder="Select one" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="general">General Inquiry</SelectItem>
-                <SelectItem value="order">Order Question</SelectItem>
-                <SelectItem value="custom">Custom Order</SelectItem>
-                <SelectItem value="feedback">Feedback</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          {/* inquiryType removed */}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="subject">
-            Subject <span className="text-destructive">*</span>
-          </Label>
-          <Input
-            id="subject"
-            placeholder="What's this about?"
-            value={formData.subject}
-            onChange={(e) =>
-              setFormData({ ...formData, subject: e.target.value })
-            }
-            required
-          />
-        </div>
+        {/* subject removed */}
 
         <div className="space-y-2">
           <Label htmlFor="message">

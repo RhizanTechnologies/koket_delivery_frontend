@@ -14,7 +14,7 @@ import LoadingState from "@/components/LoadingState";
 const ASSET_BASE_URL =
   process.env.NEXT_PUBLIC_ASSET_BASE_URL ??
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/api\/v1\/?$/, "") ??
-  "https://backend-om79.onrender.com";
+  "http://localhost:5001";
 
 function FeaturedSection() {
   const [products, setProducts] = useState<ProductSummary[]>([]);
@@ -126,14 +126,16 @@ function FeaturedSection() {
                 ) {
                   const prices = Object.values(product.kilo_to_price_map);
                   const minPrice = Math.min(...prices);
-                  displayPrice = `From $${minPrice.toFixed(2)}`;
+                  displayPrice = `ETB ${minPrice.toFixed(2)}`;
                 }
                 // Check if product is pieceable (sold per piece with subcategory price)
                 else if (
                   product.is_pieceable &&
                   product.subcategory_id?.price
                 ) {
-                  displayPrice = `$${product.subcategory_id.price.toFixed(2)}`;
+                  displayPrice = `ETB ${product.subcategory_id.price.toFixed(
+                    2
+                  )}`;
                 }
 
                 // Prepare images array

@@ -31,7 +31,7 @@ export default function ProfilePage() {
   const [user, setUser] = useState({
     name: "",
     email: "",
-    phone: "",
+    phone_number: "",
     joinedDate: "",
     initials: "",
     profileImage: "",
@@ -60,7 +60,7 @@ export default function ProfilePage() {
       setUser({
         name: profileData.name || "Unknown",
         email: profileData.email || "",
-        phone: profileData.phone || "",
+        phone_number: profileData.phone_number || "Not set",
         joinedDate: profileData.created_at
           ? new Date(profileData.created_at).toLocaleDateString("en-US", {
               year: "numeric",
@@ -114,7 +114,7 @@ export default function ProfilePage() {
   const handleSaveProfile = async (data: {
     fullName: string;
     email: string;
-    phone: string;
+    phone_number: string;
   }) => {
     try {
       setLoading(true);
@@ -124,7 +124,7 @@ export default function ProfilePage() {
       const validation = validateSafe(profileUpdateSchema, {
         name: data.fullName,
         email: data.email,
-        phone_number: data.phone,
+        phone_number: data.phone_number,
       });
 
       if (!validation.success) {
@@ -145,7 +145,7 @@ export default function ProfilePage() {
         ...user,
         name: data.fullName,
         email: data.email,
-        phone: data.phone,
+        phone_number: data.phone_number,
         initials: getInitials(data.fullName),
       });
 
@@ -259,7 +259,11 @@ export default function ProfilePage() {
           <EditProfileModal
             open={editModalOpen}
             onOpenChange={setEditModalOpen}
-            user={{ fullName: user.name, email: user.email, phone: user.phone }}
+            user={{
+              fullName: user.name,
+              email: user.email,
+              phone_number: user.phone_number,
+            }}
             onSave={handleSaveProfile}
           />
 

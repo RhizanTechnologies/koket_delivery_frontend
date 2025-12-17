@@ -16,15 +16,15 @@ function Hero() {
         <div className="flex flex-col md:flex-row gap-3 xs:gap-4 justify-center w-full md:w-auto">
           <Link
             href="/products"
-            className="bg-primary hover:bg-primary-hover text-primary-foreground font-bold px-6 lg:px-8 xl:px-10 py-3 lg:py-4 text-sm xs:text-base lg:text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            className="bg-primary hover:bg-primary-hover text-primary-foreground font-semibold px-6 lg:px-8 xl:px-10 py-3 lg:py-4 text-sm xs:text-base lg:text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
           >
-            Browse Products
+            Explore Collection
           </Link>
           <Link
-            href="/products"
-            className="bg-card hover:bg-secondary text-foreground font-semibold px-6 lg:px-8 xl:px-10 py-3 lg:py-4 text-sm xs:text-base lg:text-lg rounded-full shadow-lg hover:shadow-xl border-2 border-border hover:border-primary/50 transition-all duration-300"
+            href="/custom-cake"
+            className="bg-secondary hover:bg-secondary-hover text-foreground font-semibold px-6 lg:px-8 xl:px-10 py-3 lg:py-4 text-sm xs:text-base lg:text-lg rounded-lg shadow-md hover:shadow-lg border border-border transition-all duration-300"
           >
-            Get Your Cake
+            Custom Order
           </Link>
         </div>
       </div>

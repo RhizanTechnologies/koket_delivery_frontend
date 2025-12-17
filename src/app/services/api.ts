@@ -13,10 +13,10 @@ export const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
-    "Accept": "application/json",
+    Accept: "application/json",
   },
-  withCredentials: false, // Set to true only if backend supports credentials
-  timeout: 30000, // 30 seconds timeout
+  withCredentials: true,
+  timeout: 30000,
 });
 
 // Setup API request/response logging
@@ -58,16 +58,16 @@ apiClient.interceptors.response.use(
             const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
               refreshToken,
             });
-            
+
             // Extract tokens and user from response
             const { tokens, user } = response.data;
-            
+
             // Store new tokens
             localStorage.setItem("accessToken", tokens.accessToken);
             if (tokens.refreshToken) {
               localStorage.setItem("refreshToken", tokens.refreshToken);
             }
-            
+
             // Update user data if provided
             if (user) {
               localStorage.setItem("user", JSON.stringify(user));
@@ -83,7 +83,7 @@ apiClient.interceptors.response.use(
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
             localStorage.removeItem("user");
-            
+
             // Redirect to login if not already on auth page
             if (!window.location.pathname.startsWith("/auth")) {
               window.location.href = "/auth/login";
@@ -92,14 +92,17 @@ apiClient.interceptors.response.use(
         }
       } catch (refreshError: any) {
         // Refresh failed (expired or invalid refresh token)
-        console.error("Token refresh failed:", refreshError.response?.data || refreshError.message);
-        
+        console.error(
+          "Token refresh failed:",
+          refreshError.response?.data || refreshError.message
+        );
+
         if (typeof window !== "undefined") {
           // Clear all auth data
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
           localStorage.removeItem("user");
-          
+
           // Force logout and redirect to login
           if (!window.location.pathname.startsWith("/auth")) {
             window.location.href = "/auth/login?session=expired";
