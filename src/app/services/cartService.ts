@@ -40,7 +40,7 @@ interface CartMutationResponse {
 /**
  * Add item to cart
  */
-export async function addToCart(payload: AddToCartPayload) {
+export async function addToCart(payload: any) {
   try {
     const { data } = await apiClient.post<CartMutationResponse>(
       "/orders/items",
