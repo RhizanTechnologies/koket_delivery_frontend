@@ -23,18 +23,12 @@ import { User, LogOut, Check, Menu } from "lucide-react";
 import { useAuth } from "@/app/context/AuthContext";
 import { useCart } from "@/app/context/CartContext";
 import Image from "next/image";
-import { useState, useEffect } from "react"; // Add these imports
 
 function Navbar() {
   const pathname = usePathname() || "/";
   const { user, isLoggedIn, isLoading, logout } = useAuth();
   const { cartCount } = useCart();
   const isAdmin = user?.role === "admin";
-
-  // State for scroll detection
-  const [showNavbar, setShowNavbar] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [isNearTop, setIsNearTop] = useState(false);
 
   // Don't show authenticated state while still loading
   const showAsLoggedIn = !isLoading && isLoggedIn;
@@ -51,6 +45,7 @@ function Navbar() {
     { name: "Orders", href: "/admin/orders" },
     { name: "Users", href: "/admin/users" },
     { name: "Categories", href: "/admin/categories" },
+    { name: "Contacts", href: "/admin/contacts" },
   ];
 
   const linksToDisplay = showAsLoggedIn && isAdmin ? AdminLinks : NavLinks;
@@ -70,70 +65,15 @@ function Navbar() {
         : "text-foreground hover:text-primary transition-colors"
     }`;
 
-  // Handle scroll detection
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const nearTop = currentScrollY < 100; // Consider "near top" when less than 100px from top
-
-      // Show when scrolling up
-      if (currentScrollY < lastScrollY) {
-        setShowNavbar(true);
-      }
-      // Hide when scrolling down (except when near top)
-      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setShowNavbar(false);
-      }
-
-      // Always show when near top of page
-      if (nearTop) {
-        setShowNavbar(true);
-      }
-
-      setIsNearTop(nearTop);
-      setLastScrollY(currentScrollY);
-    };
-
-    // Add hover detection for desktop
-    const handleMouseMove = (e: MouseEvent) => {
-      if (e.clientY < 100) {
-        // When mouse is near top 100px of viewport
-        setShowNavbar(true);
-      } else if (!isNearTop && lastScrollY > 100) {
-        // Hide if mouse moves away and we're not near top (with delay)
-        setTimeout(() => {
-          if (e.clientY >= 100) {
-            setShowNavbar(false);
-          }
-        }, 500);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [lastScrollY, isNearTop]);
-
-  // Navbar classes with transition
+  // Navbar classes - normal positioning (scrolls with page)
   const navbarClasses = `
-    bg-background/90 border-b border-border w-full hidden xl:flex py-4 items-center justify-between 
-    px-4 lg:px-6 xl:px-10 2xl:px-16 3xl:px-24 z-50
-    fixed top-0 left-0 right-0
-    transition-transform duration-300 ease-in-out
-    ${showNavbar ? "translate-y-0" : "-translate-y-full"}
-    backdrop-blur-md
+    bg-background border-b border-border w-full hidden xl:flex py-4 items-center justify-between 
+    px-4 lg:px-6 xl:px-10 2xl:px-16 3xl:px-24
   `;
 
   const mobileNavbarClasses = `
     w-full flex xl:hidden px-4 py-3 items-center justify-between 
-    bg-background/80 backdrop-blur-md border-b border-border z-50
-    fixed top-0 left-0 right-0
-    transition-transform duration-300 ease-in-out
-    ${showNavbar ? "translate-y-0" : "-translate-y-full"}
+    bg-background border-b border-border
   `;
 
   return (

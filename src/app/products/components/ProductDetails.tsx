@@ -64,6 +64,18 @@ const parseKiloValue = (input?: string) => {
   return Number.isNaN(numeric) ? undefined : numeric;
 };
 
+const getServingSize = (kiloValue?: number): string | null => {
+  if (!kiloValue) return null;
+
+  if (kiloValue === 0.5) return "6 people";
+  if (kiloValue === 1) return "12 people";
+  if (kiloValue === 2) return "20 people";
+
+  // For other values, estimate based on the 1kg = 12 people ratio
+  const estimated = Math.round(kiloValue * 12);
+  return `~${estimated} people`;
+};
+
 interface ProductDetailsProps {
   product: ProductDetail;
   onCartUpdate?: () => void;
@@ -226,6 +238,16 @@ export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
                 </span>
               )}
             </div>
+            {selectedWeight &&
+              (() => {
+                const kiloValue = parseKiloValue(selectedWeight.id);
+                const servingSize = getServingSize(kiloValue);
+                return servingSize ? (
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Serves {servingSize}
+                  </p>
+                ) : null;
+              })()}
             <p className="text-sm text-muted-foreground">
               Pricing varies by weight selection
             </p>

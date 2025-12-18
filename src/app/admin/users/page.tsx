@@ -129,7 +129,7 @@ export default function CustomerPage() {
       />
 
       {/* Main content */}
-      <div className="min-h-screen flex justify-center items-start py-6 w-full px-4">
+      <div className="min-h-screen flex justify-center items-start py-6 w-full px-4 bg-background-2">
         <div className="w-full max-w-5xl mx-auto border border-black rounded-2xl">
           <div className="bg-white rounded-xl p-4 sm:p-6 w-full shadow-lg">
             <div className="flex items-center justify-between mb-2">

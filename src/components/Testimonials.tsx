@@ -21,12 +21,12 @@ const testimonials = [
       "Flavors were spot on and the design was flawless. Will order again for sure.",
     rating: 5,
   },
-  {
-    name: "Sofia Martinez",
-    review:
-      "Great customer support and timely delivery. The cake arrived fresh and delicious!",
-    rating: 5,
-  },
+  // {
+  //   name: "Sofia Martinez",
+  //   review:
+  //     "Great customer support and timely delivery. The cake arrived fresh and delicious!",
+  //   rating: 5,
+  // },
 ];
 
 function Testimonials() {
@@ -40,7 +40,7 @@ function Testimonials() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-6 sm:gap-7 md:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6 sm:gap-7 md:gap-8">
           {testimonials.map((t, i) => (
             <div
               key={i}

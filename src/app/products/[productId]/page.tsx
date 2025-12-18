@@ -247,9 +247,9 @@ export default function ProductPage() {
   return (
     <main className="min-h-screen bg-background-2">
       {/* Breadcrumb Navigation */}
-      <div className="bg-background-2 pt-3">
+      <div className="bg-background pt-3">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 py-3 sm:py-4 text-sm">
+          <div className="flex items-center gap-2 py-3 sm:py-4 text-sm ">
             <a
               href="/"
               className="text-muted-foreground hover:text-foreground transition-colors"
@@ -357,20 +357,37 @@ export default function ProductPage() {
           </p>
         </div>
         {relatedProducts.length ? (
-          <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
-            {relatedProducts.map((item) => (
-              <ProductCard
-                key={item._id}
-                image={item.image_url || "/placeholder.svg"}
-                name={item.name}
-                description={
-                  item.description ?? "Freshly made with premium ingredients."
-                }
-                price={computePriceLabel(item)}
-                category={item.category_id?.name}
-                productId={item._id}
-              />
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-6">
+            {relatedProducts.map((product) => {
+              // Determine the price to display based on product type
+              let displayPrice = "Contact for Price";
+
+              // Check if product has kilo_to_price_map (sold by weight)
+              if (
+                product.kilo_to_price_map &&
+                Object.keys(product.kilo_to_price_map).length > 0
+              ) {
+                const prices = Object.values(product.kilo_to_price_map);
+                const minPrice = Math.min(...prices);
+                displayPrice = `ETB ${minPrice.toFixed(2)}`;
+              }
+              // Check if product is pieceable (sold per piece with subcategory price)
+              else if (product.is_pieceable && product.subcategory_id?.price) {
+                displayPrice = `ETB ${product.subcategory_id.price.toFixed(2)}`;
+              }
+
+              return (
+                <ProductCard
+                  key={product._id}
+                  image={product.image_url || "/assets/img1.png"}
+                  name={product.name}
+                  description={product.description ?? ""}
+                  price={displayPrice}
+                  category={product.category_id?.name}
+                  productId={product._id}
+                />
+              );
+            })}
           </div>
         ) : (
           <div className="rounded-xl border-2 border-dashed border-border bg-muted/30 p-8 sm:p-12 text-center">

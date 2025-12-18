@@ -12,7 +12,7 @@ export default function HeroSection({
   iconAlt,
 }: HeroSectionProps) {
   return (
-    <div className="bg-background-2 section-spacing text-center">
+    <div className="bg-background section-spacing text-center">
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex flex-row justify-center items-center mb-4">
           <div className="pr-2">

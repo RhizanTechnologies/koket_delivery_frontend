@@ -283,6 +283,7 @@ export function ContactPaymentForm({
             value={formData.deliveryDate}
             onChange={handleInputChange}
             required
+            min={new Date(Date.now() + 86400000).toISOString().split("T")[0]}
             className="w-full h-11"
           />
           <div className="flex items-start gap-2 mt-2 text-xs text-muted-foreground">
@@ -299,7 +300,16 @@ export function ContactPaymentForm({
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span>Custom orders require at least 3 days advance notice</span>
+            <span>
+              Minimum delivery time is one day. For urgent orders, please
+              contact us at{" "}
+              <a
+                href="tel:+251911334455"
+                className="text-primary hover:underline font-semibold"
+              >
+                +251 911 334 455
+              </a>
+            </span>
           </div>
         </div>
 

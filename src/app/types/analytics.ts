@@ -1,5 +1,3 @@
-import { Types } from "mongoose";
-
 export type Period = "daily" | "weekly" | "monthly";
 
 export interface RevenueTrendPoint {
@@ -16,14 +14,14 @@ export interface OrdersByStatus {
 }
 
 export interface TopCategory {
-  category_id: Types.ObjectId | string;
+  category_id: string;
   category_name: string;
   order_count: number;
   revenue: number;
 }
 
 export interface TopProduct {
-  product_id: Types.ObjectId | string;
+  product_id: string;
   product_name: string;
   order_count: number;
   revenue: number;
@@ -61,7 +59,7 @@ export interface DashboardOverviewDTO {
 }
 
 export interface ProductPerformanceDTO {
-  product_id: Types.ObjectId | string;
+  product_id: string;
   product_name: string;
   total_orders: number;
   total_revenue: number;
@@ -71,7 +69,7 @@ export interface ProductPerformanceDTO {
 }
 
 export interface CategoryPerformanceDTO {
-  category_id: Types.ObjectId | string;
+  category_id: string;
   category_name: string;
   total_orders: number;
   total_revenue: number;

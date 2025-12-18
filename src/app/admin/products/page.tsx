@@ -156,7 +156,7 @@ export default function AdminProductsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-background-2 flex items-center justify-center px-4">
         <div className="text-center max-w-md">
           <div className="bg-red-100 rounded-full p-6 inline-block mb-4">
             <svg
@@ -202,7 +202,7 @@ export default function AdminProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
+    <div className="min-h-screen bg-background-2">
       <HeroSection
         title="Products"
         subtitle="Manage all products and inventory in one place"
@@ -222,7 +222,7 @@ export default function AdminProductsPage() {
 
           {/* Filters Section */}
           {showFilters && (
-            <div className="px-3 xs:px-4 md:px-6 py-4 md:py-5 border-b bg-gradient-to-r from-pink-50/50 to-purple-50/50 animate-in slide-in-from-top duration-200">
+            <div className="px-3 xs:px-4 md:px-6 py-4 md:py-5 border-b bg-background-2 animate-in slide-in-from-top duration-200">
               <ProductFiltersComponent
                 filters={filters}
                 onFilterChange={handleFilterChange}
@@ -231,7 +231,7 @@ export default function AdminProductsPage() {
             </div>
           )}
 
-          <div className="p-3 xs:p-4 md:p-5 xl:p-6 2xl:p-8 bg-gradient-to-br from-[#FFFAFF] to-white min-h-[400px]">
+          <div className="p-3 xs:p-4 md:p-5 xl:p-6 2xl:p-8 bg-background-2 min-h-[400px]">
             <ProductsGrid
               products={currentProducts}
               indexOfFirstProduct={(currentPage - 1) * itemsPerPage}

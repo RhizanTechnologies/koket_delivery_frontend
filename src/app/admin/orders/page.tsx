@@ -214,8 +214,8 @@ export default function OrdersPage() {
     expandedProductKeys.includes(`${orderId}-${productId}`);
 
   return (
-    <div className="">
-      <div className="bg-background-2 section-spacing text-center">
+    <div className="bg-background-2">
+      <div className="bg-background section-spacing text-center">
         <div className="flex flex-col sm:flex-row justify-center items-center mb-4 gap-2">
           <img
             src="../../../../assets/cake.png"

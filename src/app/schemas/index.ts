@@ -51,7 +51,12 @@ export const reviewSchema = z.object({
  * Order Schemas
  */
 export const orderSchema = z.object({
-  phone_number: z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
+  phone_number: z
+    .string()
+    .regex(
+      /^(09|07)\d{8}$/,
+      "Phone number must start with 09 or 07 and be 10 digits"
+    ),
   delivery_time: z.string().min(1, "Delivery date is required"),
   upfront_paid: z.number().positive("Upfront payment must be greater than 0"),
   total_price: z.number().positive("Total price must be greater than 0"),
@@ -75,8 +80,12 @@ export const contactSchema = z.object({
   email: z.string().email("Invalid email address").optional(),
   phone: z
     .string()
-    .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number")
-    .optional(),
+    .regex(
+      /^(09|07)\d{8}$/,
+      "Phone number must start with 09 or 07 and be 10 digits"
+    )
+    .optional()
+    .or(z.literal("")),
   message: z.string().min(20, "Message must be at least 20 characters"),
 });
 
@@ -88,8 +97,12 @@ export const profileUpdateSchema = z.object({
   email: z.string().email("Invalid email address"),
   phone_number: z
     .string()
-    .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number")
-    .optional(),
+    .regex(
+      /^(09|07)\d{8}$/,
+      "Phone number must start with 09 or 07 and be 10 digits"
+    )
+    .optional()
+    .or(z.literal("")),
 });
 
 /**
