@@ -339,7 +339,9 @@ function SignUpPage() {
                   transition={{ delay: 1.2 }}
                   className="space-y-1.5"
                 >
-                  <Label className="text-sm font-medium">Confirm Password</Label>
+                  <Label className="text-sm font-medium">
+                    Confirm Password
+                  </Label>
                   <Input
                     type="password"
                     value={confirmPassword}
