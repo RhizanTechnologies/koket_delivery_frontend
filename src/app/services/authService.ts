@@ -65,7 +65,9 @@ export const registerUser = async (
 /**
  * Refresh access token
  */
-export const refreshToken = async (refreshToken: string): Promise<{
+export const refreshToken = async (
+  refreshToken: string
+): Promise<{
   user: User;
   tokens: AuthTokens;
 }> => {

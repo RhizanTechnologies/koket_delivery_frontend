@@ -312,7 +312,7 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background-2 pb-4 md:pb-8">
       <HeroSection
         title="Categories"
         subtitle="Track all categories in client page in one place"
@@ -320,7 +320,7 @@ export default function CategoriesPage() {
         iconAlt="category icon"
       />
 
-      <main className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 mt-4 sm:mt-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 mt-4 sm:mt-6 ">
         <section className="bg-card border-2 border-border rounded-2xl sm:rounded-3xl shadow-sm overflow-hidden">
           {/* Header */}
           <div className="flex flex-col gap-3 sm:gap-4 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 w-full">

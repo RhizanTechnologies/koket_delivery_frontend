@@ -1,13 +1,14 @@
 // ...existing code...
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ProductGalleryProps {
   images?: string[];
   name?: string;
+  autoSlideInterval?: number; // in milliseconds, default 3000 (3 seconds)
 }
 
 const FALLBACK_IMAGES = [
@@ -16,8 +17,13 @@ const FALLBACK_IMAGES = [
   "/assets/img3.jpeg",
 ];
 
-export function ProductGallery({ images, name }: ProductGalleryProps) {
+export function ProductGallery({
+  images,
+  name,
+  autoSlideInterval = 3000,
+}: ProductGalleryProps) {
   const [currentImage, setCurrentImage] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const galleryImages = useMemo(() => {
     if (images && images.length > 0) {
@@ -25,6 +31,17 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
     }
     return FALLBACK_IMAGES;
   }, [images]);
+
+  // Auto-slide functionality
+  useEffect(() => {
+    if (galleryImages.length <= 1 || isPaused) return;
+
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % galleryImages.length);
+    }, autoSlideInterval);
+
+    return () => clearInterval(interval);
+  }, [galleryImages.length, autoSlideInterval, isPaused]);
 
   const nextImage = () => {
     setCurrentImage((prev) => (prev + 1) % galleryImages.length);
@@ -36,8 +53,30 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
     );
   };
 
+  const handleThumbnailClick = (index: number) => {
+    setCurrentImage(index);
+    setIsPaused(true); // Pause auto-slide when user manually selects
+    // Resume after 5 seconds
+    setTimeout(() => setIsPaused(false), 5000);
+  };
+
+  const handleManualNavigation = (direction: "next" | "prev") => {
+    if (direction === "next") {
+      nextImage();
+    } else {
+      prevImage();
+    }
+    setIsPaused(true); // Pause auto-slide when user manually navigates
+    // Resume after 5 seconds
+    setTimeout(() => setIsPaused(false), 5000);
+  };
+
   return (
-    <div className="flex flex-col gap-3 sm:gap-4">
+    <div
+      className="flex flex-col gap-3 sm:gap-4"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       {/* Main Image */}
       <div className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-muted to-muted/50 group">
         <img
@@ -50,7 +89,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
         {galleryImages.length > 1 && (
           <>
             <Button
-              onClick={prevImage}
+              onClick={() => handleManualNavigation("prev")}
               aria-label="Previous image"
               variant="ghost"
               size="icon"
@@ -59,7 +98,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
               <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-foreground" />
             </Button>
             <Button
-              onClick={nextImage}
+              onClick={() => handleManualNavigation("next")}
               aria-label="Next image"
               variant="ghost"
               size="icon"
@@ -80,12 +119,12 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
 
       {/* Thumbnail Gallery */}
       {galleryImages.length > 1 && (
-        <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb-2">
+        <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide  p-2">
           {galleryImages.map((image, index) => (
             <Button
               key={index}
               variant="ghost"
-              onClick={() => setCurrentImage(index)}
+              onClick={() => handleThumbnailClick(index)}
               aria-label={`View image ${index + 1}`}
               className={`flex-shrink-0 h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 overflow-hidden rounded-lg sm:rounded-xl border-2 transition-all p-0 ${
                 currentImage === index

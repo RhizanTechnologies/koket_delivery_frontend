@@ -128,9 +128,9 @@ function AdminPage() {
 
   return (
     <ProtectedRoute requireAdmin>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background-2">
         {/* Header */}
-        <div className="bg-background-2 section-spacing text-center">
+        <div className="bg-background section-spacing text-center">
           <h1 className="text-4xl md:text-5xl font-kaushan italic mb-3 text-foreground">
             Admin Dashboard
           </h1>

@@ -11,6 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { contactSchema } from "@/app/schemas";
 import { validateSafe } from "@/app/utils/validation";
 import { toast } from "react-toastify";
+import { submitContactForm } from "@/app/services/contactService";
+import { getErrorMessage, getSuccessMessage } from "@/app/utils/errorHandler";
 
 function ContactForm() {
   const [formData, setFormData] = useState({
@@ -22,7 +24,7 @@ function ContactForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
@@ -38,9 +40,18 @@ function ContactForm() {
         return;
       }
 
-      // TODO: Call API to submit contact form
-      console.log("Form submitted:", validation.data);
-      toast.success("Message sent successfully! We'll get back to you soon.");
+      // Prepare data for API (map phone to phone_number)
+      const contactData = {
+        name: validation.data.name,
+        email: validation.data.email || undefined,
+        phone_number: validation.data.phone || undefined,
+        message: validation.data.message,
+      };
+
+      // Call API to submit contact form
+      await submitContactForm(contactData);
+
+      toast.success(getSuccessMessage("submit", "Message"));
 
       // Reset form
       setFormData({
@@ -50,8 +61,7 @@ function ContactForm() {
         message: "",
       });
     } catch (err: any) {
-      const errorMsg =
-        err.message || "Failed to send message. Please try again.";
+      const errorMsg = getErrorMessage(err, "Failed to send message");
       setError(errorMsg);
       toast.error(errorMsg);
     } finally {
@@ -101,9 +111,7 @@ function ContactForm() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="phone">
-              Phone <span className="text-destructive">*</span>
-            </Label>
+            <Label htmlFor="phone">Phone (optional)</Label>
             <Input
               id="phone"
               type="tel"
@@ -112,7 +120,6 @@ function ContactForm() {
               onChange={(e) =>
                 setFormData({ ...formData, phone: e.target.value })
               }
-              required
             />
           </div>
 

@@ -121,7 +121,7 @@ export default function AboutPage() {
           </div>
 
           {/* Visit Us Section */}
-          <div className="mb-10">
+          <div className="pb-8     ">
             <div className="mb-8 sm:mb-10">
               <Header text="Visit Us" />
             </div>

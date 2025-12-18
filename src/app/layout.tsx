@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Kaushan_Script } from "next/font/google";
 import "./globals.css";
 
-import { Navbar, Footer } from "@/components";
-import ScrollToTop from "@/components/ScrollToTop";
 import { ToastProvider } from "@/components/ToastProvider";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { QueryProvider } from "./providers/QueryProvider";
+import { ConditionalLayout } from "./components/ConditionalLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,10 +44,7 @@ export default function RootLayout({
           <AuthProvider>
             <CartProvider>
               <ErrorBoundary>
-                <Navbar />
-                <ScrollToTop />
-                {children}
-                <Footer />
+                <ConditionalLayout>{children}</ConditionalLayout>
                 <ToastProvider />
               </ErrorBoundary>
             </CartProvider>
