@@ -114,7 +114,7 @@ export default function ShoppingCartPage() {
 
       // Update in API in the background
       await updateCartItem(id, { quantity });
-      
+
       // Note: We don't call refreshCart() here to avoid re-rendering the whole page
       // The local state is already updated optimistically above
     } catch (error: any) {
