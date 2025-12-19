@@ -20,7 +20,7 @@ export default function CustomerCard({
           <span className="text-gray-500 text-xl">👤</span>
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-base sm:text-lg hover:text-pink-600 transition-colors truncate">
+          <p className="font-semibold text-base sm:text-lg hover:text-primary transition-colors truncate">
             {customer.name}
           </p>
 

@@ -39,7 +39,7 @@ export default function CategoryCard({
           <div className="flex flex-wrap gap-2 md:flex-nowrap md:ml-4 ">
             <Button
               onClick={() => onAddSubCategory(category)}
-              className="bg-green-600 hover:bg-green-700 text-white text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 flex-1 sm:flex-none min-w-[56px] sm:min-w-[90px]"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 flex-1 sm:flex-none min-w-[56px] sm:min-w-[90px]"
             >
               + Sub
             </Button>
@@ -105,7 +105,7 @@ export default function CategoryCard({
                 <div className="flex gap-1 sm:gap-2 self-end xs:self-auto flex-shrink-0">
                   <button
                     onClick={() => onEditSubCategory(category, subCategory._id)}
-                    className="text-blue-600 hover:text-blue-800 text-xs px-2 py-1 border border-blue-200 rounded hover:bg-blue-50 transition-colors min-w-[45px] sm:min-w-[50px]"
+                    className="text-primary hover:text-primary/80 text-xs px-2 py-1 border border-primary/30 rounded hover:bg-primary/10 transition-colors min-w-[45px] sm:min-w-[50px]"
                   >
                     Edit
                   </button>

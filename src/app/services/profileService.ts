@@ -89,3 +89,29 @@ export async function updateUserProfile(updates: {
     throw new Error(errorMessage);
   }
 }
+
+/**
+ * Change user password
+ */
+export async function changePassword(data: {
+  currentPassword: string;
+  newPassword: string;
+}): Promise<{ message: string }> {
+  try {
+    const { data: response } = await api.put<{ message: string }>(
+      "/users/profile",
+      {
+        password: data.newPassword,
+      }
+    );
+
+    return response;
+  } catch (error: any) {
+    console.error("Failed to change password", error?.response?.data ?? error);
+    const errorMessage =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to change password";
+    throw new Error(errorMessage);
+  }
+}

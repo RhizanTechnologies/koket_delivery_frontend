@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
+import LoadingState from "@/components/LoadingState";
 import {
   getAdminProfile,
   updateAdminProfile,
@@ -106,11 +107,7 @@ export default function AdminProfilePage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <LoadingState message="Loading profile..." />;
   }
 
   return (

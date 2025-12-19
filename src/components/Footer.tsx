@@ -38,7 +38,7 @@ function Footer() {
             </li>
             <li>
               <Link
-                href="/custom-cake"
+                href="/custom-orders"
                 className="text-background/80 hover:text-primary transition-colors"
               >
                 Custom Order
@@ -69,7 +69,9 @@ function Footer() {
             Contact Us
           </div>
           <ul className="text-sm space-y-2 text-background/80">
-            <li className="break-words">Tulu Dimtu in front of Shewa Supermarket</li>
+            <li className="break-words">
+              Tulu Dimtu in front of Shewa Supermarket
+            </li>
             <li>Addis Ababa</li>
             <li>
               Phone:{" "}

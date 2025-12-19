@@ -91,9 +91,9 @@ export function ContactPaymentForm({
 
       <div className="space-y-6">
         {/* Payment Instructions - MOVED TO TOP */}
-        <div className="bg-secondary border border-border rounded-xl p-5 sm:p-6 shadow-md">
+        <div className="bg-gradient-to-br from-primary/15 to-primary/5 border-2 border-primary/40 rounded-xl p-5 sm:p-6 shadow-md">
           <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-primary/80 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
               <svg
                 className="w-5 h-5 text-white"
                 fill="none"
@@ -120,10 +120,7 @@ export function ContactPaymentForm({
 
           <div className="space-y-4">
             {/* Bank Account */}
-            <div
-              className="bg-white dark:bg-gray-900 rounded-lg p-4 border border-border
-"
-            >
+            <div className="bg-white/50 dark:bg-gray-900/30 rounded-lg p-4 border border-primary/20">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <svg
@@ -181,7 +178,7 @@ export function ContactPaymentForm({
             </div>
 
             {/* Mobile Payment */}
-            <div className="bg-white dark:bg-gray-900 rounded-lg p-4 border border-blue-300 dark:border-blue-700">
+            <div className="bg-white/50 dark:bg-gray-900/30 rounded-lg p-4 border border-primary/20">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <svg

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { productSchema } from "@/app/schemas";
 import { validateSafe } from "@/app/utils/validation";
+import LoadingState from "@/components/LoadingState";
 import {
   getCategories,
   getSubcategories,
@@ -312,22 +313,15 @@ export default function AddProductPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-pink-200 border-t-pink-500 mx-auto"></div>
-          <p className="mt-6 text-gray-700 font-medium text-lg">
-            Loading form...
-          </p>
-          <p className="mt-2 text-gray-500 text-sm">
-            Fetching categories and subcategories
-          </p>
-        </div>
-      </div>
+      <LoadingState
+        message="Loading form..."
+        subtitle="Fetching categories and subcategories"
+      />
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 py-4 xs:py-6 md:py-8 px-3 xs:px-4 md:px-6 xl:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-primary/10 py-4 xs:py-6 md:py-8 px-3 xs:px-4 md:px-6 xl:px-8">
       <div className="max-w-4xl mx-auto">
         <form
           onSubmit={handleSubmit}
@@ -336,7 +330,7 @@ export default function AddProductPage() {
           <div className="mb-8">
             <h1 className="text-2xl xs:text-3xl md:text-4xl font-bold text-gray-900 mb-2 flex items-center gap-3">
               <svg
-                className="w-8 h-8 text-pink-500"
+                className="w-8 h-8 text-primary"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -386,7 +380,7 @@ export default function AddProductPage() {
               value={productData.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
               placeholder="e.g., Chocolate Cake, Vanilla Cupcakes, etc."
-              className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all placeholder:text-gray-400"
+              className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all placeholder:text-gray-400"
               required
             />
           </div>
@@ -401,7 +395,7 @@ export default function AddProductPage() {
               onChange={(e) => handleInputChange("description", e.target.value)}
               placeholder="Describe your product in detail...\ne.g., Delicious chocolate cake with rich frosting, perfect for celebrations."
               rows={5}
-              className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all placeholder:text-gray-400 resize-none"
+              className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all placeholder:text-gray-400 resize-none"
               required
             />
           </div>
@@ -418,7 +412,7 @@ export default function AddProductPage() {
                 onChange={(e) =>
                   handleInputChange("categoryId", e.target.value)
                 }
-                className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all"
+                className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                 required
               >
                 <option value="">Select category</option>
@@ -440,7 +434,7 @@ export default function AddProductPage() {
                 onChange={(e) =>
                   handleInputChange("subcategoryId", e.target.value)
                 }
-                className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-all"
+                className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-all"
                 disabled={
                   !productData.categoryId || filteredSubcategories.length === 0
                 }
@@ -534,7 +528,7 @@ export default function AddProductPage() {
                 <select
                   value={productData.size}
                   onChange={(e) => handleInputChange("size", e.target.value)}
-                  className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all"
+                  className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                   required
                 >
                   <option value="">Select a size</option>
@@ -560,7 +554,7 @@ export default function AddProductPage() {
                 onChange={(e) =>
                   handleInputChange("quantity", parseInt(e.target.value))
                 }
-                className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all"
+                className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                 placeholder="Enter number of pieces"
                 required
               />
@@ -590,7 +584,7 @@ export default function AddProductPage() {
               className={`border-2 border-dashed rounded-xl p-6 text-center transition-all ${
                 imageFiles.length >= 10
                   ? "border-gray-300 bg-gray-50 cursor-not-allowed"
-                  : "border-pink-300 bg-pink-50/30 hover:border-pink-400 hover:bg-pink-50/50 cursor-pointer"
+                  : "border-primary/30 bg-primary/5 hover:border-primary/40 hover:bg-primary/10 cursor-pointer"
               }`}
             >
               <input
@@ -627,7 +621,7 @@ export default function AddProductPage() {
                     </svg>
                   ) : (
                     <svg
-                      className="w-16 h-16 text-pink-400"
+                      className="w-16 h-16 text-primary"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -674,7 +668,7 @@ export default function AddProductPage() {
                 <div className="flex items-center justify-between mb-4">
                   <p className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                     <svg
-                      className="w-4 h-4 text-pink-500"
+                      className="w-4 h-4 text-primary"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -712,7 +706,7 @@ export default function AddProductPage() {
                   {imagePreviews.map((preview, index) => (
                     <div
                       key={index}
-                      className="group relative bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-pink-300 transition-all hover:shadow-lg"
+                      className="group relative bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-primary/30 transition-all hover:shadow-lg"
                     >
                       <div className="aspect-square relative">
                         <img
@@ -789,7 +783,7 @@ export default function AddProductPage() {
             </button>
             <button
               type="submit"
-              className="w-full md:w-auto px-8 py-3 rounded-lg bg-gradient-to-r from-pink-500 to-pink-600 text-white font-semibold hover:from-pink-600 hover:to-pink-700 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              className="w-full md:w-auto px-8 py-3 rounded-lg bg-gradient-to-r from-primary/50 to-primary text-white font-semibold hover:from-primary hover:to-primary/90 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
               disabled={submitting}
             >
               {submitting ? (

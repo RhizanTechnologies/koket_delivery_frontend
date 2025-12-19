@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Mail, Phone, Calendar, Edit, Trash2 } from "lucide-react";
+import { Mail, Phone, Calendar, Edit, Trash2, KeyRound } from "lucide-react";
 import { UserStats } from "./UserStats";
 
 interface UserStatsData {
@@ -25,6 +25,7 @@ interface UserProfileCardProps {
   stats?: UserStatsData;
   onEdit: () => void;
   onDelete: () => void;
+  onChangePassword?: () => void;
 }
 
 export function UserProfileCard({
@@ -32,6 +33,7 @@ export function UserProfileCard({
   stats,
   onEdit,
   onDelete,
+  onChangePassword,
 }: UserProfileCardProps) {
   return (
     <Card className="p-6 border rounded-2xl shadow-sm">
@@ -82,7 +84,7 @@ export function UserProfileCard({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex  gap-2 self-end lg:self-auto">
+          <div className="flex flex-wrap gap-2 self-end lg:self-auto">
             <Button
               variant="outline"
               size="sm"
@@ -92,6 +94,17 @@ export function UserProfileCard({
               <Edit className="h-4 w-4" />
               Edit
             </Button>
+            {onChangePassword && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onChangePassword}
+                className="flex items-center gap-2 border-border hover:bg-background-2"
+              >
+                <KeyRound className="h-4 w-4" />
+                Password
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"

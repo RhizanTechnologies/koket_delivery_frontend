@@ -17,6 +17,7 @@ import { RevenueTrendCard } from "./components/RevenueTrendCard";
 import { CustomerMetricsCard } from "./components/CustomerMetricsCard";
 import { TopCategoriesCard } from "./components/TopCategoriesCard";
 import { PerformanceComparisonCard } from "./components/PerformanceComparisonCard";
+import LoadingState from "@/components/LoadingState";
 
 function AdminPage() {
   const [reportRange, setReportRange] = useState("Daily Report");
@@ -116,12 +117,7 @@ function AdminPage() {
   if (loadingOverview) {
     return (
       <ProtectedRoute requireAdmin>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-            <p className="mt-4 text-muted-foreground">Loading dashboard...</p>
-          </div>
-        </div>
+        <LoadingState message="Loading dashboard..." />
       </ProtectedRoute>
     );
   }

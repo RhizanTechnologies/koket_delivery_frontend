@@ -63,6 +63,10 @@ export type UpdateProductDto = {
 export type ProductFilters = {
   categoryId?: string;
   subcategoryId?: string;
+  search?: string;
+  category_id?: string;
+  subcategory_id?: string;
+  status?: string;
 };
 
 export type ProductCardProps = {

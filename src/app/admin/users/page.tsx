@@ -1,12 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useCallback } from "react";
+import { Users } from "lucide-react";
 import { Customer } from "../../types/customer";
 import HeroSection from "../components/HeroSection";
 import CustomerFilters from "../components/CustomerFilters";
 import CustomersList from "../components/CustomersList";
 import Pagination from "../components/Pagination";
 import ConfirmationModal from "../components/ConfirmationModal";
+import LoadingState from "@/components/LoadingState";
 import { getAllCustomers, deleteUser } from "../../services/admin/userService";
 
 export default function CustomerPage() {
@@ -124,8 +126,7 @@ export default function CustomerPage() {
       <HeroSection
         title="Customer"
         subtitle="Track customer details, orders, and updates all in one place"
-        iconSrc="../../../../assets/User.png"
-        iconAlt="user png"
+        Icon={Users}
       />
 
       {/* Main content */}
@@ -144,7 +145,7 @@ export default function CustomerPage() {
               <button
                 onClick={fetchCustomers}
                 disabled={loading}
-                className="text-sm px-3 py-1 bg-pink-100 hover:bg-pink-200 text-pink-700 rounded-md disabled:opacity-50"
+                className="text-sm px-3 py-1 bg-primary/10 hover:bg-primary/20 text-primary rounded-md disabled:opacity-50"
               >
                 {loading ? "Refreshing..." : "Refresh"}
               </button>
@@ -171,13 +172,9 @@ export default function CustomerPage() {
               onSearchChange={setSearch}
               onClearFilters={clearFilters}
             />
-
             {/* Customers List */}
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mb-4"></div>
-                <p className="text-gray-500">Loading customers...</p>
-              </div>
+              <LoadingState message="Loading customers..." fullScreen={false} />
             ) : currentCustomers.length > 0 ? (
               <CustomersList
                 customers={currentCustomers}

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
+import { Package } from "lucide-react";
 import { Product, ProductFilters } from "../../types/product";
 import HeroSection from "../components/HeroSection";
 import ProductsHeader from "../components/ProductsHeader";
@@ -9,13 +10,14 @@ import ProductsGrid from "../components/ProductsGrid";
 import Pagination from "../components/Pagination";
 import ConfirmationModal from "../components/ConfirmationModal";
 import ProductFiltersComponent from "../components/ProductFilters";
+import LoadingState from "@/components/LoadingState";
 import {
   getAdminProducts,
   deleteAdminProduct,
 } from "@/app/services/admin/productService";
 
 export default function AdminProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]); // Store all products
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,13 +34,13 @@ export default function AdminProductsPage() {
     productName: string;
   } | null>(null);
 
-  // Fetch products from API
+  // Fetch all products from API once
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const data = await getAdminProducts(filters);
-        setProducts(data as Product[]);
+        const data = await getAdminProducts({}); // Fetch without filters
+        setAllProducts(data as Product[]);
       } catch (err) {
         console.error("Error fetching products:", err);
         const message =
@@ -51,10 +53,45 @@ export default function AdminProductsPage() {
     };
 
     fetchProducts();
-  }, [filters]);
+  }, []); // Only run once on mount
 
-  const totalItems = products.length;
-  const currentProducts = products.slice(
+  // Filter products on the frontend
+  const filteredProducts = allProducts.filter((product) => {
+    // Search filter
+    if (filters.search) {
+      const searchLower = filters.search.toLowerCase();
+      const matchesName = product.name?.toLowerCase().includes(searchLower);
+      const matchesDescription = product.description
+        ?.toLowerCase()
+        .includes(searchLower);
+      if (!matchesName && !matchesDescription) return false;
+    }
+
+    // Category filter - check both categoryId and category_id
+    const categoryFilter = filters.categoryId || filters.category_id;
+    if (categoryFilter && categoryFilter !== "all") {
+      const productCategoryId =
+        typeof product.category_id === "object"
+          ? product.category_id._id
+          : product.category_id;
+      if (productCategoryId !== categoryFilter) return false;
+    }
+
+    // Subcategory filter - check both subcategoryId and subcategory_id
+    const subcategoryFilter = filters.subcategoryId || filters.subcategory_id;
+    if (subcategoryFilter && subcategoryFilter !== "all") {
+      const productSubcategoryId =
+        typeof product.subcategory_id === "object"
+          ? product.subcategory_id?._id
+          : product.subcategory_id;
+      if (productSubcategoryId !== subcategoryFilter) return false;
+    }
+
+    return true;
+  });
+
+  const totalItems = filteredProducts.length;
+  const currentProducts = filteredProducts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -90,12 +127,12 @@ export default function AdminProductsPage() {
       await deleteAdminProduct(productToDelete.productId);
 
       // Remove product from state
-      setProducts((prev) =>
+      setAllProducts((prev) =>
         prev.filter((product) => product._id !== productToDelete.productId)
       );
 
       // Reset to first page if current page becomes empty
-      const newTotalItems = products.length - 1;
+      const newTotalItems = filteredProducts.length - 1;
       const newTotalPages = Math.ceil(newTotalItems / itemsPerPage);
       if (currentPage > newTotalPages) {
         setCurrentPage(Math.max(1, newTotalPages));
@@ -129,28 +166,10 @@ export default function AdminProductsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="relative">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-pink-200 border-t-pink-500 mx-auto"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg
-                className="w-8 h-8 text-pink-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-              </svg>
-            </div>
-          </div>
-          <p className="mt-6 text-gray-700 font-medium text-lg">
-            Loading products...
-          </p>
-          <p className="mt-2 text-gray-500 text-sm">
-            Please wait while we fetch your products
-          </p>
-        </div>
-      </div>
+      <LoadingState
+        message="Loading products..."
+        subtitle="Please wait while we fetch your products"
+      />
     );
   }
 
@@ -179,7 +198,7 @@ export default function AdminProductsPage() {
           <p className="text-gray-600 mb-6 leading-relaxed">{error}</p>
           <Button
             onClick={() => window.location.reload()}
-            className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
+            className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
           >
             <svg
               className="w-5 h-5 mr-2 inline"
@@ -206,8 +225,7 @@ export default function AdminProductsPage() {
       <HeroSection
         title="Products"
         subtitle="Manage all products and inventory in one place"
-        iconSrc="../../../../assets/User.png"
-        iconAlt="products icon"
+        Icon={Package}
       />
 
       <main className="max-w-[1800px] mx-auto px-3 xs:px-4 md:px-6 xl:px-8 py-4 md:py-6 xl:py-8">

@@ -21,7 +21,7 @@ function Hero() {
             Explore Collection
           </Link>
           <Link
-            href="/custom-cake"
+            href="/custom-orders"
             className="bg-secondary hover:bg-secondary-hover text-foreground font-semibold px-6 lg:px-8 xl:px-10 py-3 lg:py-4 text-sm xs:text-base lg:text-lg rounded-lg shadow-md hover:shadow-lg border border-border transition-all duration-300"
           >
             Custom Order

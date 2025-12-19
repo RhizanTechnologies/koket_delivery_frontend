@@ -107,18 +107,22 @@ export default function ShoppingCartPage() {
 
   const handleQuantityChange = async (id: string, quantity: number) => {
     try {
-      // Update in API
-      await updateCartItem(id, { quantity });
-
-      // Update local state
+      // Optimistically update local state first for instant UI feedback
       setItems(
         items.map((item) => (item.id === id ? { ...item, quantity } : item))
       );
-      // Refresh cart context
-      await refreshCart();
+
+      // Update in API in the background
+      await updateCartItem(id, { quantity });
+
+      // Refresh cart context silently without re-rendering the whole page
+      refreshCart();
     } catch (error: any) {
       console.error("Failed to update quantity:", error);
       toast.error(getErrorMessage(error, "Failed to update quantity"));
+
+      // Revert optimistic update on error
+      await refreshCart();
     }
   };
 
