@@ -167,7 +167,7 @@ export default function AdminProductDetailPage() {
               <div className="flex flex-wrap gap-2 mb-4">
                 {typeof product.category_id === "object" &&
                   product.category_id && (
-                    <span className="inline-flex items-center text-xs px-3 py-1.5 bg-primary/100 text-primary/700 rounded-full font-medium">
+                    <span className="inline-flex items-center text-xs px-3 py-1.5 bg-primary/100 text-white rounded-full font-medium">
                       {product.category_id.name}
                     </span>
                   )}
@@ -214,7 +214,7 @@ export default function AdminProductDetailPage() {
                   <h3 className="font-semibold text-gray-800 mb-3">
                     Available Sizes & Prices
                   </h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {availableSizes.map((size) => (
                       <div
                         key={size}
@@ -223,7 +223,7 @@ export default function AdminProductDetailPage() {
                         <span className="block text-sm text-gray-600">
                           {size}
                         </span>
-                        <span className="block text-lg font-bold text-primary">
+                        <span className="block text-lg font-bold text-primary ">
                           {formatPrice(product.kilo_to_price_map![size])}
                         </span>
                       </div>

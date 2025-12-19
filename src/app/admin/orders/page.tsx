@@ -215,7 +215,7 @@ export default function OrdersPage() {
         Icon={ShoppingBag}
       />
 
-      <div className=" m-4 sm:m-6 rounded-3xl section-spacing-x ">
+      <div className="  rounded-3xl p-6 m-4 lg:m-6 xl:m-10 2xl:mx-14 border border-gray-500">
         <div className="overview  py-6">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-xl sm:text-2xl font-bold">All Orders</h1>
