@@ -18,6 +18,7 @@ type CartContextValue = {
   isLoading: boolean;
   error: string | null;
   refreshCart: () => Promise<void>;
+  updateCartItemQuantity: (itemId: string, quantity: number) => void;
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -55,6 +56,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     fetchCart();
   }, [fetchCart]);
 
+  const updateCartItemQuantity = useCallback(
+    (itemId: string, quantity: number) => {
+      setCartItems((prevItems) =>
+        prevItems.map((item) =>
+          item._id === itemId ? { ...item, quantity } : item
+        )
+      );
+    },
+    []
+  );
+
   const cartCount = useMemo(
     () => cartItems.reduce((total, item) => total + (item.quantity ?? 0), 0),
     [cartItems]
@@ -67,8 +79,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       isLoading,
       error,
       refreshCart: fetchCart,
+      updateCartItemQuantity,
     }),
-    [cartItems, cartCount, isLoading, error, fetchCart]
+    [cartItems, cartCount, isLoading, error, fetchCart, updateCartItemQuantity]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

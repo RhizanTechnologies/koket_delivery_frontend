@@ -38,7 +38,8 @@ const resolveImageUrl = (path?: string) => {
 };
 
 export default function ShoppingCartPage() {
-  const { cartItems, isLoading, refreshCart } = useCart();
+  const { cartItems, isLoading, refreshCart, updateCartItemQuantity } =
+    useCart();
   const [items, setItems] = useState<CartItemData[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
@@ -106,23 +107,32 @@ export default function ShoppingCartPage() {
   };
 
   const handleQuantityChange = async (id: string, quantity: number) => {
+    // Store the old quantity for potential rollback
+    const oldItem = items.find((item) => item.id === id);
+    const oldQuantity = oldItem?.quantity || 1;
+
     try {
       // Optimistically update local state first for instant UI feedback
       setItems(
         items.map((item) => (item.id === id ? { ...item, quantity } : item))
       );
 
+      // Update cart context for navbar count (without triggering re-fetch)
+      updateCartItemQuantity(id, quantity);
+
       // Update in API in the background
       await updateCartItem(id, { quantity });
-
-      // Refresh cart context silently without re-rendering the whole page
-      refreshCart();
     } catch (error: any) {
       console.error("Failed to update quantity:", error);
       toast.error(getErrorMessage(error, "Failed to update quantity"));
 
       // Revert optimistic update on error
-      await refreshCart();
+      setItems(
+        items.map((item) =>
+          item.id === id ? { ...item, quantity: oldQuantity } : item
+        )
+      );
+      updateCartItemQuantity(id, oldQuantity);
     }
   };
 
