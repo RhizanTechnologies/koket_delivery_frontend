@@ -115,13 +115,13 @@ export default function ShoppingCartPage() {
       // Update in API in the background
       await updateCartItem(id, { quantity });
 
-      // Refresh cart context silently without re-rendering the whole page
-      refreshCart();
+      // Note: We don't call refreshCart() here to avoid re-rendering the whole page
+      // The local state is already updated optimistically above
     } catch (error: any) {
       console.error("Failed to update quantity:", error);
       toast.error(getErrorMessage(error, "Failed to update quantity"));
 
-      // Revert optimistic update on error
+      // Revert optimistic update on error by refreshing from API
       await refreshCart();
     }
   };
