@@ -177,7 +177,7 @@ export default function ProfilePage() {
   }) => {
     try {
       const { changePassword } = await import("../services/profileService");
-      
+
       await changePassword({
         currentPassword: data.currentPassword,
         newPassword: data.newPassword,
@@ -187,7 +187,10 @@ export default function ProfilePage() {
       setChangePasswordModalOpen(false);
     } catch (err: any) {
       console.error("Error changing password:", err);
-      const errorMessage = err.response?.data?.message || err.message || "Failed to change password";
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to change password";
       toast.error(errorMessage);
       throw err; // Re-throw to keep modal open
     }

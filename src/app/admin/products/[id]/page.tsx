@@ -75,10 +75,7 @@ export default function AdminProductDetailPage() {
 
   if (loading) {
     return (
-      <LoadingState
-        message="Loading product details..."
-        fullScreen={true}
-      />
+      <LoadingState message="Loading product details..." fullScreen={true} />
     );
   }
 

@@ -58,7 +58,8 @@ export function ChangePasswordModal({
     }
 
     if (currentPassword && newPassword && currentPassword === newPassword) {
-      newErrors.newPassword = "New password must be different from current password";
+      newErrors.newPassword =
+        "New password must be different from current password";
     }
 
     setErrors(newErrors);
@@ -73,7 +74,7 @@ export function ChangePasswordModal({
     try {
       setIsSubmitting(true);
       await onSubmit({ currentPassword, newPassword, confirmPassword });
-      
+
       // Reset form
       setCurrentPassword("");
       setNewPassword("");

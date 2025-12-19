@@ -61,25 +61,29 @@ export default function AdminProductsPage() {
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
       const matchesName = product.name?.toLowerCase().includes(searchLower);
-      const matchesDescription = product.description?.toLowerCase().includes(searchLower);
+      const matchesDescription = product.description
+        ?.toLowerCase()
+        .includes(searchLower);
       if (!matchesName && !matchesDescription) return false;
     }
 
     // Category filter - check both categoryId and category_id
     const categoryFilter = filters.categoryId || filters.category_id;
     if (categoryFilter && categoryFilter !== "all") {
-      const productCategoryId = typeof product.category_id === 'object' 
-        ? product.category_id._id 
-        : product.category_id;
+      const productCategoryId =
+        typeof product.category_id === "object"
+          ? product.category_id._id
+          : product.category_id;
       if (productCategoryId !== categoryFilter) return false;
     }
 
     // Subcategory filter - check both subcategoryId and subcategory_id
     const subcategoryFilter = filters.subcategoryId || filters.subcategory_id;
     if (subcategoryFilter && subcategoryFilter !== "all") {
-      const productSubcategoryId = typeof product.subcategory_id === 'object'
-        ? product.subcategory_id?._id
-        : product.subcategory_id;
+      const productSubcategoryId =
+        typeof product.subcategory_id === "object"
+          ? product.subcategory_id?._id
+          : product.subcategory_id;
       if (productSubcategoryId !== subcategoryFilter) return false;
     }
 

@@ -26,7 +26,7 @@ export default function CustomOrdersPage() {
             {/* Decorative Header */}
             <div className="bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 p-8 sm:p-12 text-center relative overflow-hidden">
               <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,transparent)]" />
-              
+
               <div className="relative">
                 {/* Icon */}
                 <div className="mx-auto w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-primary/20 flex items-center justify-center mb-6 animate-pulse">
@@ -52,16 +52,18 @@ export default function CustomOrdersPage() {
               <div className="flex justify-center">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border-2 border-primary/20">
                   <Clock className="w-5 h-5 text-primary" />
-                  <span className="font-semibold text-primary">Coming Soon</span>
+                  <span className="font-semibold text-primary">
+                    Coming Soon
+                  </span>
                 </div>
               </div>
 
               {/* Description */}
               <div className="text-center space-y-4 max-w-2xl mx-auto">
                 <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-                  We're working hard to bring you an amazing custom order experience! 
-                  Soon you'll be able to design your dream cakes, pastries, and desserts 
-                  tailored exactly to your preferences.
+                  We're working hard to bring you an amazing custom order
+                  experience! Soon you'll be able to design your dream cakes,
+                  pastries, and desserts tailored exactly to your preferences.
                 </p>
                 <p className="text-sm sm:text-base text-muted-foreground">
                   Our custom order system will allow you to:
@@ -74,22 +76,26 @@ export default function CustomOrdersPage() {
                   {
                     icon: "🎂",
                     title: "Choose Your Design",
-                    description: "Select from various cake styles, shapes, and sizes",
+                    description:
+                      "Select from various cake styles, shapes, and sizes",
                   },
                   {
                     icon: "🎨",
                     title: "Customize Everything",
-                    description: "Pick flavors, colors, decorations, and themes",
+                    description:
+                      "Pick flavors, colors, decorations, and themes",
                   },
                   {
                     icon: "📝",
                     title: "Add Special Requests",
-                    description: "Include dietary requirements and personal messages",
+                    description:
+                      "Include dietary requirements and personal messages",
                   },
                   {
                     icon: "⏰",
                     title: "Schedule Delivery",
-                    description: "Choose your preferred date and time for pickup/delivery",
+                    description:
+                      "Choose your preferred date and time for pickup/delivery",
                   },
                 ].map((feature, index) => (
                   <div
@@ -118,9 +124,7 @@ export default function CustomOrdersPage() {
 
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link href="/contact">
-                    <Button className="w-full sm:w-auto">
-                      Contact Us
-                    </Button>
+                    <Button className="w-full sm:w-auto">Contact Us</Button>
                   </Link>
                   <Link href="/products">
                     <Button variant="outline" className="w-full sm:w-auto">
@@ -134,10 +138,13 @@ export default function CustomOrdersPage() {
               <div className="text-center pt-6 border-t">
                 <p className="text-sm text-muted-foreground">
                   For urgent custom orders, please{" "}
-                  <Link href="/contact" className="text-primary hover:underline font-medium">
+                  <Link
+                    href="/contact"
+                    className="text-primary hover:underline font-medium"
+                  >
                     contact us directly
-                  </Link>
-                  {" "}and we'll do our best to accommodate your request.
+                  </Link>{" "}
+                  and we'll do our best to accommodate your request.
                 </p>
               </div>
             </div>

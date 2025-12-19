@@ -174,10 +174,7 @@ export default function CustomerPage() {
             />
             {/* Customers List */}
             {loading ? (
-              <LoadingState
-                message="Loading customers..."
-                fullScreen={false}
-              />
+              <LoadingState message="Loading customers..." fullScreen={false} />
             ) : currentCustomers.length > 0 ? (
               <CustomersList
                 customers={currentCustomers}

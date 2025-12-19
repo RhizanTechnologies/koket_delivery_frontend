@@ -97,7 +97,10 @@ export default function CategoriesPage() {
     setEditingCategory(category);
     // Scroll to category form
     setTimeout(() => {
-      categoryFormRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      categoryFormRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     }, 100);
   };
 
@@ -160,7 +163,10 @@ export default function CategoriesPage() {
     setAddingSubCategory(category);
     // Scroll to subcategory form
     setTimeout(() => {
-      subCategoryFormRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      subCategoryFormRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     }, 100);
   };
 
@@ -171,14 +177,21 @@ export default function CategoriesPage() {
       // Convert array of size-price objects to record
       const kilo_to_price_map: Record<string, number> = {};
       formData.kilo_to_price_map.forEach((item) => {
-        if (item.size.trim() && typeof item.price === 'number' && item.price > 0) {
+        if (
+          item.size.trim() &&
+          typeof item.price === "number" &&
+          item.price > 0
+        ) {
           kilo_to_price_map[item.size] = item.price;
         }
       });
 
       // Ensure price and upfront_payment are numbers
-      const price = typeof formData.price === 'number' ? formData.price : 0;
-      const upfront_payment = typeof formData.upfront_payment === 'number' ? formData.upfront_payment : 0;
+      const price = typeof formData.price === "number" ? formData.price : 0;
+      const upfront_payment =
+        typeof formData.upfront_payment === "number"
+          ? formData.upfront_payment
+          : 0;
 
       const createSubCategoryDto: CreateSubCategoryDto = {
         category_id: addingSubCategory._id,
@@ -238,7 +251,10 @@ export default function CategoriesPage() {
       });
       // Scroll to subcategory form
       setTimeout(() => {
-        subCategoryFormRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        subCategoryFormRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
       }, 100);
     }
   };
@@ -250,14 +266,21 @@ export default function CategoriesPage() {
       // Convert array of size-price objects to record
       const kilo_to_price_map: Record<string, number> = {};
       formData.kilo_to_price_map.forEach((item) => {
-        if (item.size.trim() && typeof item.price === 'number' && item.price > 0) {
+        if (
+          item.size.trim() &&
+          typeof item.price === "number" &&
+          item.price > 0
+        ) {
           kilo_to_price_map[item.size] = item.price;
         }
       });
 
       // Ensure price and upfront_payment are numbers
-      const price = typeof formData.price === 'number' ? formData.price : 0;
-      const upfront_payment = typeof formData.upfront_payment === 'number' ? formData.upfront_payment : 0;
+      const price = typeof formData.price === "number" ? formData.price : 0;
+      const upfront_payment =
+        typeof formData.upfront_payment === "number"
+          ? formData.upfront_payment
+          : 0;
 
       const updateSubCategoryDto: UpdateSubCategoryDto = {
         name: formData.name.trim(),
@@ -310,12 +333,7 @@ export default function CategoriesPage() {
   };
 
   if (loading) {
-    return (
-      <LoadingState
-        message="Loading categories..."
-        fullScreen={true}
-      />
-    );
+    return <LoadingState message="Loading categories..." fullScreen={true} />;
   }
 
   if (error) {
@@ -388,7 +406,10 @@ export default function CategoriesPage() {
 
             {/* Add Sub-category Form */}
             {addingSubCategory && (
-              <div ref={subCategoryFormRef} className="mb-6 sm:mb-8 p-4 sm:p-6 border border-border rounded-lg bg-card">
+              <div
+                ref={subCategoryFormRef}
+                className="mb-6 sm:mb-8 p-4 sm:p-6 border border-border rounded-lg bg-card"
+              >
                 <SubCategoryForm
                   onSubmit={handleCreateSubCategory}
                   onCancel={() => setAddingSubCategory(null)}
@@ -399,7 +420,10 @@ export default function CategoriesPage() {
 
             {/* Edit Sub-category Form */}
             {editingSubCategory && (
-              <div ref={subCategoryFormRef} className="mb-6 sm:mb-8 p-4 sm:p-6 border border-border rounded-lg bg-card">
+              <div
+                ref={subCategoryFormRef}
+                className="mb-6 sm:mb-8 p-4 sm:p-6 border border-border rounded-lg bg-card"
+              >
                 <SubCategoryForm
                   onSubmit={handleUpdateSubCategory}
                   onCancel={() => setEditingSubCategory(null)}

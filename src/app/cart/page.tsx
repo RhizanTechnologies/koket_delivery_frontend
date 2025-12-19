@@ -111,16 +111,16 @@ export default function ShoppingCartPage() {
       setItems(
         items.map((item) => (item.id === id ? { ...item, quantity } : item))
       );
-      
+
       // Update in API in the background
       await updateCartItem(id, { quantity });
-      
+
       // Refresh cart context silently without re-rendering the whole page
       refreshCart();
     } catch (error: any) {
       console.error("Failed to update quantity:", error);
       toast.error(getErrorMessage(error, "Failed to update quantity"));
-      
+
       // Revert optimistic update on error
       await refreshCart();
     }

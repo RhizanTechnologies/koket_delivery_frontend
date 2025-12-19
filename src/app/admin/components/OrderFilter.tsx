@@ -122,8 +122,7 @@ export default function OrderFilters({
             />
           </div>
 
-          <div className="w-full sm:w-auto">
-          </div>
+          <div className="w-full sm:w-auto"></div>
 
           <div className="w-full sm:w-auto">
             <label className="block text-sm font-medium text-gray-700 mb-1">

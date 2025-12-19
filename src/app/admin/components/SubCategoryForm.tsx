@@ -48,18 +48,22 @@ export default function SubCategoryForm({
       newErrors.name = "Name is required";
     }
 
-    if (typeof formData.upfront_payment === 'number' && formData.upfront_payment < 0) {
+    if (
+      typeof formData.upfront_payment === "number" &&
+      formData.upfront_payment < 0
+    ) {
       newErrors.upfront_payment = "Upfront payment cannot be negative";
     }
 
-    if (typeof formData.price === 'number' && formData.price < 0) {
+    if (typeof formData.price === "number" && formData.price < 0) {
       newErrors.price = "Price cannot be negative";
     }
 
     // Validate kilo_to_price_map if not pieceable
     if (!formData.is_pieceable) {
       const validSizes = formData.kilo_to_price_map.filter(
-        (item) => item.size.trim() && typeof item.price === 'number' && item.price > 0
+        (item) =>
+          item.size.trim() && typeof item.price === "number" && item.price > 0
       );
       if (validSizes.length === 0) {
         newErrors.kilo_to_price_map =
@@ -74,14 +78,18 @@ export default function SubCategoryForm({
 
     // Filter out empty sizes
     const filteredKiloMap = formData.kilo_to_price_map.filter(
-      (item) => item.size.trim() && typeof item.price === 'number' && item.price > 0
+      (item) =>
+        item.size.trim() && typeof item.price === "number" && item.price > 0
     );
 
     // Convert empty strings to 0 before submitting
     onSubmit({
       ...formData,
-      price: typeof formData.price === 'number' ? formData.price : 0,
-      upfront_payment: typeof formData.upfront_payment === 'number' ? formData.upfront_payment : 0,
+      price: typeof formData.price === "number" ? formData.price : 0,
+      upfront_payment:
+        typeof formData.upfront_payment === "number"
+          ? formData.upfront_payment
+          : 0,
       kilo_to_price_map: filteredKiloMap.length > 0 ? filteredKiloMap : [],
     });
   };
@@ -89,7 +97,10 @@ export default function SubCategoryForm({
   const addSizePriceField = () => {
     setFormData((prev) => ({
       ...prev,
-      kilo_to_price_map: [...prev.kilo_to_price_map, { size: "", price: "" as any }],
+      kilo_to_price_map: [
+        ...prev.kilo_to_price_map,
+        { size: "", price: "" as any },
+      ],
     }));
   };
 
@@ -218,7 +229,9 @@ export default function SubCategoryForm({
             type="number"
             min="0"
             step="0.01"
-            value={formData.upfront_payment === "" ? "" : formData.upfront_payment}
+            value={
+              formData.upfront_payment === "" ? "" : formData.upfront_payment
+            }
             onChange={(e) => {
               const value = e.target.value;
               setFormData((prev) => ({
