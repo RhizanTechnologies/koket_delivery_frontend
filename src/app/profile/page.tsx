@@ -10,6 +10,8 @@ import { UserStats } from "./components/UserStats";
 import { MyReviewsSection } from "./components/MyReviewsSection";
 import { EditProfileModal } from "./components/EditProfileModal";
 import { DeleteAccountDialog } from "./components/DeleteAccountDialog";
+import { ChangePasswordModal } from "./components/ChangePasswordModal";
+import LoadingState from "@/components/LoadingState";
 import {
   getProfile,
   User,
@@ -26,6 +28,7 @@ export default function ProfilePage() {
   const { isLoggedIn, isLoading: authLoading, logout } = useAuth();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState({
@@ -167,25 +170,37 @@ export default function ProfilePage() {
     router.push("/");
   };
 
+  const handleChangePassword = async (data: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }) => {
+    try {
+      const { changePassword } = await import("../services/profileService");
+      
+      await changePassword({
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      });
+
+      toast.success("Password changed successfully!");
+      setChangePasswordModalOpen(false);
+    } catch (err: any) {
+      console.error("Error changing password:", err);
+      const errorMessage = err.response?.data?.message || err.message || "Failed to change password";
+      toast.error(errorMessage);
+      throw err; // Re-throw to keep modal open
+    }
+  };
+
   // Show loading while checking auth
   if (authLoading) {
-    return (
-      <div className="min-h-screen bg-background-2 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <LoadingState message="Checking authentication..." />;
   }
 
   // Show loading while fetching profile
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background-2 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading profile...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState message="Loading profile..." />;
   }
 
   // Show error state
@@ -249,6 +264,7 @@ export default function ProfilePage() {
               stats={stats}
               onEdit={() => setEditModalOpen(true)}
               onDelete={() => setDeleteDialogOpen(true)}
+              onChangePassword={() => setChangePasswordModalOpen(true)}
             />
           </div>
 
@@ -265,6 +281,12 @@ export default function ProfilePage() {
               phone_number: user.phone_number,
             }}
             onSave={handleSaveProfile}
+          />
+
+          <ChangePasswordModal
+            isOpen={changePasswordModalOpen}
+            onClose={() => setChangePasswordModalOpen(false)}
+            onSubmit={handleChangePassword}
           />
 
           <DeleteAccountDialog

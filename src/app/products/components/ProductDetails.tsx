@@ -312,31 +312,35 @@ export function ProductDetails({ product, onCartUpdate }: ProductDetailsProps) {
             </div>
           )}
 
-        {/* Message on cake */}
-        <div className="w-full flex-1">
-          <label className="mb-2 block text-sm font-medium">
-            Message on cake (Optional)
-          </label>
-          <Textarea
-            rows={3}
-            value={message}
-            onChange={(event) => setMessage(event.target.value)}
-            placeholder="e.g. Happy Birthday!"
-          />
-        </div>
+        {/* Message on cake - Only show for kilo-priced products */}
+        {weightOptions.length > 0 && (
+          <div className="w-full flex-1">
+            <label className="mb-2 block text-sm font-medium">
+              Message on cake (Optional)
+            </label>
+            <Textarea
+              rows={3}
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              placeholder="e.g. Happy Birthday!"
+            />
+          </div>
+        )}
 
-        {/* Additional instructions */}
-        <div className="flex flex-col gap-2">
-          <label className="mb-2 block text-sm font-medium">
-            Additional instructions (Optional)
-          </label>
-          <Textarea
-            rows={3}
-            value={additionalDescription}
-            onChange={(event) => setAdditionalDescription(event.target.value)}
-            placeholder="Allergies, delivery notes, or decoration details"
-          />
-        </div>
+        {/* Additional instructions - Only show for kilo-priced products */}
+        {weightOptions.length > 0 && (
+          <div className="flex flex-col gap-2">
+            <label className="mb-2 block text-sm font-medium">
+              Additional instructions (Optional)
+            </label>
+            <Textarea
+              rows={3}
+              value={additionalDescription}
+              onChange={(event) => setAdditionalDescription(event.target.value)}
+              placeholder="Allergies, delivery notes, or decoration details"
+            />
+          </div>
+        )}
       </div>
 
       {/* Add to Cart Button */}

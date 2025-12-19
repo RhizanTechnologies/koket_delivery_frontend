@@ -12,10 +12,10 @@ interface SubCategoryFormProps {
 export interface SubCategoryFormData {
   name: string;
   status: "available" | "coming_soon";
-  upfront_payment: number;
-  price: number;
+  upfront_payment: number | "";
+  price: number | "";
   is_pieceable: boolean;
-  kilo_to_price_map: Array<{ size: string; price: number }>;
+  kilo_to_price_map: Array<{ size: string; price: number | "" }>;
 }
 
 export default function SubCategoryForm({
@@ -28,11 +28,11 @@ export default function SubCategoryForm({
   const [formData, setFormData] = useState<SubCategoryFormData>({
     name: initialData?.name || "",
     status: initialData?.status || "available",
-    upfront_payment: initialData?.upfront_payment || 0,
-    price: initialData?.price || 0,
+    upfront_payment: initialData?.upfront_payment ?? "",
+    price: initialData?.price ?? "",
     is_pieceable: initialData?.is_pieceable || false,
     kilo_to_price_map: initialData?.kilo_to_price_map || [
-      { size: "", price: 0 },
+      { size: "", price: "" as any },
     ],
   });
 
@@ -48,18 +48,18 @@ export default function SubCategoryForm({
       newErrors.name = "Name is required";
     }
 
-    if (formData.upfront_payment < 0) {
+    if (typeof formData.upfront_payment === 'number' && formData.upfront_payment < 0) {
       newErrors.upfront_payment = "Upfront payment cannot be negative";
     }
 
-    if (formData.price < 0) {
+    if (typeof formData.price === 'number' && formData.price < 0) {
       newErrors.price = "Price cannot be negative";
     }
 
     // Validate kilo_to_price_map if not pieceable
     if (!formData.is_pieceable) {
       const validSizes = formData.kilo_to_price_map.filter(
-        (item) => item.size.trim() && item.price > 0
+        (item) => item.size.trim() && typeof item.price === 'number' && item.price > 0
       );
       if (validSizes.length === 0) {
         newErrors.kilo_to_price_map =
@@ -74,11 +74,14 @@ export default function SubCategoryForm({
 
     // Filter out empty sizes
     const filteredKiloMap = formData.kilo_to_price_map.filter(
-      (item) => item.size.trim() && item.price > 0
+      (item) => item.size.trim() && typeof item.price === 'number' && item.price > 0
     );
 
+    // Convert empty strings to 0 before submitting
     onSubmit({
       ...formData,
+      price: typeof formData.price === 'number' ? formData.price : 0,
+      upfront_payment: typeof formData.upfront_payment === 'number' ? formData.upfront_payment : 0,
       kilo_to_price_map: filteredKiloMap.length > 0 ? filteredKiloMap : [],
     });
   };
@@ -86,7 +89,7 @@ export default function SubCategoryForm({
   const addSizePriceField = () => {
     setFormData((prev) => ({
       ...prev,
-      kilo_to_price_map: [...prev.kilo_to_price_map, { size: "", price: 0 }],
+      kilo_to_price_map: [...prev.kilo_to_price_map, { size: "", price: "" as any }],
     }));
   };
 
@@ -190,11 +193,12 @@ export default function SubCategoryForm({
             type="number"
             min="0"
             step="0.01"
-            value={formData.price}
+            value={formData.price === "" ? "" : formData.price}
             onChange={(e) => {
+              const value = e.target.value;
               setFormData((prev) => ({
                 ...prev,
-                price: parseFloat(e.target.value) || 0,
+                price: value === "" ? "" : parseFloat(value) || "",
               }));
               if (errors.price) setErrors((prev) => ({ ...prev, price: "" }));
             }}
@@ -214,11 +218,12 @@ export default function SubCategoryForm({
             type="number"
             min="0"
             step="0.01"
-            value={formData.upfront_payment}
+            value={formData.upfront_payment === "" ? "" : formData.upfront_payment}
             onChange={(e) => {
+              const value = e.target.value;
               setFormData((prev) => ({
                 ...prev,
-                upfront_payment: parseFloat(e.target.value) || 0,
+                upfront_payment: value === "" ? "" : parseFloat(value) || "",
               }));
               if (errors.upfront_payment)
                 setErrors((prev) => ({ ...prev, upfront_payment: "" }));
@@ -271,14 +276,16 @@ export default function SubCategoryForm({
                   type="number"
                   min="0"
                   step="0.01"
-                  value={item.price}
-                  onChange={(e) =>
+                  value={item.price === "" ? "" : item.price}
+                  onChange={(e) => {
+                    const value = e.target.value;
                     updateSizePriceField(
                       index,
                       "price",
-                      parseFloat(e.target.value) || 0
-                    )
-                  }
+                      value === "" ? "" : parseFloat(value) || ""
+                    );
+                  }}
+                  placeholder="0.00"
                   className="w-full border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-transparent"
                 />
               </div>

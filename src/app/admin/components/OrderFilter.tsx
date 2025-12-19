@@ -9,11 +9,8 @@ interface OrderFiltersProps {
   onFromDateChange: (date: string) => void;
   toDate: string;
   onToDateChange: (date: string) => void;
-  categoryFilter: string;
-  onCategoryFilterChange: (category: string) => void;
   itemsPerPage: number;
   onItemsPerPageChange: (items: number) => void;
-  categories: string[];
   isFilterActive: boolean;
   onClearFilters: () => void;
   showMobileFilters: boolean;
@@ -37,11 +34,8 @@ export default function OrderFilters({
   onFromDateChange,
   toDate,
   onToDateChange,
-  categoryFilter,
-  onCategoryFilterChange,
   itemsPerPage,
   onItemsPerPageChange,
-  categories,
   isFilterActive,
   onClearFilters,
   showMobileFilters,
@@ -129,20 +123,6 @@ export default function OrderFilters({
           </div>
 
           <div className="w-full sm:w-auto">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Category
-            </label>
-            <select
-              value={categoryFilter}
-              onChange={(e) => onCategoryFilterChange(e.target.value)}
-              className="border rounded-md px-3 py-2 w-full sm:w-40 text-sm"
-            >
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
           </div>
 
           <div className="w-full sm:w-auto">

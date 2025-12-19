@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { UserCircle } from "lucide-react";
 import { Customer } from "../../types/customer";
-import UserDetailHero from "./UserDetailHero";
+import HeroSection from "./HeroSection";
 import UserProfileHeader from "./UserProfileHeader";
 import StatsCards from "./StatsCards";
 import UserInformation from "./UserInformation";
@@ -19,8 +20,12 @@ export default function UserDetailLayout({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   return (
-    <div>
-      <UserDetailHero user={user} />
+    <div className="bg-background-2">
+      <HeroSection
+        title="User Details"
+        subtitle={`Detailed information about ${user.name}`}
+        Icon={UserCircle}
+      />
 
       <div className="min-h-screen flex justify-center items-start py-6 w-full px-4">
         <div className="w-full max-w-4xl mx-auto">

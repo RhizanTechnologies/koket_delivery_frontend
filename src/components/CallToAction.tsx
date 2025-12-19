@@ -44,7 +44,7 @@ function CallToAction() {
             </Link>
 
             <Link
-              href="/custom-cake"
+              href="/custom-orders"
               className="
                 inline-block
                 text-white/80

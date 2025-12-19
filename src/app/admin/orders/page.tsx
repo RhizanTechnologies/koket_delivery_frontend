@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState, useCallback } from "react";
+import { ShoppingBag } from "lucide-react";
 import {
   Order,
   OrderStatus,
@@ -8,10 +9,12 @@ import {
   mapOrderToDisplay,
 } from "../../types/order";
 
+import HeroSection from "../components/HeroSection";
 import OrderCard from "../components/OrderCard";
 import Pagination from "../components/Pagination";
 import RejectModal from "../components/RejectModal";
 import OrderFilters from "../components/OrderFilter";
+import LoadingState from "@/components/LoadingState";
 import {
   getAllOrders,
   updateOrder,
@@ -26,7 +29,6 @@ export default function OrdersPage() {
   const [search, setSearch] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("All");
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
@@ -64,9 +66,6 @@ export default function OrdersPage() {
     fetchOrders();
   }, [fetchOrders]);
 
-  // Extract unique categories from products (if products have category info)
-  const categories = ["All"];
-
   const parseDate = (dateString: string) => {
     try {
       return new Date(dateString);
@@ -95,7 +94,7 @@ export default function OrdersPage() {
   // Only reset page when filter/search changes, NOT when orders are updated
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, fromDate, toDate, categoryFilter, itemsPerPage, filterStatus]);
+  }, [search, fromDate, toDate, itemsPerPage, filterStatus]);
 
   // Sort orders: pending first, then accepted, then by most recent date
   const sortedOrders = [...filteredOrders].sort((a, b) => {
@@ -186,18 +185,13 @@ export default function OrdersPage() {
     setSearch("");
     setFromDate("");
     setToDate("");
-    setCategoryFilter("All");
     setItemsPerPage(5);
     setCurrentPage(1);
     setShowMobileFilters(false);
   };
 
   const isFilterActive =
-    filterStatus !== "All" ||
-    search !== "" ||
-    fromDate !== "" ||
-    toDate !== "" ||
-    categoryFilter !== "All";
+    filterStatus !== "All" || search !== "" || fromDate !== "" || toDate !== "";
 
   const goToPage = (page: number) => {
     setCurrentPage(page);
@@ -214,31 +208,21 @@ export default function OrdersPage() {
     expandedProductKeys.includes(`${orderId}-${productId}`);
 
   return (
-    <div className="bg-background-2">
-      <div className="bg-background section-spacing text-center">
-        <div className="flex flex-col sm:flex-row justify-center items-center mb-4 gap-2">
-          <img
-            src="../../../../assets/cake.png"
-            alt="cake png"
-            className="w-12 h-12 sm:w-14 sm:h-14 object-cover rounded-md mb-3"
-          />
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-kaushan italic mb-3 text-foreground pl-0 sm:pl-2">
-            Orders
-          </h1>
-        </div>
-        <p className="text-muted-foreground text-base sm:text-2xl max-w-3xl mx-auto text-balance -mt-8 md:-mt-4">
-          Manage all customer orders
-        </p>
-      </div>
+    <div className="min-h-screen bg-background-2 ">
+      <HeroSection
+        title="Orders"
+        subtitle="Manage all customer orders"
+        Icon={ShoppingBag}
+      />
 
-      <div className="border-2 m-4 sm:m-6 rounded-3xl">
-        <div className="overview px-3 sm:px-6 lg:px-10 py-6">
+      <div className=" m-4 sm:m-6 rounded-3xl section-spacing-x ">
+        <div className="overview  py-6">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-xl sm:text-2xl font-bold">All Orders</h1>
             <button
               onClick={fetchOrders}
               disabled={loading}
-              className="text-sm px-3 py-1 bg-pink-100 hover:bg-pink-200 text-pink-700 rounded-md disabled:opacity-50"
+              className="text-sm px-3 py-1 bg-primary/10 hover:bg-primary/20 text-primary rounded-md disabled:opacity-50"
             >
               {loading ? "Refreshing..." : "Refresh"}
             </button>
@@ -268,30 +252,23 @@ export default function OrdersPage() {
             onFromDateChange={setFromDate}
             toDate={toDate}
             onToDateChange={setToDate}
-            categoryFilter={categoryFilter}
-            onCategoryFilterChange={setCategoryFilter}
             itemsPerPage={itemsPerPage}
             onItemsPerPageChange={setItemsPerPage}
-            categories={categories}
             isFilterActive={isFilterActive}
             onClearFilters={clearFilters}
             showMobileFilters={showMobileFilters}
             onShowMobileFiltersChange={setShowMobileFilters}
           />
-
           {/* Orders List */}
           <div className="space-y-6 mt-8">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mb-4"></div>
-                <p className="text-gray-500">Loading orders...</p>
-              </div>
+              <LoadingState message="Loading orders..." fullScreen={false} />
             ) : paginatedOrders.length > 0 ? (
               paginatedOrders.map((order) => (
                 <div key={order._id} className="relative">
                   {updating === order._id && (
                     <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 rounded-lg">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                     </div>
                   )}
                   <OrderCard

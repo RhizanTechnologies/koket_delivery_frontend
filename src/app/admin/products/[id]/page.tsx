@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { FaEdit, FaStar, FaArrowLeft, FaUser } from "react-icons/fa";
+import LoadingState from "@/components/LoadingState";
 import {
   getAdminProductById,
   resolveImageUrl,
@@ -74,20 +75,16 @@ export default function AdminProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-pink-200 border-t-pink-500 mx-auto"></div>
-          <p className="mt-6 text-gray-700 font-medium text-lg">
-            Loading product details...
-          </p>
-        </div>
-      </div>
+      <LoadingState
+        message="Loading product details..."
+        fullScreen={true}
+      />
     );
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background-2 to-primary/5 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-red-600 mb-2">
             Product Not Found
@@ -97,7 +94,7 @@ export default function AdminProductDetailPage() {
           </p>
           <button
             onClick={() => router.push("/admin/products")}
-            className="px-6 py-2 rounded-lg bg-pink-500 text-white hover:bg-pink-600 transition-colors"
+            className="px-6 py-2 rounded-lg bg-primary/500 text-white hover:bg-primary/600 transition-colors"
           >
             Back to Products
           </button>
@@ -107,20 +104,20 @@ export default function AdminProductDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 py-6 px-4 md:px-6 xl:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background-2 to-primary/5 py-6 px-4 md:px-6 xl:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <Link
             href="/admin/products"
-            className="flex items-center gap-2 text-gray-600 hover:text-pink-600 transition-colors"
+            className="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
           >
             <FaArrowLeft />
             <span>Back to Products</span>
           </Link>
           <button
             onClick={() => router.push(`/admin/products/edit/${id}`)}
-            className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
           >
             <FaEdit />
             Edit Product
@@ -152,8 +149,8 @@ export default function AdminProductDetailPage() {
                       onClick={() => setCurrentImageIndex(index)}
                       className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                         index === currentImageIndex
-                          ? "border-pink-500 shadow-lg"
-                          : "border-transparent hover:border-pink-300"
+                          ? "border-primary/500 shadow-lg"
+                          : "border-transparent hover:border-primary/300"
                       }`}
                     >
                       <img
@@ -173,7 +170,7 @@ export default function AdminProductDetailPage() {
               <div className="flex flex-wrap gap-2 mb-4">
                 {typeof product.category_id === "object" &&
                   product.category_id && (
-                    <span className="inline-flex items-center text-xs px-3 py-1.5 bg-pink-100 text-pink-700 rounded-full font-medium">
+                    <span className="inline-flex items-center text-xs px-3 py-1.5 bg-primary/100 text-primary/700 rounded-full font-medium">
                       {product.category_id.name}
                     </span>
                   )}
@@ -229,7 +226,7 @@ export default function AdminProductDetailPage() {
                         <span className="block text-sm text-gray-600">
                           {size}
                         </span>
-                        <span className="block text-lg font-bold text-pink-600">
+                        <span className="block text-lg font-bold text-primary">
                           {formatPrice(product.kilo_to_price_map![size])}
                         </span>
                       </div>
@@ -300,8 +297,8 @@ export default function AdminProductDetailPage() {
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
-                          <FaUser className="text-pink-500" />
+                        <div className="w-10 h-10 rounded-full bg-primary/100 flex items-center justify-center">
+                          <FaUser className="text-primary/500" />
                         </div>
                         <div>
                           <p className="font-semibold text-gray-800">

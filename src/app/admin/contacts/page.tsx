@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import HeroSection from "../components/HeroSection";
 import ConfirmationModal from "../components/ConfirmationModal";
+import LoadingState from "@/components/LoadingState";
 import {
   getAllContacts,
   deleteContact,
@@ -88,8 +89,7 @@ export default function ContactsPage() {
       <HeroSection
         title="Contact Messages"
         subtitle="View and manage customer inquiries and messages"
-        iconSrc="../../../../assets/User.png"
-        iconAlt="contact icon"
+        Icon={MessageSquare}
       />
 
       {/* Main content */}
@@ -110,7 +110,7 @@ export default function ContactsPage() {
               <Button
                 onClick={fetchContacts}
                 disabled={loading}
-                className="text-sm px-3 py-1 bg-pink-100 hover:bg-pink-200 text-pink-700 rounded-md disabled:opacity-50"
+                className="text-sm px-3 py-1 bg-primary/10 hover:bg-primary/20 text-primary rounded-md disabled:opacity-50"
               >
                 {loading ? "Refreshing..." : "Refresh"}
               </Button>
@@ -133,10 +133,10 @@ export default function ContactsPage() {
 
             {/* Loading State */}
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mb-4"></div>
-                <p className="text-gray-500">Loading contact messages...</p>
-              </div>
+              <LoadingState
+                message="Loading contact messages..."
+                fullScreen={false}
+              />
             ) : contacts.length > 0 ? (
               <div className="space-y-4">
                 {contacts.map((contact) => (

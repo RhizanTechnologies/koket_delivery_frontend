@@ -60,11 +60,11 @@ export default function OrderCard({
   return (
     <div className="border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-pink-50 to-purple-50 px-5 py-4 border-b border-gray-100">
+      <div className="bg-gradient-to-r from-primary/10 to-primary/5 px-5 py-4 border-b border-gray-100">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
-              <FaBox className="text-pink-600" />
+            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+              <FaBox className="text-primary" />
             </div>
             <div>
               <h2 className="font-bold text-gray-800 text-lg">
@@ -90,7 +90,7 @@ export default function OrderCard({
         {/* Customer Info */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4 p-3 bg-gray-50 rounded-xl">
           <div className="flex items-center gap-2 text-sm">
-            <FaUser className="text-pink-500 flex-shrink-0" />
+            <FaUser className="text-primary flex-shrink-0" />
             <div>
               <p className="text-xs text-gray-500">Customer</p>
               <p className="font-medium text-gray-800">
@@ -99,7 +99,7 @@ export default function OrderCard({
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <FaPhone className="text-pink-500 flex-shrink-0" />
+            <FaPhone className="text-primary flex-shrink-0" />
             <div>
               <p className="text-xs text-gray-500">Contact</p>
               <p className="font-medium text-gray-800">
@@ -108,7 +108,7 @@ export default function OrderCard({
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <FaCalendarAlt className="text-pink-500 flex-shrink-0" />
+            <FaCalendarAlt className="text-primary flex-shrink-0" />
             <div>
               <p className="text-xs text-gray-500">Delivery Date</p>
               <p className="font-medium text-gray-800">
@@ -148,7 +148,7 @@ export default function OrderCard({
                       </span>
                     </div>
                     {item.product?.price && (
-                      <span className="font-semibold text-pink-600">
+                      <span className="font-semibold text-primary">
                         ETB {(item.product.price * item.quantity).toFixed(2)}
                       </span>
                     )}
@@ -209,9 +209,9 @@ export default function OrderCard({
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pt-4 border-t border-gray-100">
           {/* Pricing */}
           <div className="flex flex-wrap items-center gap-4">
-            <div className="bg-pink-50 px-4 py-2 rounded-lg">
+            <div className="bg-primary/10 px-4 py-2 rounded-lg">
               <p className="text-xs text-gray-500">Total Price</p>
-              <p className="text-lg font-bold text-pink-600">
+              <p className="text-lg font-bold text-primary">
                 ETB {order.total_price?.toFixed(2) || "0.00"}
               </p>
             </div>
@@ -249,7 +249,7 @@ export default function OrderCard({
             <select
               value={order.status}
               onChange={handleDropdownChange}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white hover:border-pink-300 focus:border-pink-500 focus:ring-1 focus:ring-pink-500 outline-none transition-colors"
+              className="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors"
             >
               {(Object.keys(statusColors) as OrderStatus[]).map((status) => (
                 <option key={status} value={status}>
