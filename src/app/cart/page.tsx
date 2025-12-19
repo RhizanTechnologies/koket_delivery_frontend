@@ -38,7 +38,8 @@ const resolveImageUrl = (path?: string) => {
 };
 
 export default function ShoppingCartPage() {
-  const { cartItems, isLoading, refreshCart, updateCartItemQuantity } = useCart();
+  const { cartItems, isLoading, refreshCart, updateCartItemQuantity } =
+    useCart();
   const [items, setItems] = useState<CartItemData[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
@@ -107,7 +108,7 @@ export default function ShoppingCartPage() {
 
   const handleQuantityChange = async (id: string, quantity: number) => {
     // Store the old quantity for potential rollback
-    const oldItem = items.find(item => item.id === id);
+    const oldItem = items.find((item) => item.id === id);
     const oldQuantity = oldItem?.quantity || 1;
 
     try {
@@ -127,7 +128,9 @@ export default function ShoppingCartPage() {
 
       // Revert optimistic update on error
       setItems(
-        items.map((item) => (item.id === id ? { ...item, quantity: oldQuantity } : item))
+        items.map((item) =>
+          item.id === id ? { ...item, quantity: oldQuantity } : item
+        )
       );
       updateCartItemQuantity(id, oldQuantity);
     }

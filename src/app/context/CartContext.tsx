@@ -56,13 +56,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     fetchCart();
   }, [fetchCart]);
 
-  const updateCartItemQuantity = useCallback((itemId: string, quantity: number) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item._id === itemId ? { ...item, quantity } : item
-      )
-    );
-  }, []);
+  const updateCartItemQuantity = useCallback(
+    (itemId: string, quantity: number) => {
+      setCartItems((prevItems) =>
+        prevItems.map((item) =>
+          item._id === itemId ? { ...item, quantity } : item
+        )
+      );
+    },
+    []
+  );
 
   const cartCount = useMemo(
     () => cartItems.reduce((total, item) => total + (item.quantity ?? 0), 0),
