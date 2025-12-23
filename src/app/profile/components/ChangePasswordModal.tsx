@@ -211,7 +211,11 @@ export function ChangePasswordModal({
             >
               Cancel
             </Button>
-            <Button type="submit" loading={isSubmitting} disabled={isSubmitting}>
+            <Button
+              type="submit"
+              loading={isSubmitting}
+              disabled={isSubmitting}
+            >
               Change Password
             </Button>
           </DialogFooter>

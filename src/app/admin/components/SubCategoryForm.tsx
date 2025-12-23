@@ -348,8 +348,8 @@ export default function SubCategoryForm({
         >
           Cancel
         </Button>
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           loading={isSubmitting}
           disabled={isSubmitting}
           className="px-4 sm:px-6 py-2 text-sm flex-1"

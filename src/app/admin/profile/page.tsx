@@ -104,7 +104,7 @@ export default function AdminProfilePage() {
     setUpdatingPassword(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -287,7 +287,7 @@ export default function AdminProfilePage() {
                   )}
 
                   <div>
-                    <Button 
+                    <Button
                       type="submit"
                       loading={updatingPassword}
                       disabled={updatingPassword}
