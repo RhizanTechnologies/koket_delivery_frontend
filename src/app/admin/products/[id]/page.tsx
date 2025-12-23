@@ -62,7 +62,7 @@ export default function AdminProductDetailPage() {
       ? product.images.map((img) => resolveImageUrl(img))
       : product?.image_url
       ? [resolveImageUrl(product.image_url)]
-      : ["/assets/placeholder-product.png"];
+      : ["/assets/placeholder-product.jpg"];
 
   // Use calculated average from service or calculate locally
   const averageRating = product?.averageRating ?? 0;
@@ -132,7 +132,7 @@ export default function AdminProductDetailPage() {
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src =
-                      "/assets/placeholder-product.png";
+                      "/assets/placeholder-product.jpg";
                   }}
                 />
               </div>

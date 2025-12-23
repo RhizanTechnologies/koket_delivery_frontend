@@ -379,7 +379,7 @@ export default function ProductPage() {
               return (
                 <ProductCard
                   key={product._id}
-                  image={product.image_url || "/assets/img1.png"}
+                  image={product.image_url || "/assets/placeholder-product.jpg"}
                   name={product.name}
                   description={product.description ?? ""}
                   price={displayPrice}

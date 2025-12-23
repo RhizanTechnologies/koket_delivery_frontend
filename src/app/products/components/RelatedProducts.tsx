@@ -38,7 +38,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
           >
             <div className="overflow-hidden bg-muted">
               <img
-                src={product.image_url || "/placeholder.svg"}
+                src={product.image_url || "/assets/placeholder-product.jpg"}
                 alt={product.name}
                 className="h-48 w-full object-cover transition-transform hover:scale-105"
               />

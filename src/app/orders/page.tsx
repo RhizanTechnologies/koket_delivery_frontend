@@ -22,7 +22,7 @@ const ASSET_BASE_URL =
   "http://localhost:5001";
 
 const resolveImageUrl = (path?: string) => {
-  if (!path) return "/assets/img1.png";
+  if (!path) return "/assets/placeholder-product.jpg";
   if (/^https?:\/\//i.test(path)) return path;
   return `${ASSET_BASE_URL}${path}`;
 };
