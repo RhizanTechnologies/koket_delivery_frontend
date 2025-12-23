@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Product } from "../../types/order";
 
 interface ProductDetailProps {
@@ -26,11 +27,15 @@ export default function ProductDetail({
         onClick={onToggle}
       >
         <div className="flex items-center gap-3 min-w-0">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-12 h-12 sm:w-14 sm:h-14 object-cover rounded-md flex-shrink-0"
-          />
+          <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0">
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className="object-cover rounded-md"
+              sizes="56px"
+            />
+          </div>
           <div className="min-w-0">
             <p className="font-medium text-sm truncate">{product.name}</p>
             <p className="text-xs sm:text-sm text-gray-500">
