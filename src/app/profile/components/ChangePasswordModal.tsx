@@ -120,17 +120,19 @@ export function ChangePasswordModal({
                   className={errors.currentPassword ? "border-red-500" : ""}
                   placeholder="Enter current password"
                 />
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon-sm"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
                 >
                   {showCurrentPassword ? (
                     <EyeOff className="h-4 w-4" />
                   ) : (
                     <Eye className="h-4 w-4" />
                   )}
-                </button>
+                </Button>
               </div>
               {errors.currentPassword && (
                 <p className="text-sm text-red-500">{errors.currentPassword}</p>
@@ -149,17 +151,19 @@ export function ChangePasswordModal({
                   className={errors.newPassword ? "border-red-500" : ""}
                   placeholder="Enter new password (min. 6 characters)"
                 />
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon-sm"
                   onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
                 >
                   {showNewPassword ? (
                     <EyeOff className="h-4 w-4" />
                   ) : (
                     <Eye className="h-4 w-4" />
                   )}
-                </button>
+                </Button>
               </div>
               {errors.newPassword && (
                 <p className="text-sm text-red-500">{errors.newPassword}</p>
@@ -178,17 +182,19 @@ export function ChangePasswordModal({
                   className={errors.confirmPassword ? "border-red-500" : ""}
                   placeholder="Confirm new password"
                 />
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon-sm"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="h-4 w-4" />
                   ) : (
                     <Eye className="h-4 w-4" />
                   )}
-                </button>
+                </Button>
               </div>
               {errors.confirmPassword && (
                 <p className="text-sm text-red-500">{errors.confirmPassword}</p>
@@ -205,8 +211,12 @@ export function ChangePasswordModal({
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Changing..." : "Change Password"}
+            <Button
+              type="submit"
+              loading={isSubmitting}
+              disabled={isSubmitting}
+            >
+              Change Password
             </Button>
           </DialogFooter>
         </form>

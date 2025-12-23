@@ -148,10 +148,11 @@ function ContactForm() {
 
         <Button
           type="submit"
-          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+          loading={loading}
           disabled={loading}
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
         >
-          {loading ? "Sending..." : "Send Message"}
+          Send Message
         </Button>
       </form>
     </div>

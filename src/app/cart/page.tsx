@@ -30,7 +30,7 @@ const ASSET_BASE_URL =
   "http://localhost:5001";
 
 const resolveImageUrl = (path?: string) => {
-  if (!path) return "/assets/img1.png"; // Fallback image
+  if (!path) return "/assets/placeholder-product.jpg"; // Fallback image
   if (/^https?:\/\//i.test(path)) {
     return path;
   }

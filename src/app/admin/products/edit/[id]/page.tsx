@@ -2,9 +2,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import Image from "next/image";
 import { Product, UpdateProductDto } from "../../../../types/product";
 import { productSchema } from "@/app/schemas";
 import { validateSafe } from "@/app/utils/validation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   getAdminProductById,
   getCategories,
@@ -281,23 +289,26 @@ export default function EditProductPage() {
             <label className="block text-sm font-medium mb-1">
               Category <span className="text-red-500">*</span>
             </label>
-            <select
+            <Select
               value={
                 typeof product.category_id === "object"
                   ? product.category_id._id
                   : product.category_id
               }
-              onChange={(e) => handleInputChange("category_id", e.target.value)}
-              className="w-full border rounded-lg px-4 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-200"
+              onValueChange={(value) => handleInputChange("category_id", value)}
               required
             >
-              <option value="">Select category</option>
-              {categories.map((category) => (
-                <option key={category._id} value={category._id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full border rounded-lg px-4 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-200">
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((category) => (
+                  <SelectItem key={category._id} value={category._id}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Subcategory */}
@@ -305,35 +316,40 @@ export default function EditProductPage() {
             <label className="block text-sm font-medium mb-1">
               Subcategory <span className="text-red-500">*</span>
             </label>
-            <select
+            <Select
               value={
                 typeof product.subcategory_id === "object" &&
                 product.subcategory_id
                   ? product.subcategory_id._id
                   : product.subcategory_id || ""
               }
-              onChange={(e) =>
-                handleInputChange("subcategory_id", e.target.value)
+              onValueChange={(value) =>
+                handleInputChange("subcategory_id", value)
               }
-              className="w-full border rounded-lg px-4 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-200"
               disabled={
                 !currentCategoryId || filteredSubcategories.length === 0
               }
               required
             >
-              <option value="">
-                {currentCategoryId && filteredSubcategories.length > 0
-                  ? "Select subcategory"
-                  : currentCategoryId
-                  ? "No subcategories available"
-                  : "Select a category first"}
-              </option>
-              {filteredSubcategories.map((subcategory) => (
-                <option key={subcategory._id} value={subcategory._id}>
-                  {subcategory.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full border rounded-lg px-4 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-200 disabled:bg-gray-50 disabled:cursor-not-allowed">
+                <SelectValue
+                  placeholder={
+                    currentCategoryId && filteredSubcategories.length > 0
+                      ? "Select subcategory"
+                      : currentCategoryId
+                      ? "No subcategories available"
+                      : "Select a category first"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {filteredSubcategories.map((subcategory) => (
+                  <SelectItem key={subcategory._id} value={subcategory._id}>
+                    {subcategory.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Image Upload */}
@@ -348,11 +364,13 @@ export default function EditProductPage() {
                 <p className="text-sm text-gray-600 mb-2">Current Images:</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                   {product.images.map((imageUrl, index) => (
-                    <div key={index} className="relative">
-                      <img
+                    <div key={index} className="relative w-full h-24">
+                      <Image
                         src={resolveImageUrl(imageUrl)}
                         alt={`Product image ${index + 1}`}
-                        className="w-full h-24 object-cover rounded border"
+                        fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                        className="object-cover rounded border"
                       />
                     </div>
                   ))}
@@ -396,11 +414,13 @@ export default function EditProductPage() {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                   {newImagePreviews.map((preview, index) => (
-                    <div key={index} className="relative group">
-                      <img
+                    <div key={index} className="relative group w-full h-24">
+                      <Image
                         src={preview}
                         alt={`New preview ${index + 1}`}
-                        className="w-full h-24 object-cover rounded border"
+                        fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                        className="object-cover rounded border"
                       />
                       <button
                         type="button"

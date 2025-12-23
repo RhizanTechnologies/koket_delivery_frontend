@@ -25,7 +25,8 @@ export default function FeaturedProductCard({
   productId,
 }: FeaturedProductCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const displayImages = images.length > 0 ? images : ["/assets/img1.png"];
+  const displayImages =
+    images.length > 0 ? images : ["/assets/placeholder-product.jpg"];
   return (
     <Link href={`/products/${productId}`}>
       <motion.div

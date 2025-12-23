@@ -150,7 +150,7 @@ function FeaturedSection() {
                   productImages.push(`${ASSET_BASE_URL}${product.image_url}`);
                 } else {
                   // Fallback to placeholder
-                  productImages.push("/assets/img1.png");
+                  productImages.push("/assets/placeholder-product.jpg");
                 }
 
                 // Get category name

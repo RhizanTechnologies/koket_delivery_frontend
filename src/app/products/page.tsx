@@ -257,7 +257,7 @@ function ProductsPage() {
                     image={
                       product.image_url
                         ? `${ASSET_BASE_URL}${product.image_url}`
-                        : "/assets/img1.png"
+                        : "/assets/placeholder-product.jpg"
                     }
                     name={product.name}
                     description={product.description ?? ""}
