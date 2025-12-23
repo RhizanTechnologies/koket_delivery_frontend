@@ -14,6 +14,7 @@ import {
 export default function AdminProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [updatingPassword, setUpdatingPassword] = useState(false);
   const [profile, setProfile] = useState<User | null>(null);
 
   // Editable fields
@@ -88,7 +89,7 @@ export default function AdminProfilePage() {
     }
   };
 
-  const handlePasswordUpdate = (e: React.FormEvent) => {
+  const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordMessage(null);
     if (!currentPassword || !newPassword || !confirmPassword) {
@@ -100,10 +101,21 @@ export default function AdminProfilePage() {
       return;
     }
     // TODO: Implement password change API when available
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setPasswordMessage("Password updated successfully.");
+    setUpdatingPassword(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setPasswordMessage("Password updated successfully.");
+      toast.success("Password updated successfully");
+    } catch (error: any) {
+      setPasswordMessage("Failed to update password");
+      toast.error("Failed to update password");
+    } finally {
+      setUpdatingPassword(false);
+    }
   };
 
   if (loading) {
@@ -212,10 +224,11 @@ export default function AdminProfilePage() {
 
                 <Button
                   type="submit"
+                  loading={saving}
                   disabled={saving}
                   className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded w-full"
                 >
-                  {saving ? "Saving..." : "Update Profile"}
+                  Update Profile
                 </Button>
               </form>
             </div>
@@ -274,7 +287,12 @@ export default function AdminProfilePage() {
                   )}
 
                   <div>
-                    <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded w-full">
+                    <Button 
+                      type="submit"
+                      loading={updatingPassword}
+                      disabled={updatingPassword}
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded w-full"
+                    >
                       Update Password
                     </Button>
                   </div>

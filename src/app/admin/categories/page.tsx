@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { Layers } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import LoadingState from "@/components/LoadingState";
 import {
   Category,
@@ -342,12 +343,13 @@ export default function CategoriesPage() {
         <div className="text-center">
           <h2 className="text-xl font-semibold text-red-600 mb-2">Error</h2>
           <p className="text-gray-600 mb-4">{error}</p>
-          <button
+          <Button
             onClick={() => window.location.reload()}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-md"
+            variant="default"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             Try Again
-          </button>
+          </Button>
         </div>
       </div>
     );

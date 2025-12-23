@@ -334,17 +334,19 @@ function SignUpPage() {
                       required
                       className="h-12 bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 focus:border-primary transition-all duration-300 pr-12"
                     />
-                    <button
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon-sm"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2"
                     >
                       {showPassword ? (
                         <EyeOff className="w-5 h-5" />
                       ) : (
                         <Eye className="w-5 h-5" />
                       )}
-                    </button>
+                    </Button>
                   </div>
                 </motion.div>
 
@@ -366,19 +368,21 @@ function SignUpPage() {
                       required
                       className="h-12 bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 focus:border-primary transition-all duration-300 pr-12"
                     />
-                    <button
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon-sm"
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2"
                     >
                       {showConfirmPassword ? (
                         <EyeOff className="w-5 h-5" />
                       ) : (
                         <Eye className="w-5 h-5" />
                       )}
-                    </button>
+                    </Button>
                   </div>
                 </motion.div>
 
@@ -406,17 +410,11 @@ function SignUpPage() {
                 >
                   <Button
                     type="submit"
+                    loading={loading}
                     disabled={loading}
                     className="w-full h-12 bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-700 hover:to-amber-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md"
                   >
-                    {loading ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Signing up...
-                      </span>
-                    ) : (
-                      "Sign Up"
-                    )}
+                    Sign Up
                   </Button>
                 </motion.div>
               </motion.form>
