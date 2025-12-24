@@ -23,6 +23,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const router = useRouter();
   const [verifyingAdmin, setVerifyingAdmin] = useState(false);
   const [adminVerified, setAdminVerified] = useState(false);
+  const [hasVerified, setHasVerified] = useState(false);
 
   useEffect(() => {
     // Only redirect after loading is complete and user is not logged in
@@ -34,31 +35,38 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Verify admin role with backend when requireAdmin is true
   useEffect(() => {
     const verifyAdmin = async () => {
-      if (!requireAdmin || !isLoggedIn || verifyingAdmin) return;
+      // Skip if not admin route or already verified or currently verifying
+      if (!requireAdmin || !isLoggedIn || hasVerified || verifyingAdmin) return;
 
+      console.log("🔍 Starting admin verification...");
       setVerifyingAdmin(true);
+      
       try {
         const result = await verifyAdminRole();
+        console.log("🔒 Admin verification result:", result);
 
         if (!result.isAdmin) {
           // Backend says user is NOT admin - force logout
+          console.log("❌ Not admin - logging out");
           logout();
           router.replace("/");
         } else {
+          console.log("✅ Admin verified");
           setAdminVerified(true);
         }
       } catch (error) {
-        console.error("Admin verification failed:", error);
+        console.error("❌ Admin verification error:", error);
         // On error, deny access for security
         logout();
         router.replace("/");
       } finally {
         setVerifyingAdmin(false);
+        setHasVerified(true);
       }
     };
 
     verifyAdmin();
-  }, [requireAdmin, isLoggedIn, verifyingAdmin, logout, router]);
+  }, [requireAdmin, isLoggedIn, hasVerified, verifyingAdmin, logout, router]);
 
   // Show loading while checking auth state
   if (isLoading) {
