@@ -93,3 +93,30 @@ export const logoutUser = (): void => {
     localStorage.removeItem("user");
   }
 };
+
+/**
+ * Verify if user has admin role (server-side check)
+ * This prevents role manipulation via localStorage
+ * 
+ * ⚠️ REQUIRES BACKEND ENDPOINT: GET /api/v1/auth/verify-admin
+ * See BACKEND_IMPLEMENTATION.md for details
+ */
+export const verifyAdminRole = async (): Promise<{
+  isAdmin: boolean;
+  user?: User;
+}> => {
+  try {
+    const response = await apiClient.get<{
+      isAdmin: boolean;
+      user?: User;
+    }>("/auth/verify-admin");
+    return response.data;
+  } catch (error: any) {
+    logger.error(
+      "Admin verification failed:",
+      error.response?.data || error.message
+    );
+    // If request fails (401, 403, etc), user is not admin
+    return { isAdmin: false };
+  }
+};
