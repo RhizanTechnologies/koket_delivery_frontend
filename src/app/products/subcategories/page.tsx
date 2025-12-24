@@ -18,21 +18,21 @@ const works: WorkCard[] = [
     title: "Web Design",
     description:
       "Short description for the ones who look for something new. Awesome!",
-    imageUrl: "/assets/img1.png",
+    imageUrl: "/assets/placeholder-product.jpg",
   },
   {
     id: 2,
     title: "Web Design",
     description:
       "Short description for the ones who look for something new. Awesome!",
-    imageUrl: "/assets/img2.png",
+    imageUrl: "/assets/placeholder-product.jpg",
   },
   {
     id: 3,
     title: "Web Design",
     description:
       "Short description for the ones who look for something new. Awesome!",
-    imageUrl: "/assets/img2.png",
+    imageUrl: "/assets/placeholder-product.jpg",
   },
 ];
 
@@ -55,7 +55,7 @@ export default function Projects() {
               <div className="relative rounded-xl overflow-hidden">
                 <div className="aspect-[3.2/3] relative">
                   <Image
-                    src={work.imageUrl || "/placeholder.svg"}
+                    src={work.imageUrl || "/assets/placeholder-product.jpg"}
                     alt={work.title}
                     fill
                     className="object-cover"

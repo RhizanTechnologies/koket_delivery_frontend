@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 interface SubCategoryFormProps {
-  onSubmit: (data: SubCategoryFormData) => void;
+  onSubmit: (data: SubCategoryFormData) => Promise<void>;
   onCancel: () => void;
   initialData?: Partial<SubCategoryFormData>;
   categoryName: string;
@@ -37,8 +37,9 @@ export default function SubCategoryForm({
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors: { [key: string]: string } = {};
@@ -83,15 +84,20 @@ export default function SubCategoryForm({
     );
 
     // Convert empty strings to 0 before submitting
-    onSubmit({
-      ...formData,
-      price: typeof formData.price === "number" ? formData.price : 0,
-      upfront_payment:
-        typeof formData.upfront_payment === "number"
-          ? formData.upfront_payment
-          : 0,
-      kilo_to_price_map: filteredKiloMap.length > 0 ? filteredKiloMap : [],
-    });
+    setIsSubmitting(true);
+    try {
+      await onSubmit({
+        ...formData,
+        price: typeof formData.price === "number" ? formData.price : 0,
+        upfront_payment:
+          typeof formData.upfront_payment === "number"
+            ? formData.upfront_payment
+            : 0,
+        kilo_to_price_map: filteredKiloMap.length > 0 ? filteredKiloMap : [],
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const addSizePriceField = () => {
@@ -259,13 +265,16 @@ export default function SubCategoryForm({
             <label className="block text-sm font-medium text-gray-700">
               Size-based Pricing *
             </label>
-            <button
+            <Button
               type="button"
+              variant="default"
+              size="sm"
               onClick={addSizePriceField}
-              className="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md w-full sm:w-auto"
+              disabled={isSubmitting}
+              className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
             >
               + Add Size
-            </button>
+            </Button>
           </div>
 
           {formData.kilo_to_price_map.map((item, index) => (
@@ -303,13 +312,16 @@ export default function SubCategoryForm({
                 />
               </div>
               {formData.kilo_to_price_map.length > 1 && (
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => removeSizePriceField(index)}
-                  className="text-red-600 hover:text-red-800 px-2 py-2 w-full sm:w-auto"
+                  disabled={isSubmitting}
+                  className="text-red-600 hover:text-red-800 w-full sm:w-auto"
                 >
                   Remove
-                </button>
+                </Button>
               )}
             </div>
           ))}
@@ -331,11 +343,17 @@ export default function SubCategoryForm({
           type="button"
           variant="secondary"
           onClick={onCancel}
+          disabled={isSubmitting}
           className="px-4 sm:px-6 py-2 text-sm flex-1"
         >
           Cancel
         </Button>
-        <Button type="submit" className="px-4 sm:px-6 py-2 text-sm flex-1">
+        <Button
+          type="submit"
+          loading={isSubmitting}
+          disabled={isSubmitting}
+          className="px-4 sm:px-6 py-2 text-sm flex-1"
+        >
           {isEditing ? "Update" : "Add"} Sub-category
         </Button>
       </div>

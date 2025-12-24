@@ -12,9 +12,9 @@ interface ProductGalleryProps {
 }
 
 const FALLBACK_IMAGES = [
-  "/assets/img2.png",
-  "/assets/img1.png",
-  "/assets/img3.jpeg",
+  "/assets/placeholder-product.jpg",
+  "/assets/placeholder-product.jpg",
+  "/assets/placeholder-product.jpg",
 ];
 
 export function ProductGallery({
@@ -80,7 +80,7 @@ export function ProductGallery({
       {/* Main Image */}
       <div className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-muted to-muted/50 group">
         <img
-          src={galleryImages[currentImage] || "/placeholder.svg"}
+          src={galleryImages[currentImage] || "/assets/placeholder-product.jpg"}
           alt={name ? `${name} image ${currentImage + 1}` : "Product image"}
           className="w-full h-[280px] sm:h-[350px] md:h-[450px] lg:h-[500px] object-cover transition-transform duration-300 group-hover:scale-105"
         />
@@ -133,7 +133,7 @@ export function ProductGallery({
               }`}
             >
               <img
-                src={image || "/placeholder.svg"}
+                src={image || "/assets/placeholder-product.jpg"}
                 alt={
                   name
                     ? `${name} thumbnail ${index + 1}`

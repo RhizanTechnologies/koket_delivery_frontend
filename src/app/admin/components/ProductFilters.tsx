@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { ProductFilters as ProductFiltersType } from "../../types/product";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5001";
@@ -137,18 +144,22 @@ export default function ProductFiltersComponent({
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Category
           </label>
-          <select
+          <Select
             value={filters.categoryId || ""}
-            onChange={(e) => handleCategoryChange(e.target.value)}
-            className="w-full border-2 border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all hover:border-gray-300"
+            onValueChange={handleCategoryChange}
           >
-            <option value="">All Categories</option>
-            {categories.map((category) => (
-              <option key={category._id} value={category._id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="w-full border-2 border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all hover:border-gray-300">
+              <SelectValue placeholder="All Categories" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All Categories</SelectItem>
+              {categories.map((category) => (
+                <SelectItem key={category._id} value={category._id}>
+                  {category.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Subcategory Filter */}
@@ -156,19 +167,23 @@ export default function ProductFiltersComponent({
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Subcategory
           </label>
-          <select
+          <Select
             value={filters.subcategoryId || ""}
-            onChange={(e) => handleSubcategoryChange(e.target.value)}
+            onValueChange={handleSubcategoryChange}
             disabled={!filters.categoryId || filteredSubcategories.length === 0}
-            className="w-full border-2 border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-all hover:border-gray-300"
           >
-            <option value="">All Subcategories</option>
-            {filteredSubcategories.map((subcategory) => (
-              <option key={subcategory._id} value={subcategory._id}>
-                {subcategory.name}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="w-full border-2 border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-all hover:border-gray-300">
+              <SelectValue placeholder="All Subcategories" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All Subcategories</SelectItem>
+              {filteredSubcategories.map((subcategory) => (
+                <SelectItem key={subcategory._id} value={subcategory._id}>
+                  {subcategory.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {filters.categoryId && filteredSubcategories.length === 0 && (
             <p className="text-xs text-amber-600 mt-2 flex items-center gap-1">
               <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">

@@ -18,19 +18,19 @@ import Link from "next/link";
 const categories = [
   {
     name: "Cakes",
-    image: "/assets/img1.png",
+    image: "/assets/cake4.jpg",
     tagline: "Sweeten every moment!",
     description: "Custom designs for your special occasions",
   },
   {
     name: "Cookies",
-    image: "/assets/img2.png",
+    image: "/assets/cookies.jpg",
     tagline: "One bite, endless smiles!",
     description: "Custom designs for your special occasions",
   },
   {
     name: "Breads",
-    image: "/assets/img3.jpeg",
+    image: "/assets/breads.jpg",
     tagline: "Warm, fresh, and made with love!",
     description: "Artisan breads crafted to perfection",
   },
@@ -95,7 +95,7 @@ function CategorySection() {
                 {/* Image container with overlay */}
                 <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg">
                   <Image
-                    src={category.image || "/placeholder.svg"}
+                    src={category.image || "/assets/placeholder-product.jpg"}
                     alt={category.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"

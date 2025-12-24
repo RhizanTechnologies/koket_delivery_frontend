@@ -14,7 +14,7 @@ const ASSET_BASE_URL =
  * Resolve image URL - converts relative paths to absolute URLs
  */
 export function resolveImageUrl(path?: string): string {
-  if (!path) return "/assets/placeholder-product.png";
+  if (!path) return "/assets/placeholder-product.jpg";
   if (/^https?:\/\//i.test(path)) return path;
   return `${ASSET_BASE_URL}${path}`;
 }

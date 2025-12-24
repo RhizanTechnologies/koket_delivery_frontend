@@ -43,7 +43,7 @@ export default function ProductCard({
       ? product.images.map((img) => resolveImageUrl(img))
       : product.image_url
       ? [resolveImageUrl(product.image_url)]
-      : ["/assets/placeholder-product.png"];
+      : ["/assets/placeholder-product.jpg"];
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
@@ -64,7 +64,7 @@ export default function ProductCard({
           className="w-full h-48 xs:h-52 md:h-56 lg:h-60 xl:h-64 object-cover transition-transform duration-300 group-hover:scale-105"
           onError={(e) => {
             (e.target as HTMLImageElement).src =
-              "/assets/placeholder-product.png";
+              "/assets/placeholder-product.jpg";
           }}
         />
 

@@ -34,7 +34,7 @@ export function CartItem({
       <div className="flex flex-col md:flex-row gap-4 p-4 rounded-lg transition-all">
         <div className="flex gap-4 flex-1">
           <img
-            src={image || "/placeholder.svg"}
+            src={image || "/assets/placeholder-product.jpg"}
             alt={name}
             className="w-24 h-24 object-cover rounded-lg border border-border"
           />
