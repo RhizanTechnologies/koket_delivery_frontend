@@ -40,7 +40,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
       console.log("🔍 Starting admin verification...");
       setVerifyingAdmin(true);
-      
+
       try {
         const result = await verifyAdminRole();
         console.log("🔒 Admin verification result:", result);
