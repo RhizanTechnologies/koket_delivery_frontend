@@ -18,19 +18,19 @@ import Link from "next/link";
 const categories = [
   {
     name: "Cakes",
-    image: "/assets/placeholder-product.jpg",
+    image: "/assets/cake4.jpg",
     tagline: "Sweeten every moment!",
     description: "Custom designs for your special occasions",
   },
   {
     name: "Cookies",
-    image: "/assets/placeholder-product.jpg",
+    image: "/assets/cookies.jpg",
     tagline: "One bite, endless smiles!",
     description: "Custom designs for your special occasions",
   },
   {
     name: "Breads",
-    image: "/assets/placeholder-product.jpg",
+    image: "/assets/breads.jpg",
     tagline: "Warm, fresh, and made with love!",
     description: "Artisan breads crafted to perfection",
   },
