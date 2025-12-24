@@ -97,7 +97,7 @@ export const logoutUser = (): void => {
 /**
  * Verify if user has admin role (server-side check)
  * This prevents role manipulation via localStorage
- * 
+ *
  * ⚠️ REQUIRES BACKEND ENDPOINT: GET /api/v1/auth/verify-admin
  * See BACKEND_IMPLEMENTATION.md for details
  */

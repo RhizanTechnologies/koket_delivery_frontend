@@ -39,7 +39,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       setVerifyingAdmin(true);
       try {
         const result = await verifyAdminRole();
-        
+
         if (!result.isAdmin) {
           // Backend says user is NOT admin - force logout
           logout();
@@ -105,6 +105,5 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   return <>{children}</>;
 };
-
 
 export default ProtectedRoute;
