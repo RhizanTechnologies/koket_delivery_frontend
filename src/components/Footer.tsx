@@ -16,7 +16,7 @@ function Footer() {
           <div className="text-primary text-xl sm:text-2xl font-kaushan mb-3">
             Koket Bakery
           </div>
-          <p className="text-background/80 text-sm sm:text-base max-w-md">
+          <p className="text-background/80  text-sm sm:text-base max-w-md">
             Handcrafted cakes and desserts created with passion and premium
             ingredients for every celebration.
           </p>
@@ -68,24 +68,44 @@ function Footer() {
           <div className="text-primary font-semibold mb-4 text-base sm:text-lg">
             Contact Us
           </div>
+
           <ul className="text-sm space-y-2 text-background/80">
             <li className="break-words">
-              Tulu Dimtu in front of Shewa Supermarket
+              Tulu Dimtu, near Shewa Supermarket, Atika Building
             </li>
-            <li>Addis Ababa</li>
+            <li>Addis Ababa, Ethiopia</li>
+
             <li>
-              Phone:{" "}
-              <span className="hover:text-primary cursor-pointer">
-                +251 900-123-456
-              </span>
+              Phone:
+              <div className="flex flex-col ml-1">
+                <Link 
+                  href="tel:+251911529898"
+                  className="hover:text-primary cursor-pointer text-base"
+                >
+                  09 11 52 98 98
+                </Link>
+                <Link 
+                  href="tel:+251916911591"
+                  className="hover:text-primary cursor-pointer text-base"
+                >
+                  09 16 91 15 91
+                </Link>
+                <Link 
+                  href="tel:+251912700250"
+                  className="hover:text-primary cursor-pointer text-base"
+                >
+                  09 12 70 02 50
+                </Link>
+              </div>
             </li>
+
             <li>
               Email:{" "}
               <Link
-                href="mailto:hello@koketbakery.com"
+                href="mailto:koketbakeryandpastry@gmail.com"
                 className="text-primary hover:text-primary/80 transition-colors"
               >
-                hello@koketbakery.com
+                koketbakeryandpastry@gmail.com
               </Link>
             </li>
           </ul>
