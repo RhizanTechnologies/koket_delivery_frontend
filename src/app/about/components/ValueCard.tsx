@@ -14,14 +14,14 @@ function ValueCard({
   iconColor = "text-primary",
 }: ValueCardProps) {
   return (
-    <div className="bg-card rounded-lg p-6 shadow-sm border border-border text-center hover:shadow-md transition-shadow">
+    <div className="bg-card rounded-2xl p-6 sm:p-8 shadow-lg border-2 border-border text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
       <div className="flex justify-center mb-4">
-        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-          <Icon className={`w-6 h-6 ${iconColor}`} />
+        <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+          <Icon className={`w-7 h-7 ${iconColor}`} />
         </div>
       </div>
-      <h3 className="font-semibold text-xl text-foreground mb-2">{title}</h3>
-      <p className="text-base text-muted-foreground text-balance">
+      <h3 className="font-semibold text-xl text-foreground mb-3">{title}</h3>
+      <p className="text-base text-muted-foreground leading-relaxed text-balance">
         {description}
       </p>
     </div>
