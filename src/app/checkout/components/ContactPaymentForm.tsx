@@ -120,11 +120,11 @@ export function ContactPaymentForm({
 
           <div className="space-y-4">
             {/* Bank Account */}
-            <div className="bg-white/50 dark:bg-gray-900/30 rounded-lg p-4 border border-primary/20">
-              <div className="flex items-center justify-between mb-2">
+            <div className="bg-background rounded-lg p-4 border border-border">
+              <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <svg
-                    className="w-5 h-5 text-primary"
+                    className="w-5 h-5 text-foreground"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -136,15 +136,14 @@ export function ContactPaymentForm({
                       d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
                     />
                   </svg>
-                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  <span className="text-sm font-semibold text-foreground">
                     Bank Account
                   </span>
                 </div>
                 <Button
                   type="button"
                   onClick={() => {
-                    navigator.clipboard.writeText("1234-5678-9012");
-                    // Optional: Add a toast notification here
+                    navigator.clipboard.writeText("1000680074554");
                     const btn = document.activeElement as HTMLButtonElement;
                     const originalText = btn.textContent;
                     btn.textContent = "Copied!";
@@ -152,37 +151,24 @@ export function ContactPaymentForm({
                       btn.textContent = originalText;
                     }, 2000);
                   }}
-                  className="text-xs font-medium px-3 py-1 rounded-md bg-accent hover:bg-accent/80 text-accent-foreground transition-all flex items-center gap-1"
+                  className="text-xs font-medium px-3 py-1 rounded-md bg-primary hover:bg-primary/90 text-primary-foreground transition-all"
                 >
-                  <svg
-                    className="w-3 h-3"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
                   Copy
                 </Button>
               </div>
-              <div className="bg-muted dark:bg-muted rounded-md px-3 py-3 text-center">
-                <span className="text-base sm:text-lg font-mono font-bold text-gray-900 dark:text-gray-100">
-                  1234-5678-9012
+              <div className="bg-muted rounded-md px-3 py-3 text-center">
+                <span className="text-base sm:text-lg font-mono font-bold text-foreground">
+                  1000680074554
                 </span>
               </div>
             </div>
 
             {/* Mobile Payment */}
-            <div className="bg-white/50 dark:bg-gray-900/30 rounded-lg p-4 border border-primary/20">
-              <div className="flex items-center justify-between mb-2">
+            <div className="bg-background rounded-lg p-4 border border-border">
+              <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <svg
-                    className="w-5 h-5 text-primary"
+                    className="w-5 h-5 text-foreground"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -194,15 +180,14 @@ export function ContactPaymentForm({
                       d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
                     />
                   </svg>
-                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  <span className="text-sm font-semibold text-foreground">
                     Mobile Payment
                   </span>
                 </div>
                 <Button
                   type="button"
                   onClick={() => {
-                    navigator.clipboard.writeText("+1 (555) 123-4567");
-                    // Optional: Add a toast notification here
+                    navigator.clipboard.writeText("0912700250");
                     const btn = document.activeElement as HTMLButtonElement;
                     const originalText = btn.textContent;
                     btn.textContent = "Copied!";
@@ -210,27 +195,14 @@ export function ContactPaymentForm({
                       btn.textContent = originalText;
                     }, 2000);
                   }}
-                  className="text-primary hover:text-primary dark:text-primary dark:hover:text-primary text-xs font-medium px-3 py-1 rounded-md bg-blue-100 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all flex items-center gap-1"
+                  className="text-xs font-medium px-3 py-1 rounded-md bg-primary hover:bg-primary/90 text-primary-foreground transition-all"
                 >
-                  <svg
-                    className="w-3 h-3"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
                   Copy
                 </Button>
               </div>
-              <div className="bg-blue-50 dark:bg-blue-950/50 rounded-md px-3 py-3 text-center">
-                <span className="text-base sm:text-lg font-mono font-bold text-gray-900 dark:text-gray-100">
-                  +1 (555) 123-4567
+              <div className="bg-muted rounded-md px-3 py-3 text-center">
+                <span className="text-base sm:text-lg font-mono font-bold text-foreground">
+                0912700250
                 </span>
               </div>
             </div>
