@@ -7,6 +7,16 @@ import {
 } from "./components";
 import { Header, PageHeader } from "@/components";
 import MethodCards from "./components/MethodCards";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Contact Us - Get in Touch',
+  description: 'Contact Koket Bakery & Pastry for custom cake orders, inquiries, or visit us in person. Phone: 0911529898, Email: koketbakeryandpastry@gmail.com. Open daily 8:00 AM - 8:00 PM.',
+  openGraph: {
+    title: 'Contact Koket Bakery & Pastry',
+    description: 'Get in touch for custom orders and inquiries. Visit us or call us today!',
+  },
+};
 
 export default function ContactPage() {
   return (

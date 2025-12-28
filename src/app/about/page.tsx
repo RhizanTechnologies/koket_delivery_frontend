@@ -1,6 +1,16 @@
 import { Cake, Heart, Users, Sparkles } from "lucide-react";
 import { ValueCard, VisitUsCard } from "./components";
 import { Header, PageHeader } from "@/components";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'About Us - Our Story & Values',
+  description: 'Learn about Koket Bakery & Pastry - our story, values, and commitment to creating beautiful, delicious cakes that bring joy to every celebration since 2020.',
+  openGraph: {
+    title: 'About Koket Bakery & Pastry',
+    description: 'Discover our passion for handcrafted desserts and our commitment to quality ingredients and exceptional service.',
+  },
+};
 
 export default function AboutPage() {
   return (
