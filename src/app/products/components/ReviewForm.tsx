@@ -14,21 +14,29 @@ import { toast } from "react-toastify";
 interface ReviewFormProps {
   onSubmit: (payload: { rating: number; comment: string }) => void;
   defaultRating?: number;
+  defaultComment?: string;
   isSubmitting?: boolean;
+  isEditing?: boolean;
 }
 
 export function ReviewForm({
   onSubmit,
   defaultRating = 5,
+  defaultComment = "",
   isSubmitting = false,
+  isEditing = false,
 }: ReviewFormProps) {
   const [rating, setRating] = useState(defaultRating);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState(defaultComment);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setRating(defaultRating);
   }, [defaultRating]);
+
+  useEffect(() => {
+    setComment(defaultComment);
+  }, [defaultComment]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -44,13 +52,19 @@ export function ReviewForm({
     }
 
     onSubmit(validation.data);
-    setComment("");
-    setRating(defaultRating);
+    
+    // Only reset form if not editing (creating new review)
+    if (!isEditing) {
+      setComment("");
+      setRating(defaultRating);
+    }
   };
 
   return (
     <Card className="p-6">
-      <h3 className="mb-6 text-lg font-semibold">Write a Review</h3>
+      <h3 className="mb-6 text-lg font-semibold">
+        {isEditing ? "Edit Your Review" : "Write a Review"}
+      </h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="mb-2 block text-sm font-medium">Rating</label>
@@ -97,19 +111,19 @@ export function ReviewForm({
             disabled={isSubmitting}
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            {isSubmitting ? "Submitting…" : "Submit Review"}
+            {isSubmitting ? "Submitting…" : isEditing ? "Update Review" : "Submit Review"}
           </Button>
           <Button
             type="button"
             variant="outline"
             onClick={() => {
-              setComment("");
+              setComment(defaultComment);
               setRating(defaultRating);
             }}
             disabled={isSubmitting}
             className="border-border bg-transparent text-sm"
           >
-            Clear
+            {isEditing ? "Reset" : "Clear"}
           </Button>
         </div>
       </form>
