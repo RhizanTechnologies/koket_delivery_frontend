@@ -27,7 +27,7 @@ const kaushanScript = Kaushan_Script({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://koketbakery.com'),
+  metadataBase: new URL('https://koket-bakery.com'),
   title: {
     default: 'Koket Bakery & Pastry - Handcrafted Cakes & Desserts in Ethiopia',
     template: '%s | Koket Bakery & Pastry'
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://koketbakery.com',
+    url: 'https://koket-bakery.com',
     title: 'Koket Bakery & Pastry - Handcrafted Cakes & Desserts',
     description: 'Order handcrafted cakes, pastries, and desserts made with the finest ingredients. Custom cakes for every celebration.',
     siteName: 'Koket Bakery & Pastry',

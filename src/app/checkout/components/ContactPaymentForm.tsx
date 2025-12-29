@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,7 @@ export function ContactPaymentForm({
   });
 
   const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,6 +59,10 @@ export function ContactPaymentForm({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
+      // Reset input value to allow re-uploading the same file
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
       setFormData((prev) => ({ ...prev, paymentProof: e.target.files![0] }));
     }
   };
@@ -352,6 +357,7 @@ export function ContactPaymentForm({
             <input
               type="file"
               id="payment-proof"
+              ref={fileInputRef}
               onChange={handleFileChange}
               accept="image/png,image/jpeg,image/jpg"
               required
@@ -389,6 +395,10 @@ export function ContactPaymentForm({
                     onClick={(e) => {
                       e.preventDefault();
                       setFormData((prev) => ({ ...prev, paymentProof: null }));
+                      // Reset file input
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = "";
+                      }
                     }}
                     className="text-xs text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium h-auto p-0"
                   >
