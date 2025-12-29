@@ -38,7 +38,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <div className="hidden sm:block absolute -top-10 -right-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
 
             <Image
-              src={image}
+              src={image || "/placeholder-product.jpg"} 
               alt={name}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-110"

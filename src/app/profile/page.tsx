@@ -63,7 +63,7 @@ export default function ProfilePage() {
       setUser({
         name: profileData.name || "Unknown",
         email: profileData.email || "",
-        phone_number: profileData.phone_number || "Not set",
+        phone_number: profileData.phone_number || "",
         joinedDate: profileData.created_at
           ? new Date(profileData.created_at).toLocaleDateString("en-US", {
               year: "numeric",
