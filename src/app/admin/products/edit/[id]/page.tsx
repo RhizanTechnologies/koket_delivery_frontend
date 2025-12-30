@@ -366,7 +366,7 @@ export default function EditProductPage() {
                   {product.images.map((imageUrl, index) => (
                     <div key={index} className="relative w-full h-24">
                       <Image
-                        src={resolveImageUrl(imageUrl)}
+                        src={resolveImageUrl(imageUrl) || "/placeholder-product.jpg"}
                         alt={`Product image ${index + 1}`}
                         fill
                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
@@ -416,7 +416,7 @@ export default function EditProductPage() {
                   {newImagePreviews.map((preview, index) => (
                     <div key={index} className="relative group w-full h-24">
                       <Image
-                        src={preview}
+                        src={preview || "/placeholder-product.jpg"}
                         alt={`New preview ${index + 1}`}
                         fill
                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"

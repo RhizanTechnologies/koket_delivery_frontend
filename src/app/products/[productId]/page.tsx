@@ -10,6 +10,8 @@ import { ProductDetails } from "../components/ProductDetails";
 import dynamic from "next/dynamic";
 import {
   createProductReview,
+  updateProductReview,
+  deleteProductReview,
   getProductById,
 } from "@/app/services/productService";
 import { addToCart, type AddToCartPayload } from "@/app/services/cartService";
@@ -142,6 +144,18 @@ export default function ProductPage() {
     return [];
   }, [product?.images, product?.image_url]);
 
+  // Find user's existing review
+  const userReview = useMemo(() => {
+    if (!user?.id || !product?.reviews?.length) return null;
+    const reviews = product.reviews;
+    return reviews.find((review) => {
+      const userId = typeof review.user_id === "string" 
+        ? review.user_id 
+        : review.user_id?._id;
+      return userId === user.id;
+    });
+  }, [product?.reviews, user?.id]);
+
   const computePriceLabel = (item: ProductSummary) => {
     const kiloValues = item.kilo_to_price_map
       ? Object.values(item.kilo_to_price_map)
@@ -223,14 +237,20 @@ export default function ProductPage() {
       setIsSubmittingReview(true);
       setReviewError(null);
 
-      const payload = {
-        user_id: user.id,
-        product_id: productId,
-        rating,
-        comment,
-      };
-
-      await createProductReview(payload);
+      if (userReview) {
+        // Update existing review
+        await updateProductReview(userReview._id, { rating, comment });
+      } else {
+        // Create new review
+        const payload = {
+          user_id: user.id,
+          product_id: productId,
+          rating,
+          comment,
+        };
+        await createProductReview(payload);
+      }
+      
       setShowReviewForm(false);
       setRefreshIndex((prev) => prev + 1);
     } catch (submitError: any) {
@@ -238,6 +258,26 @@ export default function ProductPage() {
         submitError?.response?.data?.message ??
         submitError?.message ??
         "Unable to submit review. Please try again.";
+      setReviewError(apiMessage);
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
+
+  const handleReviewDelete = async () => {
+    if (!userReview) return;
+
+    try {
+      setIsSubmittingReview(true);
+      setReviewError(null);
+      await deleteProductReview(userReview._id);
+      setShowReviewForm(false);
+      setRefreshIndex((prev) => prev + 1);
+    } catch (deleteError: any) {
+      const apiMessage =
+        deleteError?.response?.data?.message ??
+        deleteError?.message ??
+        "Unable to delete review. Please try again.";
       setReviewError(apiMessage);
     } finally {
       setIsSubmittingReview(false);
@@ -311,16 +351,19 @@ export default function ProductPage() {
               disabled={isSubmittingReview}
               className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-lg w-full sm:w-auto"
             >
-              {showReviewForm ? "Cancel" : "+ Write a Review"}
+              {showReviewForm ? "Cancel" : userReview ? "Edit Your Review" : "+ Write a Review"}
             </Button>
           </div>
 
           {showReviewForm && (
             <div className="mb-8 bg-card border border-border rounded-xl p-4 sm:p-6 shadow-sm">
               <ReviewForm
+                key={userReview?._id ?? 'new-review'}
                 onSubmit={handleReviewSubmit}
-                defaultRating={Math.max(1, ratingValue || 5)}
+                defaultRating={userReview?.rating ?? Math.max(1, ratingValue || 5)}
+                defaultComment={userReview?.comment ?? ""}
                 isSubmitting={isSubmittingReview}
+                isEditing={!!userReview}
               />
               {reviewError && (
                 <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
@@ -341,7 +384,12 @@ export default function ProductPage() {
               />
             }
           >
-            <ReviewsList reviews={reviews} />
+            <ReviewsList 
+              reviews={reviews} 
+              currentUserId={user?.id}
+              onEdit={() => setShowReviewForm(true)}
+              onDelete={handleReviewDelete}
+            />
           </Suspense>
         </div>
       </section>

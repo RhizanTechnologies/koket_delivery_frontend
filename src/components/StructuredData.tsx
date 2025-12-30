@@ -6,11 +6,11 @@ export function StructuredData() {
     '@type': 'Bakery',
     name: 'Koket Bakery & Pastry',
     description: 'Handcrafted cakes, pastries, and desserts made with the finest ingredients',
-    url: 'https://koketbakery.com',
-    logo: 'https://koketbakery.com/assets/cake.avif',
-    image: 'https://koketbakery.com/assets/cake.avif',
+    url: 'https://koket-bakery.com',
+    logo: 'https://koket-bakery.com/assets/cake.avif',
+    image: 'https://koket-bakery.com/assets/cake.avif',
     telephone: '+251911529898',
-    email: 'koketbakeryandpastry@gmail.com',
+    email: 'koket-bakeryandpastry@gmail.com',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Ethiopia',
@@ -40,9 +40,9 @@ export function StructuredData() {
     priceRange: '$$',
     servesCuisine: 'Bakery',
     acceptsReservations: 'True',
-    menu: 'https://koketbakery.com/products',
+    menu: 'https://koket-bakery.com/products',
     sameAs: [
-      'https://t.me/koketbakery',
+      'https://t.me/koket-bakery',
       // Add other social media links here
     ],
   };
@@ -50,12 +50,12 @@ export function StructuredData() {
   const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': 'https://koketbakery.com',
+    '@id': 'https://koket-bakery.com',
     name: 'Koket Bakery & Pastry',
     description: 'Custom cakes for birthdays, weddings, and special occasions',
-    url: 'https://koketbakery.com',
+    url: 'https://koket-bakery.com',
     telephone: '+251911529898',
-    email: 'koketbakeryandpastry@gmail.com',
+    email: 'koket-bakeryandpastry@gmail.com',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Ethiopia',
@@ -67,18 +67,18 @@ export function StructuredData() {
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    '@id': 'https://koketbakery.com/#website',
-    url: 'https://koketbakery.com',
+    '@id': 'https://koket-bakery.com/#website',
+    url: 'https://koket-bakery.com',
     name: 'Koket Bakery & Pastry',
     description: 'Handcrafted cakes and pastries for every celebration',
     publisher: {
-      '@id': 'https://koketbakery.com/#organization',
+      '@id': 'https://koket-bakery.com/#organization',
     },
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://koketbakery.com/products?search={search_term_string}',
+        urlTemplate: 'https://koket-bakery.com/products?search={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },

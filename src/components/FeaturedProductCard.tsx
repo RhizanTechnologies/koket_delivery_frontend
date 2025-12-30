@@ -40,7 +40,7 @@ export default function FeaturedProductCard({
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-500"></div>
 
           <Image
-            src={displayImages[currentImageIndex]}
+            src={displayImages[currentImageIndex] || "/placeholder-product.jpg"}
             alt={name}
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-500"

@@ -405,7 +405,7 @@ export default function OrdersPage() {
                                       src={resolveImageUrl(
                                         item.product?.images?.[0] ||
                                           item.product?.image_url
-                                      )}
+                                      ) || "/placeholder-product.jpg"}
                                       alt={item.product?.name || "Product"}
                                       fill
                                       className="object-cover"

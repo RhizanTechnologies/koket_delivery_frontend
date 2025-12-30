@@ -5,14 +5,14 @@ import { z } from "zod";
  */
 export const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(4, "Password must be at least 4 characters"),
 });
 
 export const registerSchema = z
   .object({
     name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z.string().min(4, "Password must be at least 4 characters"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -76,7 +76,10 @@ export const orderSchema = z.object({
  * Contact Form Schema
  */
 export const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .regex(/^[a-zA-Z\s'-]+$/, "Name must contain only letters, spaces, hyphens, and apostrophes"),
   email: z.string().email("Invalid email address").optional(),
   phone: z
     .string()
@@ -86,7 +89,7 @@ export const contactSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
-  message: z.string().min(20, "Message must be at least 20 characters"),
+  message: z.string().min(5, "Message must be at least 5 characters"),
 });
 
 /**
@@ -110,10 +113,10 @@ export const profileUpdateSchema = z.object({
  */
 export const passwordChangeSchema = z
   .object({
-    currentPassword: z.string().min(6, "Current password is required"),
+    currentPassword: z.string().min(4, "Current password is required"),
     newPassword: z
       .string()
-      .min(6, "New password must be at least 6 characters"),
+      .min(4, "New password must be at least 4 characters"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {

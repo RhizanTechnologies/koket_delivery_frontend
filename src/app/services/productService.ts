@@ -79,3 +79,58 @@ export async function createProductReview(payload: ReviewPayload) {
     throw error;
   }
 }
+
+/**
+ * Update product review
+ */
+export async function updateProductReview(
+  reviewId: string,
+  payload: { rating: number; comment: string }
+) {
+  try {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      throw new Error("Please login to update a review");
+    }
+
+    const { data } = await api.patch<ReviewResponse>(
+      `/reviews/${reviewId}`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return data;
+  } catch (error: any) {
+    logger.error("Failed to update review", error?.response?.data ?? error);
+    throw error;
+  }
+}
+
+/**
+ * Delete product review
+ */
+export async function deleteProductReview(reviewId: string) {
+  try {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      throw new Error("Please login to delete a review");
+    }
+
+    const { data } = await api.delete<ReviewResponse>(`/reviews/${reviewId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return data;
+  } catch (error: any) {
+    logger.error("Failed to delete review", error?.response?.data ?? error);
+    throw error;
+  }
+}

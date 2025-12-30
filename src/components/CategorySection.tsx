@@ -95,7 +95,7 @@ function CategorySection() {
                 {/* Image container with overlay */}
                 <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg">
                   <Image
-                    src={category.image || "/assets/placeholder-product.jpg"}
+                    src={category.image || "/placeholder-product.jpg"}
                     alt={category.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"

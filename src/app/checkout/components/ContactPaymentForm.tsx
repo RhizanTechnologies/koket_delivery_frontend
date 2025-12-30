@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,7 @@ export function ContactPaymentForm({
   });
 
   const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -57,9 +58,20 @@ export function ContactPaymentForm({
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData((prev) => ({ ...prev, paymentProof: e.target.files![0] }));
-    }
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      paymentProof: file,
+    }));
+
+    // Reset AFTER state update to allow re-uploading the same file
+    setTimeout(() => {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }, 0);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -246,18 +258,21 @@ export function ContactPaymentForm({
             </svg>
             Desired Delivery Date *
           </label>
-          <Input
-            type="date"
-            name="deliveryDate"
-            value={formData.deliveryDate}
-            onChange={handleInputChange}
-            required
-            min={new Date(Date.now() + 86400000).toISOString().split("T")[0]}
-            className="w-full h-11"
-          />
-          <div className="flex items-start gap-2 mt-2 text-xs text-muted-foreground">
+          <div className="relative">
+            <Input
+              type="date" 
+              name="deliveryDate"
+              value={formData.deliveryDate}
+              onChange={handleInputChange}
+              required
+              min={new Date(Date.now() + 86400000).toISOString().split("T")[0]}
+              className="w-full h-12 text-base pl-4 pr-4 cursor-pointer"
+              placeholder="Select delivery date"
+            />
+          </div>
+          <div className="flex items-start gap-2 mt-3 p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
             <svg
-              className="w-4 h-4 flex-shrink-0 mt-0.5"
+              className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -269,16 +284,22 @@ export function ContactPaymentForm({
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span>
-              Minimum delivery time is one day. For urgent orders, please
-              contact us at{" "}
-              <a
-                href="tel:+251911334455"
-                className="text-primary hover:underline font-semibold"
-              >
-                +251 911 334 455
-              </a>
-            </span>
+            <div className="text-xs text-blue-900 dark:text-blue-200 leading-relaxed">
+              <p className="font-semibold mb-1">📅 Delivery Information</p>
+              <p>
+                • Minimum delivery time: <strong>24 hours</strong> (next day)
+                <br />
+                • Please select when you'd like to receive your order
+                <br />
+                • For urgent same-day orders, call{" "}
+                <a
+                  href="tel:+251911334455"
+                  className="text-primary hover:underline font-bold"
+                >
+                  +251 911 334 455
+                </a>
+              </p>
+            </div>
           </div>
         </div>
 
@@ -352,6 +373,7 @@ export function ContactPaymentForm({
             <input
               type="file"
               id="payment-proof"
+              ref={fileInputRef}
               onChange={handleFileChange}
               accept="image/png,image/jpeg,image/jpg"
               required
@@ -389,6 +411,10 @@ export function ContactPaymentForm({
                     onClick={(e) => {
                       e.preventDefault();
                       setFormData((prev) => ({ ...prev, paymentProof: null }));
+                      // Reset file input
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = "";
+                      }
                     }}
                     className="text-xs text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium h-auto p-0"
                   >

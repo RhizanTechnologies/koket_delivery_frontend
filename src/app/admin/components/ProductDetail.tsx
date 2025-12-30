@@ -29,7 +29,7 @@ export default function ProductDetail({
         <div className="flex items-center gap-3 min-w-0">
           <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0">
             <Image
-              src={product.image}
+              src={product.image || "/placeholder-product.jpg"}
               alt={product.name}
               fill
               className="object-cover rounded-md"
