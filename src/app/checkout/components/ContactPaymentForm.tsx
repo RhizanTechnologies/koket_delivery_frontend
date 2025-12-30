@@ -260,7 +260,7 @@ export function ContactPaymentForm({
           </label>
           <div className="relative">
             <Input
-              type="date"
+              type="date" 
               name="deliveryDate"
               value={formData.deliveryDate}
               onChange={handleInputChange}
