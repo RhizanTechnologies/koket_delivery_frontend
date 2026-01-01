@@ -43,7 +43,7 @@ export const reviewSchema = z.object({
     .max(5, "Rating cannot exceed 5"),
   comment: z
     .string()
-    .min(10, "Comment must be at least 10 characters")
+    .min(2, "Comment must be at least 2 characters")
     .max(500, "Comment cannot exceed 500 characters"),
 });
 
@@ -89,7 +89,7 @@ export const contactSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
-  message: z.string().min(5, "Message must be at least 5 characters"),
+  message: z.string().min(2, "Message must be at least 2 characters"),
 });
 
 /**
