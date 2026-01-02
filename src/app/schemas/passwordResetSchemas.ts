@@ -45,7 +45,7 @@ export const resetPasswordSchema = z
     resetToken: z.string().min(1, "Reset token is required"),
     newPassword: z
       .string()
-      .min(6, "Password must be at least 6 characters")
+      .min(4, "Password must be at least 4 characters")
       .max(100, "Password must not exceed 100 characters"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
   })

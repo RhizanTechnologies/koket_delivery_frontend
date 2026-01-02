@@ -229,7 +229,7 @@ function Navbar() {
                         }`}
                       >
                         My Profile
-                        {pathname.startsWith("/admin/profile") && (
+                        {pathname.startsWith("/profile") && (
                           <Check size={14} className="text-primary" />
                         )}
                       </Link>

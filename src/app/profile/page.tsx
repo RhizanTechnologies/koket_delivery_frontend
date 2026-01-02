@@ -64,7 +64,7 @@ export default function ProfilePage() {
       setUser({
         name: profileData.name || "Unknown",
         email: profileData.email || "",
-        phone_number: profileData.phone_number || "Not set",
+        phone_number: profileData.phone_number || "",
         joinedDate: profileData.created_at
           ? new Date(profileData.created_at).toLocaleDateString("en-US", {
               year: "numeric",
@@ -249,17 +249,6 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-background-2">
       <div className="py-6 sm:py-8 md:py-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back Navigation */}
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 sm:mb-8 transition-colors font-medium group"
-          >
-            <div className="w-8 h-8 rounded-full bg-card border-2 border-border flex items-center justify-center group-hover:bg-primary/10 group-hover:border-primary transition-all">
-              <ChevronLeft className="h-4 w-4" />
-            </div>
-            Back to Home
-          </Link>
-
           {/* Page Header */}
           <div className="mb-8 sm:mb-10">
             <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-2 flex items-center gap-3">

@@ -9,14 +9,14 @@ import {
 
 function Footer() {
   return (
-    <footer className="bg-foreground text-background px-6 md:px-12 lg:px-24 py-12 md:py-16">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8 mb-8">
+    <footer className="bg-[#21202D] text-background px-6 md:px-12 lg:px-24 py-12 md:py-16">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8 mb-8">
         {/* Brand */}
         <div className="flex flex-col">
           <div className="text-primary text-xl sm:text-2xl font-kaushan mb-3">
             Koket Bakery
           </div>
-          <p className="text-background/80 text-sm sm:text-base max-w-md">
+          <p className="text-background/80  text-sm sm:text-base max-w-md">
             Handcrafted cakes and desserts created with passion and premium
             ingredients for every celebration.
           </p>
@@ -68,25 +68,49 @@ function Footer() {
           <div className="text-primary font-semibold mb-4 text-base sm:text-lg">
             Contact Us
           </div>
-          <ul className="text-sm space-y-2 text-background/80">
+
+          <ul className="text-sm space-y-3 text-background/80">
             <li className="break-words">
-              Tulu Dimtu in front of Shewa Supermarket
+              Tulu Dimtu, near Shewa Supermarket<br/>
+              Atika Building, Addis Ababa, Ethiopia
             </li>
-            <li>Addis Ababa</li>
+
             <li>
-              Phone:{" "}
-              <span className="hover:text-primary cursor-pointer">
-                +251 900-123-456
-              </span>
+              <div className="flex items-start gap-2">
+                <span className="text-background/60 flex-shrink-0">Phone:</span>
+                <div className="flex flex-col gap-1">
+                  <Link 
+                    href="tel:+251911529898"
+                    className="hover:text-primary transition-colors"
+                  >
+                    +251 911 529 898
+                  </Link>
+                  <Link 
+                    href="tel:+251916911591"
+                    className="hover:text-primary transition-colors"
+                  >
+                    +251 916 911 591
+                  </Link>
+                  <Link 
+                    href="tel:+251912700250"
+                    className="hover:text-primary transition-colors"
+                  >
+                    +251 912 700 250
+                  </Link>
+                </div>
+              </div>
             </li>
+
             <li>
-              Email:{" "}
-              <Link
-                href="mailto:hello@koketbakery.com"
-                className="text-primary hover:text-primary/80 transition-colors"
-              >
-                hello@koketbakery.com
-              </Link>
+              <div className="flex items-start gap-2">
+                <span className="text-background/60 flex-shrink-0">Email:</span>
+                <Link
+                  href="mailto:koketbakeryandpastry@gmail.com"
+                  className="hover:text-primary transition-colors break-all"
+                >
+                  koketbakeryandpastry@gmail.com
+                </Link>
+              </div>
             </li>
           </ul>
         </div>

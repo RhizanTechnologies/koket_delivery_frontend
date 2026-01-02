@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,7 +32,17 @@ export function EditProfileModal({
   user,
   onSave,
 }: EditProfileModalProps) {
-  const [formData, setFormData] = useState(user);
+  const [formData, setFormData] = useState({
+    ...user,
+    phone_number: user.phone_number === "Not set" ? "" : user.phone_number,
+  });
+
+  useEffect(() => {
+    setFormData({
+      ...user,
+      phone_number: user.phone_number === "Not set" ? "" : user.phone_number,
+    });
+  }, [user]);
 
   const handleSave = () => {
     onSave(formData);

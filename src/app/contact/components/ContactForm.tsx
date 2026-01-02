@@ -115,7 +115,7 @@ function ContactForm() {
             <Input
               id="phone"
               type="tel"
-              placeholder="(0123) 01 23 14 68"
+              placeholder="0987654321"
               value={formData.phone}
               onChange={(e) =>
                 setFormData({ ...formData, phone: e.target.value })
@@ -134,7 +134,7 @@ function ContactForm() {
           </Label>
           <Textarea
             id="message"
-            placeholder="Tell us more about your inquiry..."
+            placeholder="How can we help you? Please provide details about your inquiry (minimum 5 characters)..."
             rows={5}
             value={formData.message}
             onChange={(e) =>

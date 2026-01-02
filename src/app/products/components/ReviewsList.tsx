@@ -1,9 +1,17 @@
-"use client";
-
-import { useState, useMemo } from "react";
-import { Star, Edit2, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Star, Edit, Trash2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import type { ProductReview } from "@/app/types/product";
 import { ReviewForm } from "./ReviewForm";
 
@@ -21,8 +29,8 @@ import {
 interface ReviewsListProps {
   reviews?: ProductReview[];
   currentUserId?: string;
-  onUpdate?: (reviewId: string, rating: number, comment: string) => Promise<void>;
-  onDelete?: (reviewId: string) => Promise<void>;
+  onEdit?: (review: ProductReview) => void;
+  onDelete?: (reviewId: string) => void;
 }
 
 const getInitials = (input?: string | any) => {
@@ -54,67 +62,34 @@ const formatDate = (date?: string) => {
 export function ReviewsList({
   reviews,
   currentUserId,
-  onUpdate,
+  onEdit,
   onDelete,
 }: ReviewsListProps) {
+  const list = reviews ?? [];
   const [showAll, setShowAll] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [isActionLoading, setIsActionLoading] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
-  // Memoize the sorted list to put current user's review at top
-  const list = useMemo(() => {
-    if (!reviews) return [];
-    if (!currentUserId) return reviews;
+  // Sort reviews to show current user's review first
+  const sortedList = [...list].sort((a, b) => {
+    const aUserId = typeof a.user_id === "string" ? a.user_id : a.user_id?._id;
+    const bUserId = typeof b.user_id === "string" ? b.user_id : b.user_id?._id;
 
-    return [...reviews].sort((a, b) => {
-      const aOwnerId =
-        typeof a.user_id === "object" ? a.user_id?._id || a.user_id?.id : a.user_id;
-      const bOwnerId =
-        typeof b.user_id === "object" ? b.user_id?._id || b.user_id?.id : b.user_id;
+    const aIsCurrentUser = currentUserId && aUserId === currentUserId;
+    const bIsCurrentUser = currentUserId && bUserId === currentUserId;
 
-      if (aOwnerId === currentUserId) return -1;
-      if (bOwnerId === currentUserId) return 1;
-      return 0;
-    });
-  }, [reviews, currentUserId]);
+    if (aIsCurrentUser && !bIsCurrentUser) return -1;
+    if (!aIsCurrentUser && bIsCurrentUser) return 1;
+    return 0;
+  });
 
-  // Show only 5 reviews initially, or all if showAll is true
-  const displayedReviews = showAll ? list : list.slice(0, 5);
-  const hasMore = list.length > 5;
-
-  const handleEdit = (reviewId: string) => {
-    setEditingId(reviewId);
-  };
-
-  const confirmDelete = async () => {
-    if (deletingId && onDelete) {
-      setIsActionLoading(true);
-      try {
-        await onDelete(deletingId);
-        setDeletingId(null);
-      } finally {
-        setIsActionLoading(false);
-      }
-    }
-  };
-
-  const handleUpdate = async (rating: number, comment: string) => {
-    if (editingId && onUpdate) {
-      setIsActionLoading(true);
-      try {
-        await onUpdate(editingId, rating, comment);
-        setEditingId(null);
-      } finally {
-        setIsActionLoading(false);
-      }
-    }
-  };
+  // Show only 3 reviews initially, or all if showAll is true
+  const displayedReviews = showAll ? sortedList : sortedList.slice(0, 3);
+  const hasMore = sortedList.length > 3;
 
   return (
     <div className="relative">
       <div className="mt-6 space-y-4">
-        {list.length === 0 ? (
+        {sortedList.length === 0 ? (
           <div className="rounded-lg border border-border bg-card p-8 text-center">
             <p className="text-muted-foreground">
               No reviews yet. Be the first to review! 🍰
@@ -141,25 +116,18 @@ export function ReviewsList({
               const avatar = getInitials(displayName);
               const subtitle = formatDate(review.created_at);
 
-              if (editingId === review._id) {
-                return (
-                  <div key={review._id} className="mt-4">
-                    <ReviewForm
-                      defaultRating={review.rating}
-                      initialComment={review.comment}
-                      onSubmit={(data) => handleUpdate(data.rating, data.comment)}
-                      onCancel={() => setEditingId(null)}
-                      isSubmitting={isActionLoading}
-                      submitLabel="Update Review"
-                    />
-                  </div>
-                );
-              }
+              // Check if this review belongs to the current user
+              const reviewUserId =
+                typeof review.user_id === "string"
+                  ? review.user_id
+                  : review.user_id?._id;
+              const isCurrentUser =
+                currentUserId && reviewUserId === currentUserId;
 
               return (
                 <Card
                   key={review._id}
-                  className="rounded-lg border border-border p-6"
+                  className="rounded-lg border border-border p-6 relative"
                 >
                   <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
@@ -185,7 +153,7 @@ export function ReviewsList({
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3">
                         <div className="flex gap-1">
                           {[...Array(5)].map((_, index) => (
                             <Star
@@ -198,26 +166,6 @@ export function ReviewsList({
                             />
                           ))}
                         </div>
-                        {isOwner && (
-                          <div className="flex items-center gap-2 border-l border-border pl-4 ml-2">
-                            <button
-                              onClick={() => handleEdit(review._id)}
-                              className="text-muted-foreground hover:text-primary transition-colors"
-                              title="Edit Review"
-                              disabled={isActionLoading}
-                            >
-                              <Edit2 className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => setDeletingId(review._id)}
-                              className="text-muted-foreground hover:text-destructive transition-colors"
-                              title="Delete Review"
-                              disabled={isActionLoading}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
-                        )}
                       </div>
                     </div>
                     {review.comment && (
@@ -225,34 +173,63 @@ export function ReviewsList({
                         {review.comment}
                       </p>
                     )}
+                    {isCurrentUser && (onEdit || onDelete) && (
+                      <div className="flex gap-2 justify-end mt-2">
+                        {onEdit && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => onEdit(review)}
+                            className="h-8 w-8 text-muted-foreground hover:text-primary"
+                            title="Edit review"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        )}
+                        {onDelete && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setDeleteConfirmId(review._id)}
+                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                            title="Delete review"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </Card>
               );
             })}
 
-            {/* Deletion Confirmation Dialog */}
             <AlertDialog
-              open={!!deletingId}
-              onOpenChange={(open) => !open && setDeletingId(null)}
+              open={deleteConfirmId !== null}
+              onOpenChange={(open) => !open && setDeleteConfirmId(null)}
             >
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogTitle>Delete Review</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete your
-                    review for this product.
+                    Are you sure you want to delete this review? This action
+                    cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel disabled={isActionLoading}>
+                  <AlertDialogCancel onClick={() => setDeleteConfirmId(null)}>
                     Cancel
                   </AlertDialogCancel>
                   <AlertDialogAction
-                    onClick={confirmDelete}
-                    disabled={isActionLoading}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    onClick={() => {
+                      if (deleteConfirmId) {
+                        onDelete?.(deleteConfirmId);
+                        setDeleteConfirmId(null);
+                      }
+                    }}
+                    className="bg-destructive text-white hover:bg-destructive/90"
                   >
-                    {isActionLoading ? "Deleting..." : "Delete Review"}
+                    Delete
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>

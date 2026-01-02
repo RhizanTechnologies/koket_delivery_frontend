@@ -55,7 +55,7 @@ export default function Projects() {
               <div className="relative rounded-xl overflow-hidden">
                 <div className="aspect-[3.2/3] relative">
                   <Image
-                    src={work.imageUrl || "/assets/placeholder-product.jpg"}
+                    src={work.imageUrl || "/placeholder-product.jpg"}
                     alt={work.title}
                     fill
                     className="object-cover"
