@@ -142,15 +142,90 @@ export default function ProductPage() {
     return [];
   }, [product?.images, product?.image_url]);
 
-  const computePriceLabel = (item: ProductSummary) => {
-    const kiloValues = item.kilo_to_price_map
-      ? Object.values(item.kilo_to_price_map)
-      : [];
-    const firstPrice =
-      item.price ?? (kiloValues.length ? kiloValues[0] : undefined);
-    return typeof firstPrice === "number"
-      ? currencyFormatter.format(firstPrice)
-      : "Price on request";
+  const userReview = useMemo(() => {
+    if (!user?.id || !product?.reviews) return null;
+    return product.reviews.find((r) => {
+      const ownerId =
+        typeof r.user_id === "object"
+          ? r.user_id?._id || r.user_id?.id
+          : r.user_id;
+      return ownerId === user.id;
+    });
+  }, [user?.id, product?.reviews]);
+
+  const hasReviewed = !!userReview;
+
+  const handleReviewSubmit = async ({
+    rating,
+    comment,
+  }: {
+    rating: number;
+    comment: string;
+    name?: string;
+  }) => {
+    if (!productId) {
+      setReviewError("Missing product identifier.");
+      return;
+    }
+
+    if (!user?.id) {
+      setReviewError("Please login to submit a review.");
+      return;
+    }
+
+    try {
+      setIsSubmittingReview(true);
+      setReviewError(null);
+
+      const payload = {
+        user_id: user.id,
+        product_id: productId,
+        rating,
+        comment,
+      };
+
+      await createProductReview(payload);
+      setShowReviewForm(false);
+      setRefreshIndex((prev) => prev + 1);
+    } catch (submitError: any) {
+      const apiMessage =
+        submitError?.response?.data?.message ??
+        submitError?.message ??
+        "Unable to submit review. Please try again.";
+      setReviewError(apiMessage);
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
+
+  const handleReviewUpdate = async (
+    reviewId: string,
+    rating: number,
+    comment: string
+  ) => {
+    try {
+      const { updateProductReview } = await import(
+        "@/app/services/productService"
+      );
+      await updateProductReview(reviewId, { rating, comment });
+      setRefreshIndex((prev) => prev + 1);
+    } catch (error: any) {
+      console.error("Failed to update review", error);
+      throw error;
+    }
+  };
+
+  const handleReviewDelete = async (reviewId: string) => {
+    try {
+      const { deleteProductReview } = await import(
+        "@/app/services/productService"
+      );
+      await deleteProductReview(reviewId);
+      setRefreshIndex((prev) => prev + 1);
+    } catch (error: any) {
+      console.error("Failed to delete review", error);
+      throw error;
+    }
   };
 
   if (loading) {
@@ -200,49 +275,6 @@ export default function ProductPage() {
         ) / totalReviews
       : 0;
   const ratingValue = Math.min(5, Math.max(0, Math.round(averageRating)));
-
-  const handleReviewSubmit = async ({
-    rating,
-    comment,
-  }: {
-    rating: number;
-    comment: string;
-    name?: string;
-  }) => {
-    if (!productId) {
-      setReviewError("Missing product identifier.");
-      return;
-    }
-
-    if (!user?.id) {
-      setReviewError("Please login to submit a review.");
-      return;
-    }
-
-    try {
-      setIsSubmittingReview(true);
-      setReviewError(null);
-
-      const payload = {
-        user_id: user.id,
-        product_id: productId,
-        rating,
-        comment,
-      };
-
-      await createProductReview(payload);
-      setShowReviewForm(false);
-      setRefreshIndex((prev) => prev + 1);
-    } catch (submitError: any) {
-      const apiMessage =
-        submitError?.response?.data?.message ??
-        submitError?.message ??
-        "Unable to submit review. Please try again.";
-      setReviewError(apiMessage);
-    } finally {
-      setIsSubmittingReview(false);
-    }
-  };
 
   return (
     <main className="min-h-screen bg-background-2">
@@ -306,13 +338,15 @@ export default function ProductPage() {
                   : "Be the first to review this product"}
               </p>
             </div>
-            <Button
-              onClick={() => setShowReviewForm((prev) => !prev)}
-              disabled={isSubmittingReview}
-              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-lg w-full sm:w-auto"
-            >
-              {showReviewForm ? "Cancel" : "+ Write a Review"}
-            </Button>
+            {!hasReviewed && (
+              <Button
+                onClick={() => setShowReviewForm((prev) => !prev)}
+                disabled={isSubmittingReview}
+                className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-lg w-full sm:w-auto"
+              >
+                {showReviewForm ? "Cancel" : "+ Write a Review"}
+              </Button>
+            )}
           </div>
 
           {showReviewForm && (
@@ -341,7 +375,12 @@ export default function ProductPage() {
               />
             }
           >
-            <ReviewsList reviews={reviews} />
+            <ReviewsList
+              reviews={reviews}
+              currentUserId={user?.id}
+              onUpdate={handleReviewUpdate}
+              onDelete={handleReviewDelete}
+            />
           </Suspense>
         </div>
       </section>
@@ -358,33 +397,33 @@ export default function ProductPage() {
         </div>
         {relatedProducts.length ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-6">
-            {relatedProducts.map((product) => {
+            {relatedProducts.map((p) => {
               // Determine the price to display based on product type
               let displayPrice = "Contact for Price";
 
               // Check if product has kilo_to_price_map (sold by weight)
               if (
-                product.kilo_to_price_map &&
-                Object.keys(product.kilo_to_price_map).length > 0
+                p.kilo_to_price_map &&
+                Object.keys(p.kilo_to_price_map).length > 0
               ) {
-                const prices = Object.values(product.kilo_to_price_map);
+                const prices = Object.values(p.kilo_to_price_map);
                 const minPrice = Math.min(...prices);
                 displayPrice = `ETB ${minPrice.toFixed(2)}`;
               }
               // Check if product is pieceable (sold per piece with subcategory price)
-              else if (product.is_pieceable && product.subcategory_id?.price) {
-                displayPrice = `ETB ${product.subcategory_id.price.toFixed(2)}`;
+              else if (p.is_pieceable && p.subcategory_id?.price) {
+                displayPrice = `ETB ${p.subcategory_id.price.toFixed(2)}`;
               }
 
               return (
                 <ProductCard
-                  key={product._id}
-                  image={product.image_url || "/assets/placeholder-product.jpg"}
-                  name={product.name}
-                  description={product.description ?? ""}
+                  key={p._id}
+                  image={p.image_url || "/assets/placeholder-product.jpg"}
+                  name={p.name}
+                  description={p.description ?? ""}
                   price={displayPrice}
-                  category={product.category_id?.name}
-                  productId={product._id}
+                  category={p.category_id?.name}
+                  productId={p._id}
                 />
               );
             })}

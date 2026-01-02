@@ -14,21 +14,31 @@ import { toast } from "react-toastify";
 interface ReviewFormProps {
   onSubmit: (payload: { rating: number; comment: string }) => void;
   defaultRating?: number;
+  initialComment?: string;
   isSubmitting?: boolean;
+  submitLabel?: string;
+  onCancel?: () => void;
 }
 
 export function ReviewForm({
   onSubmit,
   defaultRating = 5,
+  initialComment = "",
   isSubmitting = false,
+  submitLabel = "Submit Review",
+  onCancel,
 }: ReviewFormProps) {
   const [rating, setRating] = useState(defaultRating);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState(initialComment);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setRating(defaultRating);
   }, [defaultRating]);
+
+  useEffect(() => {
+    setComment(initialComment);
+  }, [initialComment]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -44,13 +54,17 @@ export function ReviewForm({
     }
 
     onSubmit(validation.data);
-    setComment("");
-    setRating(defaultRating);
+    if (!initialComment) {
+      setComment("");
+      setRating(defaultRating);
+    }
   };
 
   return (
     <Card className="p-6">
-      <h3 className="mb-6 text-lg font-semibold">Write a Review</h3>
+      <h3 className="mb-6 text-lg font-semibold">
+        {initialComment ? "Edit Your Review" : "Write a Review"}
+      </h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="mb-2 block text-sm font-medium">Rating</label>
@@ -97,20 +111,32 @@ export function ReviewForm({
             disabled={isSubmitting}
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            {isSubmitting ? "Submitting…" : "Submit Review"}
+            {isSubmitting ? "Submitting…" : submitLabel}
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              setComment("");
-              setRating(defaultRating);
-            }}
-            disabled={isSubmitting}
-            className="border-border bg-transparent text-sm"
-          >
-            Clear
-          </Button>
+          {onCancel ? (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onCancel}
+              disabled={isSubmitting}
+              className="border-border bg-transparent text-sm"
+            >
+              Cancel
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setComment("");
+                setRating(defaultRating);
+              }}
+              disabled={isSubmitting}
+              className="border-border bg-transparent text-sm"
+            >
+              Clear
+            </Button>
+          )}
         </div>
       </form>
     </Card>

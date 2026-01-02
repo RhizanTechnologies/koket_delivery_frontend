@@ -233,3 +233,14 @@ export async function getSubcategories(): Promise<SubCategory[]> {
     throw error;
   }
 }
+/**
+ * Delete a product review (Admin)
+ */
+export async function deleteAdminReview(reviewId: string): Promise<void> {
+  try {
+    await apiClient.delete(`/reviews/${reviewId}`);
+  } catch (error: any) {
+    logger.error("Failed to delete review", error?.response?.data ?? error);
+    throw error;
+  }
+}

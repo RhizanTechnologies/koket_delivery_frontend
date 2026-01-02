@@ -4,11 +4,13 @@ import { Customer } from "../../types/customer";
 interface UserProfileHeaderProps {
   user: Customer;
   onDelete: () => void;
+  isCurrentUser?: boolean;
 }
 
 export default function UserProfileHeader({
   user,
   onDelete,
+  isCurrentUser,
 }: UserProfileHeaderProps) {
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8 pb-6 border-b">
@@ -23,12 +25,19 @@ export default function UserProfileHeader({
         <p className="text-sm text-gray-500 mt-2">🗓 Joined {user.joined}</p>
       </div>
       <div className="flex gap-3">
-        <Button
-          onClick={onDelete}
-          className="bg-red-600 hover:bg-red-700 text-white"
-        >
-          Delete User
-        </Button>
+        {!isCurrentUser && (
+          <Button
+            onClick={onDelete}
+            className="bg-red-600 hover:bg-red-700 text-white"
+          >
+            Delete User
+          </Button>
+        )}
+        {isCurrentUser && (
+          <span className="bg-blue-100 text-blue-600 px-3 py-1.5 rounded-md font-semibold text-sm">
+            This is you
+          </span>
+        )}
       </div>
     </div>
   );

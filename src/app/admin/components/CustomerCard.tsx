@@ -3,14 +3,16 @@ import { Customer } from "../../types/customer";
 interface CustomerCardProps {
   customer: Customer;
   onDelete: (customer: Customer) => void;
+  isCurrentUser?: boolean;
 }
 
 export default function CustomerCard({
   customer,
   onDelete,
+  isCurrentUser,
 }: CustomerCardProps) {
   return (
-    <div className="flex flex-col xl:flex-row xl:justify-between border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+    <div className={`flex flex-col xl:flex-row xl:justify-between border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow ${isCurrentUser ? 'bg-blue-50/50' : ''}`}>
       <a
         href={`/admin/users/${customer.id}`}
         className="flex items-start gap-3 flex-1 min-w-0"
@@ -22,6 +24,11 @@ export default function CustomerCard({
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-base sm:text-lg hover:text-primary transition-colors truncate">
             {customer.name}
+            {isCurrentUser && (
+              <span className="ml-2 text-[10px] bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded-full uppercase tracking-wider font-bold">
+                You
+              </span>
+            )}
           </p>
 
           <p className="text-[12px] sm:text-sm md:text-base text-gray-500 truncate overflow-hidden">
@@ -52,9 +59,15 @@ export default function CustomerCard({
         <button
           onClick={(e) => {
             e.preventDefault();
-            onDelete(customer);
+            if (!isCurrentUser) onDelete(customer);
           }}
-          className="text-red-600 border border-red-500 hover:bg-red-100 px-4 py-2 mt-4 rounded-md text-sm w-full sm:w-auto"
+          disabled={isCurrentUser}
+          className={`text-red-600 border border-red-500 px-4 py-2 mt-4 rounded-md text-sm w-full sm:w-auto transition-colors ${
+            isCurrentUser
+              ? "opacity-50 cursor-not-allowed bg-gray-50 border-gray-300 text-gray-400"
+              : "hover:bg-red-100"
+          }`}
+          title={isCurrentUser ? "You cannot delete your own account" : "Delete User"}
         >
           Delete
         </button>

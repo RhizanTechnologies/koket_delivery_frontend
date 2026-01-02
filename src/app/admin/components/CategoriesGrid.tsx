@@ -8,6 +8,7 @@ interface CategoriesGridProps {
   onAddSubCategory: (category: Category) => void;
   onEditSubCategory: (category: Category, subCategoryId: string) => void;
   onDeleteSubCategory: (category: Category, subCategoryId: string) => void;
+  activeCategoryId?: string | null;
 }
 
 export default function CategoriesGrid({
@@ -17,6 +18,7 @@ export default function CategoriesGrid({
   onAddSubCategory,
   onEditSubCategory,
   onDeleteSubCategory,
+  activeCategoryId,
 }: CategoriesGridProps) {
   if (categories.length === 0) {
     return (
@@ -38,6 +40,7 @@ export default function CategoriesGrid({
           onAddSubCategory={onAddSubCategory}
           onEditSubCategory={onEditSubCategory}
           onDeleteSubCategory={onDeleteSubCategory}
+          isActive={category._id === activeCategoryId}
         />
       ))}
     </div>

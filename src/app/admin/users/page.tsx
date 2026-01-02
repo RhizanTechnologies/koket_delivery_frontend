@@ -10,8 +10,10 @@ import Pagination from "../components/Pagination";
 import ConfirmationModal from "../components/ConfirmationModal";
 import LoadingState from "@/components/LoadingState";
 import { getAllCustomers, deleteUser } from "../../services/admin/userService";
+import { useAuth } from "../../context/AuthContext";
 
 export default function CustomerPage() {
+  const { user: currentUser } = useAuth();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -179,6 +181,7 @@ export default function CustomerPage() {
               <CustomersList
                 customers={currentCustomers}
                 onDelete={openDeleteConfirm}
+                currentUserId={currentUser?.id}
               />
             ) : (
               <div className="text-center py-10 text-gray-500">

@@ -4,11 +4,13 @@ import CustomerCard from "./CustomerCard";
 interface CustomersListProps {
   customers: Customer[];
   onDelete: (customer: Customer) => void;
+  currentUserId?: string;
 }
 
 export default function CustomersList({
   customers,
   onDelete,
+  currentUserId,
 }: CustomersListProps) {
   if (customers.length === 0) {
     return (
@@ -25,6 +27,7 @@ export default function CustomersList({
           key={customer.id}
           customer={customer}
           onDelete={onDelete}
+          isCurrentUser={String(customer.id) === currentUserId}
         />
       ))}
     </div>

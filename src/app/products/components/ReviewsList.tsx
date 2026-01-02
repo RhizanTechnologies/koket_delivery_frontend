@@ -1,11 +1,28 @@
-import { useState } from "react";
-import { Star } from "lucide-react";
+"use client";
+
+import { useState, useMemo } from "react";
+import { Star, Edit2, Trash2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { ProductReview } from "@/app/types/product";
+import { ReviewForm } from "./ReviewForm";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface ReviewsListProps {
   reviews?: ProductReview[];
+  currentUserId?: string;
+  onUpdate?: (reviewId: string, rating: number, comment: string) => Promise<void>;
+  onDelete?: (reviewId: string) => Promise<void>;
 }
 
 const getInitials = (input?: string | any) => {
@@ -34,13 +51,65 @@ const formatDate = (date?: string) => {
   });
 };
 
-export function ReviewsList({ reviews }: ReviewsListProps) {
-  const list = reviews ?? [];
+export function ReviewsList({
+  reviews,
+  currentUserId,
+  onUpdate,
+  onDelete,
+}: ReviewsListProps) {
   const [showAll, setShowAll] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isActionLoading, setIsActionLoading] = useState(false);
 
-  // Show only 3 reviews initially, or all if showAll is true
-  const displayedReviews = showAll ? list : list.slice(0, 3);
-  const hasMore = list.length > 3;
+  // Memoize the sorted list to put current user's review at top
+  const list = useMemo(() => {
+    if (!reviews) return [];
+    if (!currentUserId) return reviews;
+
+    return [...reviews].sort((a, b) => {
+      const aOwnerId =
+        typeof a.user_id === "object" ? a.user_id?._id || a.user_id?.id : a.user_id;
+      const bOwnerId =
+        typeof b.user_id === "object" ? b.user_id?._id || b.user_id?.id : b.user_id;
+
+      if (aOwnerId === currentUserId) return -1;
+      if (bOwnerId === currentUserId) return 1;
+      return 0;
+    });
+  }, [reviews, currentUserId]);
+
+  // Show only 5 reviews initially, or all if showAll is true
+  const displayedReviews = showAll ? list : list.slice(0, 5);
+  const hasMore = list.length > 5;
+
+  const handleEdit = (reviewId: string) => {
+    setEditingId(reviewId);
+  };
+
+  const confirmDelete = async () => {
+    if (deletingId && onDelete) {
+      setIsActionLoading(true);
+      try {
+        await onDelete(deletingId);
+        setDeletingId(null);
+      } finally {
+        setIsActionLoading(false);
+      }
+    }
+  };
+
+  const handleUpdate = async (rating: number, comment: string) => {
+    if (editingId && onUpdate) {
+      setIsActionLoading(true);
+      try {
+        await onUpdate(editingId, rating, comment);
+        setEditingId(null);
+      } finally {
+        setIsActionLoading(false);
+      }
+    }
+  };
 
   return (
     <div className="relative">
@@ -53,9 +122,15 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
           </div>
         ) : (
           <>
-            {displayedReviews.map((review) => {
+            {displayedReviews.map((review: ProductReview) => {
               const ratingValue = Math.max(0, Math.min(5, review.rating ?? 0));
               // Handle user_id which can be string or object
+              const ownerId =
+                typeof review.user_id === "object"
+                  ? review.user_id?._id || review.user_id?.id
+                  : review.user_id;
+              const isOwner = currentUserId && ownerId === currentUserId;
+
               const userName =
                 typeof review.user_id === "object" && review.user_id?.name
                   ? review.user_id.name
@@ -65,6 +140,21 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
               const displayName = review.name ?? userName;
               const avatar = getInitials(displayName);
               const subtitle = formatDate(review.created_at);
+
+              if (editingId === review._id) {
+                return (
+                  <div key={review._id} className="mt-4">
+                    <ReviewForm
+                      defaultRating={review.rating}
+                      initialComment={review.comment}
+                      onSubmit={(data) => handleUpdate(data.rating, data.comment)}
+                      onCancel={() => setEditingId(null)}
+                      isSubmitting={isActionLoading}
+                      submitLabel="Update Review"
+                    />
+                  </div>
+                );
+              }
 
               return (
                 <Card
@@ -78,9 +168,16 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
                           {avatar}
                         </div>
                         <div>
-                          <p className="font-semibold text-primary">
-                            {displayName}
-                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold text-primary">
+                              {displayName}
+                            </p>
+                            {isOwner && (
+                              <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full uppercase tracking-wider font-bold">
+                                You
+                              </span>
+                            )}
+                          </div>
                           {subtitle && (
                             <p className="text-xs text-muted-foreground">
                               {subtitle}
@@ -88,17 +185,39 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
                           )}
                         </div>
                       </div>
-                      <div className="flex gap-1">
-                        {[...Array(5)].map((_, index) => (
-                          <Star
-                            key={index}
-                            className={`h-4 w-4 ${
-                              index < ratingValue
-                                ? "fill-amber-400 text-amber-400"
-                                : "text-muted-foreground"
-                            }`}
-                          />
-                        ))}
+                      <div className="flex items-center gap-4">
+                        <div className="flex gap-1">
+                          {[...Array(5)].map((_, index) => (
+                            <Star
+                              key={index}
+                              className={`h-4 w-4 ${
+                                index < ratingValue
+                                  ? "fill-amber-400 text-amber-400"
+                                  : "text-muted-foreground"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        {isOwner && (
+                          <div className="flex items-center gap-2 border-l border-border pl-4 ml-2">
+                            <button
+                              onClick={() => handleEdit(review._id)}
+                              className="text-muted-foreground hover:text-primary transition-colors"
+                              title="Edit Review"
+                              disabled={isActionLoading}
+                            >
+                              <Edit2 className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => setDeletingId(review._id)}
+                              className="text-muted-foreground hover:text-destructive transition-colors"
+                              title="Delete Review"
+                              disabled={isActionLoading}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                     {review.comment && (
@@ -111,6 +230,34 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
               );
             })}
 
+            {/* Deletion Confirmation Dialog */}
+            <AlertDialog
+              open={!!deletingId}
+              onOpenChange={(open) => !open && setDeletingId(null)}
+            >
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete your
+                    review for this product.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel disabled={isActionLoading}>
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={confirmDelete}
+                    disabled={isActionLoading}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    {isActionLoading ? "Deleting..." : "Delete Review"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
             {/* Show More Button */}
             {hasMore && !showAll && (
               <div className="flex justify-center mt-6">
@@ -119,7 +266,7 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
                   onClick={() => setShowAll(true)}
                   className="border-primary/40 text-primary hover:bg-primary/10"
                 >
-                  Show More Reviews ({list.length - 3} more)
+                  Show More Reviews ({list.length - 5} more)
                 </Button>
               </div>
             )}

@@ -14,6 +14,7 @@ import { ChangePasswordModal } from "./components/ChangePasswordModal";
 import LoadingState from "@/components/LoadingState";
 import {
   getProfile,
+  deleteUser,
   User,
   UserStatsData,
   UserRating,
@@ -25,7 +26,7 @@ import { validateSafe } from "../utils/validation";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { isLoggedIn, isLoading: authLoading, logout } = useAuth();
+  const { user: authUser, isLoggedIn, isLoading: authLoading, logout } = useAuth();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
@@ -163,11 +164,35 @@ export default function ProfilePage() {
     }
   };
 
-  const handleDeleteAccount = () => {
-    console.log("Account deleted");
-    setDeleteDialogOpen(false);
-    logout();
-    router.push("/");
+  const handleDeleteAccount = async () => {
+    try {
+      setLoading(true);
+      
+      // Safety check: Don't allow admins to delete themselves from profile page
+      if (authUser?.role === "admin") {
+        toast.error("Administrators cannot delete their own accounts from this page. Please contact the system owner.");
+        setDeleteDialogOpen(false);
+        setLoading(false);
+        return;
+      }
+
+      const profileData = await getProfile();
+      const userId = profileData._id || profileData.id;
+
+      if (!userId) throw new Error("User ID not found");
+
+      await deleteUser(userId);
+      
+      toast.success("Account permanently deleted. We are sorry to see you go.");
+      setDeleteDialogOpen(false);
+      logout();
+      router.push("/");
+    } catch (err: any) {
+      console.error("Error deleting account:", err);
+      toast.error(err.message || "Failed to delete account. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChangePassword = async (data: {

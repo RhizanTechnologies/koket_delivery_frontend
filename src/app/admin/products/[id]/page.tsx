@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { FaEdit, FaStar, FaArrowLeft, FaUser } from "react-icons/fa";
+import { FaEdit, FaStar, FaArrowLeft, FaUser, FaTrash } from "react-icons/fa";
 import LoadingState from "@/components/LoadingState";
+import ConfirmationModal from "../../components/ConfirmationModal";
 import {
   getAdminProductById,
   resolveImageUrl,
+  deleteAdminReview,
   type ProductWithDetails,
   type ProductRating,
 } from "@/app/services/admin/productService";
@@ -19,24 +21,53 @@ export default function AdminProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // Deletion state
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const fetchData = async () => {
+    if (!id || typeof id !== "string") return;
+
+    try {
+      setLoading(true);
+      const productData = await getAdminProductById(id);
+      setProduct(productData);
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      toast.error("Failed to load product details");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      if (!id || typeof id !== "string") return;
-
-      try {
-        setLoading(true);
-        const productData = await getAdminProductById(id);
-        setProduct(productData);
-      } catch (error) {
-        console.error("Error fetching product:", error);
-        toast.error("Failed to load product details");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, [id]);
+
+  const handleDeleteReview = (reviewId: string) => {
+    setReviewToDelete(reviewId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteReview = async () => {
+    if (!reviewToDelete) return;
+
+    try {
+      setIsDeleting(true);
+      await deleteAdminReview(reviewToDelete);
+      toast.success("Review deleted successfully");
+      // Refresh data
+      await fetchData();
+    } catch (error) {
+      console.error("Error deleting review:", error);
+      toast.error("Failed to delete review");
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteModalOpen(false);
+      setReviewToDelete(null);
+    }
+  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-ET", {
@@ -308,17 +339,26 @@ export default function AdminProductDetailPage() {
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <FaStar
-                            key={star}
-                            className={`w-4 h-4 ${
-                              star <= review.rating
-                                ? "text-yellow-400"
-                                : "text-gray-300"
-                            }`}
-                          />
-                        ))}
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <FaStar
+                              key={star}
+                              className={`w-4 h-4 ${
+                                star <= review.rating
+                                  ? "text-yellow-400"
+                                  : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <button
+                          onClick={() => handleDeleteReview(review._id)}
+                          className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                          title="Delete Comment"
+                        >
+                          <FaTrash size={14} />
+                        </button>
                       </div>
                     </div>
                     <p className="text-gray-600 leading-relaxed">
@@ -331,6 +371,15 @@ export default function AdminProductDetailPage() {
           </div>
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        title="Delete Review"
+        message="Are you sure you want to delete this review? This action cannot be undone."
+        onConfirm={confirmDeleteReview}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        confirmText={isDeleting ? "Deleting..." : "Delete"}
+      />
     </div>
   );
 }

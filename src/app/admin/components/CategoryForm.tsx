@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 interface CategoryFormProps {
   onSubmit: (name: string) => void;
@@ -18,6 +19,11 @@ export default function CategoryForm({
 }: CategoryFormProps) {
   const [name, setName] = useState(initialValue);
 
+  // Sync state if initialValue changes (modal reused)
+  useEffect(() => {
+    setName(initialValue);
+  }, [initialValue]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (name.trim()) {
@@ -31,32 +37,46 @@ export default function CategoryForm({
       onSubmit={handleSubmit}
       className="flex flex-col sm:flex-row gap-3 mb-4 sm:mb-6"
     >
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder={placeholder}
-        className="flex-1 border border-border rounded-md px-3 sm:px-4 py-2 sm:py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-transparent"
-        required
-      />
-      <div className="flex gap-2 sm:gap-3">
-        <Button
-          type="submit"
-          className="px-4 sm:px-6 py-2 text-sm flex-1 sm:flex-none min-w-[120px]"
-        >
-          {buttonText}
-        </Button>
-        {onCancel && (
-          <Button
+      <div className="relative flex-1">
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder={placeholder}
+          className="w-full border border-border rounded-md pl-3 sm:pl-4 pr-10 py-2 sm:py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-transparent"
+          required
+        />
+        {onCancel && name && (
+          <button
             type="button"
-            onClick={onCancel}
-            variant="secondary"
-            className="px-4 sm:px-6 py-2 text-sm flex-1 sm:flex-none min-w-[100px]"
+            onClick={() => setName("")}
+            className="absolute right-9 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1 transition-colors border-r pr-2"
+            title="Clear input"
           >
-            Cancel
-          </Button>
+            <X className="h-3.5 w-3.5" />
+          </button>
+        )}
+        {onCancel && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onCancel();
+            }}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-red-500 p-1 transition-colors"
+            title="Cancel"
+          >
+            <X className="h-5 w-5" />
+          </button>
         )}
       </div>
+      <Button
+        type="submit"
+        className="px-4 sm:px-6 py-2 text-sm w-full sm:w-auto min-w-[120px]"
+      >
+        {buttonText}
+      </Button>
     </form>
   );
 }

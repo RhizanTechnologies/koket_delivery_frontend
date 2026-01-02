@@ -8,6 +8,7 @@ interface CategoryCardProps {
   onAddSubCategory: (category: Category) => void;
   onEditSubCategory: (category: Category, subCategoryId: string) => void;
   onDeleteSubCategory: (category: Category, subCategoryId: string) => void;
+  isActive?: boolean;
 }
 
 export default function CategoryCard({
@@ -39,19 +40,19 @@ export default function CategoryCard({
           <div className="flex flex-wrap gap-2 md:flex-nowrap md:ml-4 ">
             <Button
               onClick={() => onAddSubCategory(category)}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 flex-1 sm:flex-none min-w-[56px] sm:min-w-[90px]"
+              className="bg-emerald-400 hover:bg-emerald-700 text-white text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 flex-1 sm:flex-none min-w-[56px] sm:min-w-[90px]"
             >
               + Sub
             </Button>
             <Button
               onClick={() => onEdit(category)}
-              className="bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm px-3 py-2 flex-1 sm:flex-none min-w-[70px] sm:min-w-[80px]"
+              className="bg-blue-400 hover:bg-blue-700 text-white text-xs sm:text-sm px-3 py-2 flex-1 sm:flex-none min-w-[70px] sm:min-w-[80px]"
             >
               Edit
             </Button>
             <Button
               onClick={() => onDelete(category)}
-              className="bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm px-3 py-2 flex-1 sm:flex-none min-w-[70px] sm:min-w-[80px]"
+              className="bg-red-400 hover:bg-red-700 text-white text-xs sm:text-sm px-3 py-2 flex-1 sm:flex-none min-w-[70px] sm:min-w-[80px]"
             >
               Delete
             </Button>

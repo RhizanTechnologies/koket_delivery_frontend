@@ -11,11 +11,13 @@ import ConfirmationModal from "./ConfirmationModal";
 interface UserDetailLayoutProps {
   user: Customer;
   onDelete: () => void;
+  isCurrentUser?: boolean;
 }
 
 export default function UserDetailLayout({
   user,
   onDelete,
+  isCurrentUser,
 }: UserDetailLayoutProps) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -33,6 +35,7 @@ export default function UserDetailLayout({
             <UserProfileHeader
               user={user}
               onDelete={() => setShowDeleteModal(true)}
+              isCurrentUser={isCurrentUser}
             />
             <StatsCards user={user} />
             <UserInformation user={user} />

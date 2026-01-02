@@ -132,12 +132,6 @@ export default function SubCategoryForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-      <div>
-        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
-          {isEditing ? "Edit" : "Add"} Sub-category for{" "}
-          <span className="text-primary">{categoryName}</span>
-        </h3>
-      </div>
 
       {/* Basic Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
@@ -267,11 +261,11 @@ export default function SubCategoryForm({
             </label>
             <Button
               type="button"
-              variant="default"
+              variant="outline"
               size="sm"
               onClick={addSizePriceField}
               disabled={isSubmitting}
-              className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
+              className="border-primary text-primary hover:bg-primary/5 w-full sm:w-auto"
             >
               + Add Size
             </Button>

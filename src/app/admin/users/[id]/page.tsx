@@ -3,6 +3,7 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useState, useEffect, useCallback } from "react";
 import { Customer } from "../../../types/customer";
 import { getUserById, deleteUser } from "../../../services/admin/userService";
+import { useAuth } from "../../../context/AuthContext";
 import UserDetailLayout from "../../components/UserDetailLayout";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import UserNotFound from "../../components/UserNotFound";
@@ -10,6 +11,7 @@ import UserNotFound from "../../components/UserNotFound";
 export default function UserDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { user: currentUser } = useAuth();
   const [user, setUser] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -78,5 +80,11 @@ export default function UserDetailPage() {
     return <UserNotFound />;
   }
 
-  return <UserDetailLayout user={user} onDelete={handleDelete} />;
+  return (
+    <UserDetailLayout
+      user={user}
+      onDelete={handleDelete}
+      isCurrentUser={String(user.id) === currentUser?.id}
+    />
+  );
 }

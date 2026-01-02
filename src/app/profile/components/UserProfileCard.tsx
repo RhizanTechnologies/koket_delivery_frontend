@@ -105,7 +105,7 @@ export function UserProfileCard({
                 Password
               </Button>
             )}
-            <Button
+            {/* <Button
               variant="outline"
               size="sm"
               onClick={onDelete}
@@ -113,7 +113,7 @@ export function UserProfileCard({
             >
               <Trash2 className="h-4 w-4" />
               Delete
-            </Button>
+            </Button> */}
           </div>
         </div>
 

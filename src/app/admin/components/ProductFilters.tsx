@@ -9,25 +9,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5001";
+import {
+  getCategories,
+  getSubcategories,
+  Category,
+  SubCategory,
+} from "@/app/services/admin/productService";
 
 interface ProductFiltersProps {
   filters: ProductFiltersType;
   onFilterChange: (filters: ProductFiltersType) => void;
   onClearFilters: () => void;
-}
-
-interface Category {
-  _id: string;
-  name: string;
-  subcategories?: SubCategory[];
-}
-
-interface SubCategory {
-  _id: string;
-  name: string;
-  category_id: string;
 }
 
 export default function ProductFiltersComponent({
@@ -45,27 +37,13 @@ export default function ProductFiltersComponent({
       try {
         setLoading(true);
 
-        // Fetch categories
-        const categoriesResponse = await fetch(`${API_BASE_URL}/categories`);
-        if (categoriesResponse.ok) {
-          const categoriesData = await categoriesResponse.json();
-          setCategories(
-            categoriesData.categories || categoriesData.data || categoriesData
-          );
-        }
+        // Fetch categories using service
+        const categoriesData = await getCategories();
+        setCategories(categoriesData);
 
-        // Fetch subcategories
-        const subcategoriesResponse = await fetch(
-          `${API_BASE_URL}/subcategories`
-        );
-        if (subcategoriesResponse.ok) {
-          const subcategoriesData = await subcategoriesResponse.json();
-          setSubcategories(
-            subcategoriesData.subcategories ||
-              subcategoriesData.data ||
-              subcategoriesData
-          );
-        }
+        // Fetch subcategories using service
+        const subcategoriesData = await getSubcategories();
+        setSubcategories(subcategoriesData);
       } catch (error) {
         console.error("Error fetching filter data:", error);
       } finally {
@@ -77,7 +55,10 @@ export default function ProductFiltersComponent({
   }, []);
 
   const handleCategoryChange = (categoryId: string) => {
-    const newFilters = { ...filters, categoryId: categoryId || undefined };
+    const newFilters = {
+      ...filters,
+      categoryId: categoryId === "all" ? undefined : categoryId,
+    };
     // Clear subcategory when category changes
     delete newFilters.subcategoryId;
     onFilterChange(newFilters);
@@ -86,7 +67,7 @@ export default function ProductFiltersComponent({
   const handleSubcategoryChange = (subcategoryId: string) => {
     onFilterChange({
       ...filters,
-      subcategoryId: subcategoryId || undefined,
+      subcategoryId: subcategoryId === "all" ? undefined : subcategoryId,
     });
   };
 
@@ -145,14 +126,14 @@ export default function ProductFiltersComponent({
             Category
           </label>
           <Select
-            value={filters.categoryId || ""}
+            value={filters.categoryId || "all"}
             onValueChange={handleCategoryChange}
           >
             <SelectTrigger className="w-full border-2 border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all hover:border-gray-300">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Categories</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category._id} value={category._id}>
                   {category.name}
@@ -168,7 +149,7 @@ export default function ProductFiltersComponent({
             Subcategory
           </label>
           <Select
-            value={filters.subcategoryId || ""}
+            value={filters.subcategoryId || "all"}
             onValueChange={handleSubcategoryChange}
             disabled={!filters.categoryId || filteredSubcategories.length === 0}
           >
@@ -176,7 +157,7 @@ export default function ProductFiltersComponent({
               <SelectValue placeholder="All Subcategories" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Subcategories</SelectItem>
+              <SelectItem value="all">All Subcategories</SelectItem>
               {filteredSubcategories.map((subcategory) => (
                 <SelectItem key={subcategory._id} value={subcategory._id}>
                   {subcategory.name}
@@ -214,7 +195,8 @@ export default function ProductFiltersComponent({
               >
                 <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
               </svg>
-              {categories.find((c) => c._id === filters.categoryId)?.name}
+              {categories.find((c) => c._id === filters.categoryId)?.name ||
+                "Unknown Category"}
               <button
                 onClick={() => handleCategoryChange("")}
                 className="ml-2 text-pink-600 hover:text-pink-800 font-bold"
@@ -233,7 +215,8 @@ export default function ProductFiltersComponent({
               >
                 <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
               </svg>
-              {subcategories.find((s) => s._id === filters.subcategoryId)?.name}
+              {subcategories.find((s) => s._id === filters.subcategoryId)
+                ?.name || "Unknown Subcategory"}
               <button
                 onClick={() => handleSubcategoryChange("")}
                 className="ml-2 text-purple-600 hover:text-purple-800 font-bold"
